@@ -16,15 +16,19 @@ public:
 
 	virtual QString getIcon();
 
-	virtual void addLabels(ScriptInputDataList& inputDataList);
+	virtual void getLabels(ScriptInputDataList& inputDataList);
 
-	virtual void addResults(ScriptInputDataList& inputDataList, 
+	virtual void getResults(ScriptInputDataList& inputDataList, 
 		ScriptResultsList& resultsList);
 
 	virtual void getCatalog(ScriptResultsList& resultsList);
 
 	virtual void launchItem(ScriptInputDataList& inputDataList, 
 		CatItem& item);	
+
+	virtual void launchyShow();
+
+	virtual void launchyHide();
 
 	static const unsigned int hash;
 

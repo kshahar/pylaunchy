@@ -30,15 +30,15 @@ public:
 		return this->get_override("getIcon")();
 	}
 
-	virtual void addLabels(ScriptInputDataList& inputDataList)
+	virtual void getLabels(ScriptInputDataList& inputDataList)
 	{
-		this->get_override("addLabels")(inputDataList);
+		this->get_override("getLabels")(inputDataList);
 	}
 
-	virtual void addResults(ScriptInputDataList& inputDataList, 
+	virtual void getResults(ScriptInputDataList& inputDataList, 
 		ScriptResultsList& resultsList)
 	{
-		this->get_override("addResults")(inputDataList, resultsList);
+		this->get_override("getResults")(inputDataList, resultsList);
 	}
 
 	virtual void getCatalog(ScriptResultsList& resultsList)
@@ -50,6 +50,16 @@ public:
 		CatItem& item)
 	{
 		this->get_override("launchItem")(inputDataList, item);
+	}
+
+	virtual void launchyShow()
+	{
+		this->get_override("launchyShow")();
+	}
+
+	virtual void launchyHide()
+	{
+		this->get_override("launchyHide")();
 	}
 
 
@@ -77,10 +87,12 @@ void export_ScriptPlugin()
 		.def("getID", pure_virtual(&ScriptPlugin::getID))
 		.def("getName", pure_virtual(&ScriptPlugin::getName))
 		.def("getIcon", pure_virtual(&ScriptPlugin::getIcon))
-		.def("addLabels", pure_virtual(&ScriptPlugin::addLabels))
-		.def("addResults", pure_virtual(&ScriptPlugin::addResults))
+		.def("getLabels", pure_virtual(&ScriptPlugin::getLabels))
+		.def("getResults", pure_virtual(&ScriptPlugin::getResults))
 		.def("getCatalog", pure_virtual(&ScriptPlugin::getCatalog))
 		.def("launchItem", pure_virtual(&ScriptPlugin::launchItem))
+		.def("launchyShow", pure_virtual(&ScriptPlugin::launchyShow))
+		.def("launchyHide", pure_virtual(&ScriptPlugin::launchyHide))
     ;
 
 }

@@ -135,8 +135,8 @@ void PyLaunchyPlugin::getLabels(QList<InputData>* id)
 	{
 		ScriptPluginsManager::instance().setCurrentPlugin(pluginInfo.plugin);
 		try {
-			LOG_DEBUG("Calling plugin addLabels");
-			pluginInfo.plugin->addLabels(inputDataList);
+			LOG_DEBUG("Calling plugin getLabels");
+			pluginInfo.plugin->getLabels(inputDataList);
 		}
 		catch(boost::python::error_already_set const &) {
 			LOG_DEBUG(QString("Exception occured with plugin ") + pluginInfo.name);
@@ -156,8 +156,8 @@ void PyLaunchyPlugin::getResults(QList<InputData>* id, QList<CatItem>* results)
 	{
 		m_pluginsManager.setCurrentPlugin(pluginInfo.plugin);
 		try {
-			LOG_DEBUG("Calling plugin addResults");
-			pluginInfo.plugin->addResults(inputDataList, scriptResults);
+			LOG_DEBUG("Calling plugin getResults");
+			pluginInfo.plugin->getResults(inputDataList, scriptResults);
 		}
 		catch(boost::python::error_already_set const &) {
 			LOG_DEBUG(QString("Exception occured with plugin ") + pluginInfo.name);
@@ -168,9 +168,9 @@ void PyLaunchyPlugin::getResults(QList<InputData>* id, QList<CatItem>* results)
 	/*try {
 		
 		if (plugin) {
-			LOG_DEBUG("Calling plugin addResults");
+			LOG_DEBUG("Calling plugin getResults");
 			ScriptResultsList scriptResults(*results);
-			plugin->addResults(inputDataList, scriptResults);
+			plugin->getResults(inputDataList, scriptResults);
 		}
 	}
 	catch(boost::python::error_already_set const &) {
@@ -250,6 +250,42 @@ void PyLaunchyPlugin::endDialog(bool accept)
 {
 }
 
+void PyLaunchyPlugin::launchyShow() 
+{
+	LOG_DEBUG(__FUNCTION__);
+
+	foreach (ScriptPluginInfo pluginInfo, m_pluginsManager.plugins())
+	{
+		m_pluginsManager.setCurrentPlugin(pluginInfo.plugin);
+		try {
+			LOG_DEBUG("Calling plugin launchyShow");
+			pluginInfo.plugin->launchyShow();
+		}
+		catch(boost::python::error_already_set const &) {
+			LOG_DEBUG(QString("Exception occured with plugin ") + pluginInfo.name);
+		}
+	}
+	m_pluginsManager.resetCurrentPlugin();
+}
+
+void PyLaunchyPlugin::launchyHide() 
+{
+	LOG_DEBUG(__FUNCTION__);
+
+	foreach (ScriptPluginInfo pluginInfo, m_pluginsManager.plugins())
+	{
+		m_pluginsManager.setCurrentPlugin(pluginInfo.plugin);
+		try {
+			LOG_DEBUG("Calling plugin launchyHide");
+			pluginInfo.plugin->launchyHide();
+		}
+		catch(boost::python::error_already_set const &) {
+			LOG_DEBUG(QString("Exception occured with plugin ") + pluginInfo.name);
+		}
+	}
+	m_pluginsManager.resetCurrentPlugin();
+}
+
 int PyLaunchyPlugin::msg(int msgId, void* wParam, void* lParam)
 {
 	bool handled = false;
@@ -294,6 +330,14 @@ int PyLaunchyPlugin::msg(int msgId, void* wParam, void* lParam)
 		case MSG_END_DIALOG:
 			// This isn't called unless you return true to MSG_HAS_DIALOG
 			endDialog((bool) wParam);
+			break;
+		case MSG_LAUNCHY_SHOW:
+			handled = true;
+			launchyShow();
+			break;
+		case MSG_LAUNCHY_HIDE:
+			handled = true;
+			launchyHide();
 			break;
 
 		default:

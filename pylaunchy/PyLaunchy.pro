@@ -22,6 +22,7 @@
 	LIBS += shell32.lib
 	LIBS += $$(PYTHONROOT)\libs\python25.lib
 	LIBS += -L$$(BOOST_1_35_0)\lib
+	RC_FILE = PyLaunchy_resource.rc
 %	LIBS += user32.lib
 %	LIBS += Gdi32.lib
 %	LIBS += comctl32.lib

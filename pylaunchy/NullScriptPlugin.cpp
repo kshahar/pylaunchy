@@ -37,11 +37,11 @@ QString NullScriptPlugin::getIcon()
 	return icon;
 }
 
-void NullScriptPlugin::addLabels(ScriptInputDataList& inputDataList)
+void NullScriptPlugin::getLabels(ScriptInputDataList& inputDataList)
 {
 }
 
-void NullScriptPlugin::addResults(ScriptInputDataList& inputDataList, 
+void NullScriptPlugin::getResults(ScriptInputDataList& inputDataList, 
 		ScriptResultsList& resultsList)
 {
 }
@@ -54,3 +54,11 @@ void NullScriptPlugin::launchItem(ScriptInputDataList& inputDataList,
 	CatItem& item)
 {
 }	
+
+void NullScriptPlugin::launchyShow()
+{
+}
+
+void NullScriptPlugin::launchyHide()
+{
+}

@@ -5,16 +5,16 @@ sys.stdout = open('stdout.txt','w')
 sys.stderr = open('stderr.txt','w')
 print "Launchy Python plug-in system is up and running"
 
-try:
-	print __name__
-	for pyfile in glob.glob("*.py"):
-		if pyfile != "pylaunchy.py":
-			print "Importing %s" % pyfile
-			__import__(os.path.splitext(pyfile)[0], globals())
-except Exception, inst:
-	print inst
-print "All plugins were imported"
-for s in [sys.stdout, sys.stderr]: s.flush()	
+# try:
+	# print __name__
+	# for pyfile in glob.glob("*.py"):
+		# if pyfile != "pylaunchy.py":
+			# print "Importing %s" % pyfile
+			# __import__(os.path.splitext(pyfile)[0], globals())
+# except Exception, inst:
+	# print inst
+# print "All plugins were imported"
+# for s in [sys.stdout, sys.stderr]: s.flush()	
 	
 # t = TestPlugin()
 # print t

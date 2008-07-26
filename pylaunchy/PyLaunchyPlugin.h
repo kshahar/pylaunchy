@@ -46,6 +46,8 @@ public:
 	void endDialog(bool accept);
 	void init();
 	QString getIcon();
+	void launchyShow();
+	void launchyHide();
 
 private:
 	/** Convert QList<InputData> -> ScriptInputDataList */

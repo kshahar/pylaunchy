@@ -13,15 +13,19 @@ public:
 
 	virtual QString getIcon() = 0;
 
-	virtual void addLabels(ScriptInputDataList& inputDataList) = 0;
+	virtual void getLabels(ScriptInputDataList& inputDataList) = 0;
 
-	virtual void addResults(ScriptInputDataList& inputDataList, 
+	virtual void getResults(ScriptInputDataList& inputDataList, 
 		ScriptResultsList& resultsList) = 0;
 
 	virtual void getCatalog(ScriptResultsList& resultsList) = 0;
 
 	virtual void launchItem(ScriptInputDataList& inputDataList, 
 		CatItem& item) = 0;
+
+	virtual void launchyShow() = 0;
+
+	virtual void launchyHide() = 0;
 };
 
 #endif
