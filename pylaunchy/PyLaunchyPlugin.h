@@ -18,27 +18,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #pragma once
 
-#define PLUGIN_NAME "PyLaunchy"
-
 #include "plugin_interface.h"
 #include "ScriptPluginInfo.h"
 #include "ScriptDataStructures.h"
+
+class ScriptPluginsManager;
 
 class PyLaunchyPlugin : public QObject, public PluginInterface
 {
 	Q_OBJECT
 	Q_INTERFACES(PluginInterface)
 
-
-public:
-	uint HASH_myplugin;
 private:
 
 public:
-	PyLaunchyPlugin() {
-		HASH_myplugin = qHash(QString(PLUGIN_NAME));
-	}
-	~PyLaunchyPlugin() {}
+	PyLaunchyPlugin();
+	~PyLaunchyPlugin();
 	int msg(int msgId, void* wParam = NULL, void* lParam = NULL); 
 
 	void getLabels(QList<InputData>*);
@@ -53,13 +48,11 @@ public:
 	QString getIcon();
 
 private:
-	void addPlugin(boost::python::object pluginObject);
-
 	/** Convert QList<InputData> -> ScriptInputDataList */
 	ScriptInputDataList prepareInputDataList(QList<InputData>* id);
 
 	boost::python::object m_mainModule;
-	QList<ScriptPluginInfo> m_scriptPlugins;
+	ScriptPluginsManager& m_pluginsManager;
 };
 
 extern PyLaunchyPlugin* gmypluginInstance;

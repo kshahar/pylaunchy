@@ -1,8 +1,7 @@
 #ifndef ExportedInputData_H_
 #define ExportedInputData_H_
 
-#include <catalog.h>
-#include <ExportedCatItem.h>
+#include "catalog.h"
 
 class ExportedInputData
 {
@@ -41,10 +40,10 @@ public:
 	void setText(const char* t);
 
 	/** Get a pointer to the best catalog match for this segment of the query */
-	ExportedCatItem& const getTopResult();
+	CatItem& const getTopResult();
 
 	/** Change the best catalog match for this segment */
-	void setTopResult(ExportedCatItem sr);
+	void setTopResult(CatItem sr);
 };
 
 #endif // ExportedInputData_H_

@@ -51,12 +51,12 @@ void ExportedInputData::setText(const char* t)
 	m_inputData.setText(t);
 }
 
-ExportedCatItem& const ExportedInputData::getTopResult()
+CatItem& const ExportedInputData::getTopResult()
 {
 	return m_inputData.getTopResult();
 }
 
-void ExportedInputData::setTopResult(ExportedCatItem sr)
+void ExportedInputData::setTopResult(CatItem sr)
 {
 	m_inputData.setTopResult(sr);
 }

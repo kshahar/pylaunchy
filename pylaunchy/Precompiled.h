@@ -1,5 +1,11 @@
 #pragma once
 
+#include <stdlib.h>
+#ifdef _WIN32
+#include <windows.h>
+#endif //_WIN32
+#include <ezlogger_headers.hpp>
+
 #include <Python.h>
 #include <boost/python.hpp>
 #include <boost/python/call.hpp>
@@ -25,3 +31,4 @@
 #include <shlobj.h>
 #include <tchar.h>
 #endif
+

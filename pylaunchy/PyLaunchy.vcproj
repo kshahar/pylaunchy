@@ -63,6 +63,10 @@
 			Name="Plugin API"
 			>
 			<File
+				RelativePath=".\catalog.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\catalog.h"
 				>
 			</File>
@@ -96,11 +100,23 @@
 				UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 				>
 				<File
+					RelativePath=".\NullScriptPlugin.h"
+					>
+				</File>
+				<File
 					RelativePath=".\PyLaunchyPlugin.h"
 					>
 				</File>
 				<File
+					RelativePath=".\PyLaunchyPluginDefines.h"
+					>
+				</File>
+				<File
 					RelativePath=".\ScriptPluginInfo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ScriptPluginsManager.h"
 					>
 				</File>
 			</Filter>
@@ -110,7 +126,15 @@
 				UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 				>
 				<File
+					RelativePath=".\NullScriptPlugin.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\PyLaunchyPlugin.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ScriptPluginsManager.cpp"
 					>
 				</File>
 			</Filter>
@@ -121,10 +145,6 @@
 			<Filter
 				Name="Header Files"
 				>
-				<File
-					RelativePath=".\ExportedCatItem.h"
-					>
-				</File>
 				<File
 					RelativePath=".\ExportedInputData.h"
 					>
@@ -142,10 +162,6 @@
 				Name="Source Files"
 				>
 				<File
-					RelativePath=".\ExportedCatItem.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\ExportedInputData.cpp"
 					>
 				</File>
@@ -155,6 +171,10 @@
 				</File>
 				<File
 					RelativePath=".\python_export_catalog.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\python_export_pylaunchy.cpp"
 					>
 				</File>
 				<File

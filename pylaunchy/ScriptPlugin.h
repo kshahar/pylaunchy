@@ -21,7 +21,7 @@ public:
 	virtual void getCatalog(ScriptResultsList& resultsList) = 0;
 
 	virtual void launchItem(ScriptInputDataList& inputDataList, 
-		const ExportedCatItem& item) = 0;
+		CatItem& item) = 0;
 };
 
 #endif

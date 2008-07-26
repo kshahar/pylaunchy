@@ -51,45 +51,16 @@ public:
 	/** The plugin id of the creator of this CatItem */
 	int id;
 
-	CatItem() {}
+	CatItem();
 
 
-
-	CatItem(QString full, bool isDir = false) 
-		: fullPath(full) {
-			int last = fullPath.lastIndexOf("/");
-			if (last == -1) {
-				shortName = fullPath;
-
-			} else {
-				shortName = fullPath.mid(last+1);
-				if (!isDir)
-					shortName = shortName.mid(0,shortName.lastIndexOf("."));
-			}
-
-			lowName = shortName.toLower();
-			data = NULL;
-			usage = 0;
-			id = 0;
-	}
+	CatItem(QString full, bool isDir = false);
 
 
-	CatItem(QString full, QString shortN) 
-		: fullPath(full), shortName(shortN) 
-	{
-		lowName = shortName.toLower();
-		data = NULL;
-		usage = 0;
-		id = 0;
-	}
+	CatItem(QString full, QString shortN);
 
-	CatItem(QString full, QString shortN, uint i_d) 
-		: id(i_d), fullPath(full), shortName(shortN)
-	{
-		lowName = shortName.toLower();
-		data = NULL;
-		usage = 0;
-	}
+	CatItem(QString full, QString shortN, uint i_d);
+
 	/** This is the constructor most used by plugins 
 	\param full The full path of the file to execute
 	\param The abbreviated name for the entry
@@ -98,41 +69,32 @@ public:
 	\warning It is usually a good idea to append ".your_plugin_name" to the end of the full parameter
 	so that there are not multiple items in the index with the same full path.
 	*/
-	CatItem(QString full, QString shortN, uint i_d, QString iconPath) 
-		: id(i_d), fullPath(full), shortName(shortN), icon(iconPath)
-	{
-		lowName = shortName.toLower();
-		data = NULL;
-		usage = 0;
-	}
+	CatItem(QString full, QString shortN, uint i_d, QString iconPath);
 
-	CatItem(const CatItem &s) {
-		fullPath = s.fullPath;
-		shortName = s.shortName;
-		lowName = s.lowName;
-		icon = s.icon;
-		usage = s.usage;
-		data = s.data;
-		id = s.id;
-	}
+	CatItem(const CatItem &s);
 
-	CatItem& operator=( const CatItem &s ) {
-		fullPath = s.fullPath;
-		shortName = s.shortName;
-		lowName = s.lowName;
-		icon = s.icon;
-		usage = s.usage;
-		data = s.data;
-		id = s.id;
-		return *this;
-	}
+	CatItem& operator=( const CatItem &s );
 
-	bool operator==(const CatItem& other) const{
-		if (fullPath == other.fullPath)
-			return true;
-		return false;
-	}
+	bool operator==(const CatItem& other) const;
 
+	// For some reason I can't get Boost.Python to like accessing the QString 
+	// directly, so here are the getter functions
+
+	/** The full path of the indexed item */
+	QString get_fullPath() const { return fullPath; };
+	/** The abbreviated name of the indexed item */
+	QString get_shortName() const { return shortName; }
+	/** The lowercase name of the indexed item */
+	QString get_lowName() const { return lowName; }
+	/** A path to an icon for the item */
+	QString get_icon() const { return icon; }
+	/** How many times this item has been called by the user */
+	int get_usage() const { return usage; }
+	/** The plugin id of the creator of this CatItem */
+	int get_id() const { return id; }
+
+	/** Get the real id of this CatItem, the one that was set by the script */
+	int get_scriptPluginId() const;
 };
 
 

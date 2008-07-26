@@ -2,7 +2,7 @@
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 
-#include "ExportedCatItem.h"
+#include "catalog.h"
 #include "ExportedInputData.h"
 #include "ScriptPlugin.h"
 
@@ -15,13 +15,24 @@ void export_CatItem()
 		.def(init<QString, const char*>())
 		.def(init<QString, QString, unsigned int>())
 		.def(init<QString, QString, unsigned int, QString>())
+		.def("fullPath", &CatItem::get_fullPath)
+		.def("shortName", &CatItem::get_shortName)
+		.def("lowName", &CatItem::get_lowName)
+		.def("icon", &CatItem::get_icon)
+		.def("usage", &CatItem::get_usage)
+		.def("id", &CatItem::get_scriptPluginId)
+	;
+
+		/* Direct access to CatItem members does not work. 
+		I get TypeError with "No Python class registered for C++ class class QString"
+
 		.def_readwrite("fullPath", &CatItem::fullPath)
 		.def_readwrite("shortName", &CatItem::shortName)
 		.def_readwrite("lowName", &CatItem::lowName)
 		.def_readwrite("icon", &CatItem::icon)
 		.def_readwrite("usage", &CatItem::usage)
 		.def_readwrite("id", &CatItem::id)
-	;
+		*/
 }
 
 /*

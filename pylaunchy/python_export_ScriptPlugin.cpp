@@ -47,7 +47,7 @@ public:
 	}
 
 	virtual void launchItem(ScriptInputDataList& inputDataList, 
-		const ExportedCatItem& item)
+		CatItem& item)
 	{
 		this->get_override("launchItem")(inputDataList, item);
 	}

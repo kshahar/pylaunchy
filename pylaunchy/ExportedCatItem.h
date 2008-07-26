@@ -3,8 +3,6 @@
 
 #include <catalog.h>
 
-typedef CatItem ExportedCatItem;
-
 #if 0
 
 /** 

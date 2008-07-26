@@ -1,5 +1,8 @@
 #include "Precompiled.h"
 #include "PyLaunchyPlugin.h"
+#include "PyLaunchyPluginDefines.h"
+#include "ScriptPlugin.h"
+#include "ScriptPluginsManager.h"
 
 #include <QtGui>
 #include <QUrl>
@@ -13,8 +16,6 @@
 #include <tchar.h>
 
 #endif
-
-#include "ScriptPlugin.h"
 
 using namespace boost::python;
 
@@ -51,14 +52,23 @@ static PluginDebug g_pluginDebug;
 	do {} while(0);
 #endif
 
+PyLaunchyPlugin::PyLaunchyPlugin()
+: m_pluginsManager( ScriptPluginsManager::instance() )
+{
+}
+
+PyLaunchyPlugin::~PyLaunchyPlugin()
+{
+}
+
 void PyLaunchyPlugin::getID(uint* id)
 {
-	*id = HASH_myplugin;
+	*id = pylaunchy::pluginHash;
 }
 
 void PyLaunchyPlugin::getName(QString* str)
 {
-	*str = PLUGIN_NAME;
+	*str = pylaunchy::pluginName;
 }
 
 void PyLaunchyPlugin::init()
@@ -84,13 +94,13 @@ void PyLaunchyPlugin::init()
 		boost::python::object ignored = boost::python::exec_file(
 			"plugins/python/init.py", main_namespace, main_namespace);
 
-		LOG_DEBUG("Retrieving getPlugin function");
+		/*LOG_DEBUG("Retrieving getPlugin function");
 		boost::python::object getPlugin = m_mainModule.attr("getPlugin");
 
 		LOG_DEBUG("Retrieving plugin");		
 		boost::python::object pluginObject = getPlugin();
 
-		addPlugin(pluginObject);
+		addPlugin(pluginObject);*/
 	} 
 	catch(boost::python::error_already_set const &) {
 		LOG_DEBUG("Exception occured");
@@ -104,8 +114,9 @@ void PyLaunchyPlugin::getLabels(QList<InputData>* id)
 
 	ScriptInputDataList inputDataList(prepareInputDataList(id));
 
-	foreach (ScriptPluginInfo pluginInfo, m_scriptPlugins)
+	foreach (ScriptPluginInfo pluginInfo, m_pluginsManager.plugins())
 	{
+		ScriptPluginsManager::instance().setCurrentPlugin(pluginInfo.plugin);
 		try {
 			LOG_DEBUG("Calling plugin addLabels");
 			pluginInfo.plugin->addLabels(inputDataList);
@@ -114,6 +125,7 @@ void PyLaunchyPlugin::getLabels(QList<InputData>* id)
 			LOG_DEBUG(QString("Exception occured with plugin ") + pluginInfo.name);
 		}
 	}
+	ScriptPluginsManager::instance().resetCurrentPlugin();
 }
 
 void PyLaunchyPlugin::getResults(QList<InputData>* id, QList<CatItem>* results)
@@ -123,8 +135,9 @@ void PyLaunchyPlugin::getResults(QList<InputData>* id, QList<CatItem>* results)
 	ScriptInputDataList inputDataList(prepareInputDataList(id));
 	ScriptResultsList scriptResults(*results);
 
-	foreach (ScriptPluginInfo pluginInfo, m_scriptPlugins)
+	foreach (ScriptPluginInfo pluginInfo, m_pluginsManager.plugins())
 	{
+		m_pluginsManager.setCurrentPlugin(pluginInfo.plugin);
 		try {
 			LOG_DEBUG("Calling plugin addResults");
 			pluginInfo.plugin->addResults(inputDataList, scriptResults);
@@ -133,6 +146,7 @@ void PyLaunchyPlugin::getResults(QList<InputData>* id, QList<CatItem>* results)
 			LOG_DEBUG(QString("Exception occured with plugin ") + pluginInfo.name);
 		}
 	}
+	ScriptPluginsManager::instance().resetCurrentPlugin();
 
 	/*try {
 		
@@ -165,8 +179,9 @@ void PyLaunchyPlugin::getCatalog(QList<CatItem>* items)
 
 	ScriptResultsList scriptResults(*items);
 
-	foreach (ScriptPluginInfo pluginInfo, m_scriptPlugins)
+	foreach (ScriptPluginInfo pluginInfo, m_pluginsManager.plugins())
 	{
+		m_pluginsManager.setCurrentPlugin(pluginInfo.plugin);
 		try {
 			LOG_DEBUG("Calling plugin getCatalog");
 			pluginInfo.plugin->getCatalog(scriptResults);
@@ -175,6 +190,7 @@ void PyLaunchyPlugin::getCatalog(QList<CatItem>* items)
 			LOG_DEBUG(QString("Exception occured with plugin ") + pluginInfo.name);
 		}
 	}
+	m_pluginsManager.resetCurrentPlugin();
 }
 
 void PyLaunchyPlugin::launchItem(QList<InputData>* id, CatItem* item)
@@ -182,6 +198,19 @@ void PyLaunchyPlugin::launchItem(QList<InputData>* id, CatItem* item)
 	LOG_DEBUG(__FUNCTION__);
 
 	ScriptInputDataList inputDataList(prepareInputDataList(id));
+	ScriptPlugin* plugin = reinterpret_cast<ScriptPlugin*>(item->data);
+
+	try {
+		EZLOGGERPRINT("Calling launchItem for plugin %s", plugin->getName().toUtf8());
+		LOG_DEBUG(plugin->getName());
+		plugin->launchItem(inputDataList, *item);
+	}
+	catch(boost::python::error_already_set const &) {
+		//LOG_DEBUG(QString("Exception occured with plugin ") + pluginInfo.name);
+	}
+	
+
+	/*ScriptInputDataList inputDataList(prepareInputDataList(id));
 
 	foreach (ScriptPluginInfo pluginInfo, m_scriptPlugins)
 	{
@@ -193,7 +222,7 @@ void PyLaunchyPlugin::launchItem(QList<InputData>* id, CatItem* item)
 		catch(boost::python::error_already_set const &) {
 			LOG_DEBUG(QString("Exception occured with plugin ") + pluginInfo.name);
 		}
-	}
+	}*/
 }
 
 void PyLaunchyPlugin::doDialog(QWidget* parent, QWidget** newDlg) 
@@ -255,23 +284,6 @@ int PyLaunchyPlugin::msg(int msgId, void* wParam, void* lParam)
 	}
 		
 	return handled;
-}
-
-void PyLaunchyPlugin::addPlugin(boost::python::object pluginObject)
-{
-	LOG_DEBUG("Extracting plugin");
-	ScriptPlugin* plugin = extract<ScriptPlugin*>(pluginObject);
-
-	if (plugin) {
-		LOG_DEBUG("Initializing plugin");
-		plugin->init();
-
-		LOG_DEBUG("Getting plugin name");
-		QString pluginName = plugin->getName();
-
-		LOG_DEBUG("Adding plugin to list");
-		m_scriptPlugins.push_back( ScriptPluginInfo(plugin, pluginName) );
-	}
 }
 
 ScriptInputDataList PyLaunchyPlugin::prepareInputDataList(QList<InputData>* id)
