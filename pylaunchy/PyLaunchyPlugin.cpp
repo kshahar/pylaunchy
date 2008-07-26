@@ -82,6 +82,9 @@ void PyLaunchyPlugin::init()
 		PyErr_Clear();
 	}
 
+	// TODO: check if exists
+	QDir::setCurrent("plugins/python/");
+
 	try {
 		LOG_DEBUG("Importing __main__ and __dict__");
 		m_mainModule = boost::python::import("__main__");
@@ -90,10 +93,22 @@ void PyLaunchyPlugin::init()
 		LOG_DEBUG("Initializing pylaunchy exports");
 		init_pylaunchy();
 
-		LOG_DEBUG("Executing init.py file");
+		LOG_DEBUG("Executing pylaunchy.py file");
 		boost::python::object ignored = boost::python::exec_file(
-			"plugins/python/init.py", main_namespace, main_namespace);
+			"pylaunchy.py", main_namespace, main_namespace);
 
+		QDir scriptsDir(".");
+		scriptsDir.setNameFilters(QStringList("*.py"));
+		scriptsDir.setFilter(QDir::Files);
+		LOG_DEBUG("HERE1");
+		foreach (QString pyFile, scriptsDir.entryList()) {
+			if (pyFile != "pylaunchy.py") {
+				boost::python::str pyFileName( (const char*) pyFile.toUtf8());
+				boost::python::exec_file(pyFileName, 
+					main_namespace, main_namespace);
+			}
+		}	
+		LOG_DEBUG("HERE2");
 		/*LOG_DEBUG("Retrieving getPlugin function");
 		boost::python::object getPlugin = m_mainModule.attr("getPlugin");
 
@@ -105,6 +120,8 @@ void PyLaunchyPlugin::init()
 	catch(boost::python::error_already_set const &) {
 		LOG_DEBUG("Exception occured");
 	}
+
+
 }
 
 

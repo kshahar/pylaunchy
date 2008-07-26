@@ -1,12 +1,5 @@
-import sys, os
 import launchy
-os.chdir('plugins/python')
-sys.stdout = open('stdout.txt','w')
-sys.stderr = open('stderr.txt','w')
-print "Launchy Python plug-in is up and running"
-
-sys.stdout.flush()
-sys.stderr.flush()
+import sys,os
 
 class TestPlugin(launchy.Plugin):
 	def init(self):
@@ -14,7 +7,7 @@ class TestPlugin(launchy.Plugin):
 		self.hash = launchy.hash(self.getName())
 		
 	def getID(self):
-		return 999
+		return self.hash
 	
 	def getName(self):
 		return "TestPythonPlugin"
@@ -47,32 +40,18 @@ class TestPlugin(launchy.Plugin):
 		pass
 		
 	def launchItem(self, inputDataList, catItem):
-		print "WHOOOO", catItem.fullPath
+		try:
+			print "WHOOO"
+			print catItem.fullPath(), catItem.shortName(), catItem.lowName(), catItem.icon(), catItem.usage(), catItem.id()
+		except Exception, inst:
+			print type(inst)     # the exception instance
+			print inst.args      # arguments stored in .args
+			print inst           # __str__ allows args to printed directly	
 		for s in [sys.stdout, sys.stderr]: s.flush()
 
-t = TestPlugin()
-print t
-
-sys.stdout.flush()
-sys.stderr.flush()	
-
-def getPlugin():
-	return t
-	
-# def getResults(inputData):
-	# try:
-		# print dir(inputData), inputData.getID,  inputData.getID()
-	# except Exception, inst:
-		# print type(inst)     # the exception instance
-		# print inst.args      # arguments stored in .args
-		# print inst           # __str__ allows args to printed directly
-	# sys.stdout.flush()
-
-# try:
-	# import launchy
-	# print "YEEEEEEEEEEESSSSSSSSSSSSSSS"
-	# print launchy.add_five(5)
-# except Exception, inst:
-	# print type(inst)     # the exception instance
-	# print inst.args      # arguments stored in .args
-	# print inst           # __str__ allows args to printed directly
+try:
+	testPlugin = TestPlugin()
+	launchy.addPlugin(TestPlugin())
+except Exception, inst:
+	print inst           # __str__ allows args to printed directly	
+for s in [sys.stdout, sys.stderr]: s.flush()	

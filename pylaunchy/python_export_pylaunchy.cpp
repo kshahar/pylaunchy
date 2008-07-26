@@ -6,6 +6,10 @@
 
 using namespace boost::python;
 
+// Since the plugin is created in the script, we need to hold a reference
+// to it so that the python GC will not delete it
+static std::vector<object> g_scriptPluginsObjects;
+
 namespace pylaunchy 
 {
 	void addPlugin(boost::python::object pluginObject)
@@ -28,6 +32,9 @@ namespace pylaunchy
 				EZLOGGERSTREAM << "Adding plugin to list" << std::endl;
 				ScriptPluginsManager& pluginsManager = ScriptPluginsManager::instance();
 				pluginsManager.addPlugin( ScriptPluginInfo(plugin, pluginName) );
+
+				// Keep a copy of the object here to avoid deleting by the GC
+				g_scriptPluginsObjects.push_back(pluginObject);
 			}
 		}
 		catch(boost::python::error_already_set const &) {
