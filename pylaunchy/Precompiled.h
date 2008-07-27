@@ -1,10 +1,10 @@
 #pragma once
 
-#include <stdlib.h>
-#ifdef _WIN32
-#include <windows.h>
-#endif //_WIN32
-#include <ezlogger_headers.hpp>
+#if _MSC_VER >= 1300
+#pragma warning (disable : 4100)
+#endif
+
+#include "pylaunchy_ezlogger_adapter.h"
 
 #include <Python.h>
 #include <boost/python.hpp>

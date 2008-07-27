@@ -14,22 +14,25 @@ namespace pylaunchy
 {
 	void addPlugin(boost::python::object pluginObject)
 	{
+		LOG_FUNCTRACK;
+
 		try {
-			EZLOGGERSTREAM << "Extracting plugin" << std::endl;
+			LOG_DEBUG("Extracting plugin");
 			ScriptPlugin* plugin = extract<ScriptPlugin*>(pluginObject);
 
 			if (!plugin) {
-				EZLOGGERSTREAM << "Plugin is NULL" << std::endl;
+				LOG_DEBUG("Plugin is NULL");
+				return;
 			}
 
 			if (plugin) {
-				EZLOGGERSTREAM << "Initializing plugin" << std::endl;
+				LOG_DEBUG("Initializing plugin");
 				plugin->init();
 
-				EZLOGGERSTREAM << "Getting plugin name" << std::endl;
+				LOG_DEBUG("Getting plugin name");
 				QString pluginName = plugin->getName();
 
-				EZLOGGERSTREAM << "Adding plugin to list" << std::endl;
+				LOG_DEBUG("Adding plugin to list");
 				ScriptPluginsManager& pluginsManager = ScriptPluginsManager::instance();
 				pluginsManager.addPlugin( ScriptPluginInfo(plugin, pluginName) );
 
@@ -38,7 +41,7 @@ namespace pylaunchy
 			}
 		}
 		catch(boost::python::error_already_set const &) {
-			EZLOGGERSTREAM << "Exception caught when trying to add plugin" << std::endl;
+			LOG_DEBUG("Exception caught when trying to add plugin");
 		}
 	}
 

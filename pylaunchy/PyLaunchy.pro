@@ -18,6 +18,7 @@
  INCLUDEPATH = $$(PYTHON_ROOT)\include $$(BOOST_1_35_0) ezlogger
  
  win32 {
+	DEFINES = _CRT_SECURE_NO_DEPRECATE
  	CONFIG -= embed_manifest_dll
 	LIBS += shell32.lib
 	LIBS += $$(PYTHONROOT)\libs\python25.lib

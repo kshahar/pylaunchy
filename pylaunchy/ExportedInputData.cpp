@@ -51,7 +51,7 @@ void ExportedInputData::setText(const char* t)
 	m_inputData.setText(t);
 }
 
-CatItem& const ExportedInputData::getTopResult()
+CatItem& ExportedInputData::getTopResult()
 {
 	return m_inputData.getTopResult();
 }

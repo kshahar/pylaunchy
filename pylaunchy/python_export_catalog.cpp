@@ -35,24 +35,6 @@ void export_CatItem()
 		*/
 }
 
-/*
-void export_CatItem()
-{
-	class_<ExportedCatItem>("CatItem", init<>())
-		.def(init<const char*, bool>())
-		.def(init<const char*, const char*>())
-		.def(init<const char*, const char*, unsigned int>())
-		.def(init<const char*, const char*, unsigned int, const char*>())
-		.def("fullPath", &ExportedCatItem::fullPath)
-		.def("shortName", &ExportedCatItem::shortName)
-		.def("lowName", &ExportedCatItem::lowName)
-		.def("icon", &ExportedCatItem::icon)
-		.def("usage", &ExportedCatItem::usage)
-		.def("id", &ExportedCatItem::id)
-	;
-}
-*/
-
 void export_InputData()
 {
 	class_<ExportedInputData>("InputData", no_init)
@@ -65,30 +47,14 @@ void export_InputData()
 		.def("getTopResult", &ExportedInputData::getTopResult, return_value_policy<reference_existing_object>())
 		.def("setTopResult", &ExportedInputData::setTopResult)
 	;
-}
 
-class MyTest {
-public:
-	MyTest(): test1(""), test2("") {}
-	const char* test1;
-	const char* test2;
-};
+	class_< std::vector<ExportedInputData> >("InputDataVector")
+		.def(vector_indexing_suite< std::vector<ExportedInputData>, true>());
 
-void export_MyTest()
-{
-	class_<MyTest>("MyTest")
-		.def_readwrite("test1", &MyTest::test1)
-		.def_readwrite("test2", &MyTest::test2)
-	;
 }
 
 void export_catalog()
 {
 	export_CatItem();
 	export_InputData();
-	export_MyTest();
-
-	class_< std::vector<ExportedInputData> >("InputDataVector")
-                 .def(vector_indexing_suite< std::vector<ExportedInputData>, true>());
-
 }

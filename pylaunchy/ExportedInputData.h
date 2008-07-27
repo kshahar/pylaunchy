@@ -40,7 +40,7 @@ public:
 	void setText(const char* t);
 
 	/** Get a pointer to the best catalog match for this segment of the query */
-	CatItem& const getTopResult();
+	CatItem& getTopResult();
 
 	/** Change the best catalog match for this segment */
 	void setTopResult(CatItem sr);

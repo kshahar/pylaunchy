@@ -90,6 +90,10 @@
 				RelativePath=".\Precompiled.h"
 				>
 			</File>
+			<File
+				RelativePath=".\pylaunchy_ezlogger_adapter.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="PyLaunchy"

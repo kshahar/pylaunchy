@@ -9,6 +9,42 @@
 
 namespace axter
 {
+	static const char* severity_strings[] = {
+		"", // no_severity 
+		"DEBUG", //debug 
+		"INFO", //info 
+		"STAUTS", //status 
+		"WARN", //warn 
+		"ERROR", //error 
+		"FATAL", //fatal
+	};
+
+	/*! @class pylaunchy_ezlogger_format_policy
+	@see ezlogger_format_policy
+	*/
+	class ezlogger_format_policy
+	{
+	public:
+		inline static std::string get_log_prefix_format(const char*FileName, 
+			int LineNo, const char*FunctionName, ext_data levels_format_usage_data)
+		{
+			time_t currentTime = time(0);
+			char timeBuff[128];
+			strftime(timeBuff, 128, "%y-%m-%d %H:%M:%S",localtime(&currentTime));
+
+			char FileNameFormat[999] = {0};
+			sprintf(FileNameFormat, "%s %s\t[%s] - ", 
+				timeBuff, severity_strings[levels_format_usage_data.m_severity_level],
+				FunctionName);
+			return FileNameFormat;
+		}
+	};
+};
+
+// Original EzLogger code:
+#if 0
+namespace axter
+{
 	/*! @class ezlogger_format_policy
 	@brief This struct defines the get_log_prefix_format function, which 
 			is used to format the start of each log line.
@@ -47,5 +83,6 @@ namespace axter
 		}
 	};
 }
+#endif // if 0
 
 #endif //EZLOGGER_FORMAT_POLICY_HPP_HEADER_GRD_
