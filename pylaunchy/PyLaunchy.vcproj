@@ -116,6 +116,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\PythonUtils.h"
+					>
+				</File>
+				<File
 					RelativePath=".\ScriptPluginInfo.h"
 					>
 				</File>

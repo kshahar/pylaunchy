@@ -3,6 +3,7 @@
 #include <QHash>
 #include "plugin_interface.h"
 #include "ScriptPluginsManager.h"
+#include "PythonUtils.h"
 
 using namespace boost::python;
 
@@ -16,7 +17,8 @@ namespace pylaunchy
 	{
 		LOG_FUNCTRACK;
 
-		try {
+		GUARDED_CALL_TO_PYTHON
+		(
 			LOG_DEBUG("Extracting plugin");
 			ScriptPlugin* plugin = extract<ScriptPlugin*>(pluginObject);
 
@@ -39,10 +41,7 @@ namespace pylaunchy
 				// Keep a copy of the object here to avoid deleting by the GC
 				g_scriptPluginsObjects.push_back(pluginObject);
 			}
-		}
-		catch(boost::python::error_already_set const &) {
-			LOG_DEBUG("Exception caught when trying to add plugin");
-		}
+		);
 	}
 
 	unsigned int hash(const char* str)
@@ -67,6 +66,8 @@ namespace pylaunchy
 
 	void runProgram(QString file, QString args)
 	{
+		LOG_DEBUG("Running file [args]: %s [%s]", 
+			(const char*)file.toUtf8(), (const char*)args.toUtf8());
 		::runProgram(file, args);
 	}
 };

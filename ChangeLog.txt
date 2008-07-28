@@ -1,0 +1,2 @@
+2008-07-29  Shahar Kosti
+	* Version 0.5 - first public release

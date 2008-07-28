@@ -1,8 +1,5 @@
 #include "Precompiled.h"
 #include "PyLaunchyPlugin.h"
-#include "PyLaunchyPluginDefines.h"
-#include "ScriptPlugin.h"
-#include "ScriptPluginsManager.h"
 
 #include <QtGui>
 #include <QUrl>
@@ -14,23 +11,18 @@
 #include <windows.h>
 #include <shlobj.h>
 #include <tchar.h>
-
 #endif
+
+#include "PyLaunchyPluginDefines.h"
+#include "ScriptPlugin.h"
+#include "ScriptPluginsManager.h"
+#include "PythonUtils.h"
 
 using namespace boost::python;
 
 extern void init_pylaunchy();
 
 PyLaunchyPlugin* gmypluginInstance = NULL;
-
-#define GUARDED_CALL_TO_PYTHON(expr) do { \
-		try { \
-			expr \
-		} \
-		catch(boost::python::error_already_set const &) { \
-		} \
-	} while (0); \
-//
 
 PyLaunchyPlugin::PyLaunchyPlugin()
 : m_pluginsManager( ScriptPluginsManager::instance() )
@@ -68,6 +60,33 @@ void PyLaunchyPlugin::init()
 	// TODO: check if exists
 	QDir::setCurrent("plugins/python/");
 
+	/*
+	LOG_DEBUG("Opening init script");
+	QFile initScript(":/pylaunchy.py");
+
+	const QString tempFileName = 
+		QDir::tempPath() + QDir::separator() + "pylaunchy.py";
+	LOG_DEBUG("Trying to copy init script to path %s", (const char*)tempFileName.toUtf8());
+
+	if (QFile::exists(tempFileName)) {
+		LOG_DEBUG("Trying to remove %s", (const char*)tempFileName.toUtf8());
+		const bool removeSuccess = QFile::remove(tempFileName);
+		if (!removeSuccess) {
+			LOG_ERROR("Cannot remove %s", (const char*)tempFileName.toUtf8());
+		}
+	}
+	const bool copySuccess = initScript.copy(tempFileName);
+	if (!copySuccess) {
+		LOG_ERROR("Cannot copy pylaunchy.py file to temp directory");
+	}*/
+
+	LOG_DEBUG("Copying init script to temporary file");
+	QTemporaryFile* initScript =
+		QTemporaryFile::createLocalFile( ":/pylaunchy.py" );
+
+	QString initScriptFileName = initScript->fileName();
+	LOG_DEBUG("Init script file name is %s", initScriptFileName.toUtf8());
+
 	GUARDED_CALL_TO_PYTHON
 	(
 		LOG_INFO("Importing __main__ and __dict__");
@@ -76,10 +95,11 @@ void PyLaunchyPlugin::init()
 
 		LOG_INFO("Initializing pylaunchy module");
 		init_pylaunchy();
-
-		LOG_INFO("Executing pylaunchy.py file");
+	
+		LOG_INFO("Executing init script file");
 		boost::python::object ignored = boost::python::exec_file(
-			"pylaunchy.py", main_namespace, main_namespace);
+			(const char*)initScriptFileName.toUtf8(), main_namespace, main_namespace);
+		LOG_DEBUG("Finished executing init script");
 
 		QDir scriptsDir(".");
 		scriptsDir.setNameFilters(QStringList("*.py"));
@@ -87,13 +107,10 @@ void PyLaunchyPlugin::init()
 		
 		LOG_INFO("Executing all *.py files in plugins/python directory");
 		foreach (QString pyFile, scriptsDir.entryList()) {
-			if (pyFile != "pylaunchy.py") {
-				const char* fileName = (const char*) pyFile.toUtf8();
-				LOG_DEBUG("Found %s, executing it", fileName);
-				boost::python::str pyFileName(fileName);
-				boost::python::exec_file(pyFileName, 
-					main_namespace, main_namespace);
-			}
+			LOG_INFO("Found %s, executing it", (const char*) pyFile.toUtf8());
+			boost::python::str pyFileName((const char*) pyFile.toUtf8());
+			boost::python::exec_file(pyFileName, 
+				main_namespace, main_namespace);
 		}	
 		LOG_INFO("Finished executing *.py files");
 	);

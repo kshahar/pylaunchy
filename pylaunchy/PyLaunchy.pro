@@ -15,6 +15,8 @@
  TARGET		   = PyLaunchy
  PRECOMPILED_HEADER = Precompiled.h
  
+ RESOURCES     = PyLaunchyPlugin.qrc
+ 
  INCLUDEPATH = $$(PYTHON_ROOT)\include $$(BOOST_1_35_0) ezlogger
  
  win32 {
@@ -23,7 +25,7 @@
 	LIBS += shell32.lib
 	LIBS += $$(PYTHONROOT)\libs\python25.lib
 	LIBS += -L$$(BOOST_1_35_0)\lib
-	RC_FILE = PyLaunchy_resource.rc
+	RC_FILE = PyLaunchyPlugin.rc
 %	LIBS += user32.lib
 %	LIBS += Gdi32.lib
 %	LIBS += comctl32.lib

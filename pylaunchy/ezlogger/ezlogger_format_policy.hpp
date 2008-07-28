@@ -13,7 +13,7 @@ namespace axter
 		"", // no_severity 
 		"DEBUG", //debug 
 		"INFO", //info 
-		"STAUTS", //status 
+		"STATUS", //status 
 		"WARN", //warn 
 		"ERROR", //error 
 		"FATAL", //fatal
@@ -30,10 +30,10 @@ namespace axter
 		{
 			time_t currentTime = time(0);
 			char timeBuff[128];
-			strftime(timeBuff, 128, "%y-%m-%d %H:%M:%S",localtime(&currentTime));
+			strftime(timeBuff, 128, "%d/%m/%y %H:%M:%S",localtime(&currentTime));
 
 			char FileNameFormat[999] = {0};
-			sprintf(FileNameFormat, "%s %s\t[%s] - ", 
+			sprintf(FileNameFormat, "%s %-6s [%s] - ", 
 				timeBuff, severity_strings[levels_format_usage_data.m_severity_level],
 				FunctionName);
 			return FileNameFormat;

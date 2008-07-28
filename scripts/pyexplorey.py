@@ -1,3 +1,4 @@
+#import rpdb2; rpdb2.start_embedded_debugger("")
 import launchy
 
 import comtypes
@@ -24,7 +25,7 @@ def listOpenExplorerDirectories():
 			dirs.append( urllib.unquote(path) )
 			
 	return dirs
-
+	
 class PyExplorey(launchy.Plugin):
 	cacheTimeThreshold = 30 # 30 seconds to rebuild cache
 	
@@ -33,6 +34,7 @@ class PyExplorey(launchy.Plugin):
 		self.hash = launchy.hash(self.getName())
 		self.fileCache = []
 		self.lastCacheUpdate = 0 # Should cause cache on first time
+		listOpenExplorerDirectories()
 		
 	def getID(self):
 		return self.hash
@@ -62,17 +64,22 @@ class PyExplorey(launchy.Plugin):
 					resultsList.append( launchy.CatItem(filePath, fileEntry[0], self.hash, filePath) )
 		except Exception, inst:
 			print inst
-		for s in [sys.stdout, sys.stderr]: s.flush()
 		
 	def getCatalog(self, resultsList):
 		pass
 		
 	def launchItem(self, inputDataList, catItem):
 		try:
-			launchy.runProgram( catItem.fullPath(), "" )
+			os.system(catItem.fullPath())
+			#launchy.runProgram( catItem.fullPath(), "" )
 		except Exception, inst:
 			print inst
-		for s in [sys.stdout, sys.stderr]: s.flush()
+			
+	def launchyShow(self):
+		pass
+			
+	def launchyHide(self):
+		pass
 		
 	def _cacheFilesFromOpenDirs(self):
 		currentTime = time.time()
@@ -91,7 +98,5 @@ class PyExplorey(launchy.Plugin):
 				
 				#if splitext[1] in ['.bat', '.lnk']:
 				self.fileCache.append( (entry, dir) )
-					
-		for s in [sys.stdout, sys.stderr]: s.flush()
 
 launchy.addPlugin(PyExplorey())
