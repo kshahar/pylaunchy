@@ -25,7 +25,8 @@ extern void init_pylaunchy();
 PyLaunchyPlugin* gmypluginInstance = NULL;
 
 PyLaunchyPlugin::PyLaunchyPlugin()
-: m_pluginsManager( ScriptPluginsManager::instance() )
+: m_pluginsManager( ScriptPluginsManager::instance() ), 
+  m_launchingItem(false)
 {
 }
 
@@ -181,9 +182,15 @@ void PyLaunchyPlugin::getCatalog(QList<CatItem>* items)
 void PyLaunchyPlugin::launchItem(QList<InputData>* id, CatItem* item)
 {
 	LOG_FUNCTRACK;
+	
+	CatItem& topResult = id->last().getTopResult();
+	item = &topResult;
 
 	ScriptInputDataList inputDataList(prepareInputDataList(id));
 	ScriptPlugin* plugin = reinterpret_cast<ScriptPlugin*>(item->data);
+
+	LOG_DEBUG("Begining to launch item");
+	m_launchingItem = true;
 
 	if (plugin) {
 		GUARDED_CALL_TO_PYTHON(
@@ -191,6 +198,12 @@ void PyLaunchyPlugin::launchItem(QList<InputData>* id, CatItem* item)
 			plugin->launchItem(inputDataList, *item);
 		);
 	}
+	else {
+		LOG_WARN("Cannot access plugin");
+	}
+
+	LOG_DEBUG("Finished launching item");
+	m_launchingItem = false;
 }
 
 void PyLaunchyPlugin::doDialog(QWidget* parent, QWidget** newDlg) 
@@ -218,6 +231,12 @@ void PyLaunchyPlugin::launchyShow()
 
 void PyLaunchyPlugin::launchyHide() 
 {
+	// pygo-y would crash in launchItem() if this test was not here.
+	// TODO: find a better way to fix the crash.
+	if (m_launchingItem) {
+		return;
+	}
+
 	LOG_FUNCTRACK;
 
 	foreach (ScriptPluginInfo pluginInfo, m_pluginsManager.plugins())

@@ -1,2 +1,8 @@
+2008-07-30  Shahar Kosti
+	* Released version 0.5.1
+	* Added pygo-y.py plugin, that activates a windows (similar to the old Go-Y)
+	* Fixed PyLaunchyPlugin::launchItem relating to the wrong CatItem
+	* Workaround for crash when launchItem() would hide Launchy and call launchyHide()
+
 2008-07-29  Shahar Kosti
 	* Version 0.5 - first public release

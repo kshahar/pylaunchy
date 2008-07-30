@@ -55,6 +55,7 @@ private:
 
 	boost::python::object m_mainModule;
 	ScriptPluginsManager& m_pluginsManager;
+	bool m_launchingItem;
 };
 
 extern PyLaunchyPlugin* gmypluginInstance;
