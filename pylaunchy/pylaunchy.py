@@ -1,5 +1,7 @@
 #import rpdb2; rpdb2.start_embedded_debugger("pass")
-import sys
+import sys, os
+
+sys.path.append(os.path.realpath('.'))
 
 # If I write code such as sys.stdout = open('stdout.txt', 'w'), 
 # I have to flush the file after writing to it (using "print" for example).
