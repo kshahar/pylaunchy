@@ -1,3 +1,8 @@
+2008-08-02 Shahar Kosti
+	* Version 0.6.0
+	* Using custom Launchy Plugin API interface - MSG_GET_PLUGINS
+	* Each script plugin is now a real Launchy plugins
+
 2008-08-01 Shahar Kosti
 	* Version 0.5.5
 	* Improved exporting of CatItem - exporting member instead of function
