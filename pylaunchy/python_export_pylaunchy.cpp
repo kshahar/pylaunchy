@@ -2,8 +2,9 @@
 
 #include <QHash>
 #include "plugin_interface.h"
-#include "ScriptPluginsManager.h"
 #include "PythonUtils.h"
+#include "PyLaunchyPlugin.h"
+#include "ScriptPlugin.h"
 
 using namespace boost::python;
 
@@ -11,9 +12,11 @@ using namespace boost::python;
 // to it so that the python GC will not delete it
 static std::vector<object> g_scriptPluginsObjects;
 
+extern PyLaunchyPlugin* g_pyLaunchyInstance;
+
 namespace pylaunchy 
 {
-	void addPlugin(boost::python::object pluginObject)
+	void registerPlugin(boost::python::object pluginObject)
 	{
 		LOG_FUNCTRACK;
 
@@ -34,9 +37,8 @@ namespace pylaunchy
 				LOG_DEBUG("Getting plugin name");
 				QString pluginName = plugin->getName();
 
-				LOG_DEBUG("Adding plugin to list");
-				ScriptPluginsManager& pluginsManager = ScriptPluginsManager::instance();
-				pluginsManager.addPlugin( ScriptPluginInfo(plugin, pluginName) );
+				LOG_DEBUG("Registering plugin");
+				g_pyLaunchyInstance->registerPlugin(plugin);
 
 				// Keep a copy of the object here to avoid deleting by the GC
 				g_scriptPluginsObjects.push_back(pluginObject);
@@ -44,7 +46,7 @@ namespace pylaunchy
 		);
 	}
 
-	unsigned int hash(const char* str)
+	unsigned int hash(QString str)
 	{
 		return qHash(str);
 	}
@@ -74,7 +76,7 @@ namespace pylaunchy
 
 void export_pylaunchy()
 {
-	def("addPlugin", &pylaunchy::addPlugin);
+	def("registerPlugin", &pylaunchy::registerPlugin);
 	def("hash", &pylaunchy::hash);
 	def("getLaunchyPath", &pylaunchy::getLaunchyPath);
 	def("getScriptsPath", &pylaunchy::getScriptsPath);

@@ -19,9 +19,9 @@ void export_CatItem()
 		BOOST_PYTHON_EXPORT_CUSTOM_TYPE("fullPath", &CatItem::fullPath)
 		BOOST_PYTHON_EXPORT_CUSTOM_TYPE("shortName", &CatItem::shortName)
 		BOOST_PYTHON_EXPORT_CUSTOM_TYPE("icon", &CatItem::icon)
-		BOOST_PYTHON_EXPORT_CUSTOM_TYPE("usage", &CatItem::usage)
 
-		.def("id", &CatItem::get_scriptPluginId)
+		.def_readwrite("usage", &CatItem::usage)
+		.def_readwrite("id", &CatItem::id)
 	;
 }
 

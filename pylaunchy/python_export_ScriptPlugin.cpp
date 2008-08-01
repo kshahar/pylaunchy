@@ -79,9 +79,6 @@ void export_ScriptPlugin()
 {
 	export_ScriptResultsList();
 
-	class_< ScriptInputDataList >("InputDataList")
-		.def(vector_indexing_suite< ScriptInputDataList, true>());
-
 	class_< ScriptPluginWrapper, boost::noncopyable >("Plugin")
 		.def("init", pure_virtual(&ScriptPlugin::init))
 		.def("getID", pure_virtual(&ScriptPlugin::getID))

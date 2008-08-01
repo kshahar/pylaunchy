@@ -71,6 +71,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\plugin_info.h"
+				>
+			</File>
+			<File
 				RelativePath=".\plugin_interface.cpp"
 				>
 			</File>
@@ -127,6 +131,10 @@
 					RelativePath=".\ScriptPluginsManager.h"
 					>
 				</File>
+				<File
+					RelativePath=".\ScriptPluginWrapper.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Source Files"
@@ -143,6 +151,10 @@
 				</File>
 				<File
 					RelativePath=".\ScriptPluginsManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ScriptPluginWrapper.cpp"
 					>
 				</File>
 			</Filter>

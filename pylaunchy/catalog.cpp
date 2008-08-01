@@ -1,10 +1,6 @@
 #include "Precompiled.h"
 #include "catalog.h"
 
-#include "ScriptPluginsManager.h"
-#include "NullScriptPlugin.h"
-#include "PyLaunchyPluginDefines.h"
-
 CatItem::CatItem() {}
 
 
@@ -26,7 +22,6 @@ CatItem::CatItem(QString full, bool isDir)
 	data = NULL;
 	usage = 0;
 	id = 0;
-	data = ScriptPluginsManager::instance().currentPlugin();
 }
 
 
@@ -36,25 +31,20 @@ CatItem::CatItem(QString full, QString shortN)
 	lowName = shortName.toLower();
 	usage = 0;
 	id = 0;
-	data = ScriptPluginsManager::instance().currentPlugin();
 }
 
 CatItem::CatItem(QString full, QString shortN, uint i_d) 
-	: /*id(i_d), */fullPath(full), shortName(shortN)
+	: id(i_d), fullPath(full), shortName(shortN)
 {
 	lowName = shortName.toLower();
-	id = pylaunchy::pluginHash;
 	usage = 0;
-	data = ScriptPluginsManager::instance().currentPlugin();
 }
 
 CatItem::CatItem(QString full, QString shortN, uint i_d, QString iconPath) 
-	: /*id(i_d), */fullPath(full), shortName(shortN), icon(iconPath)
+	: id(i_d), fullPath(full), shortName(shortN), icon(iconPath)
 {
 	lowName = shortName.toLower();
-	id = pylaunchy::pluginHash;
 	usage = 0;
-	data = ScriptPluginsManager::instance().currentPlugin();
 }
 
 CatItem::CatItem(const CatItem &s) {
@@ -82,15 +72,4 @@ bool CatItem::operator==(const CatItem& other) const{
 	if (fullPath == other.fullPath)
 		return true;
 	return false;
-}
-
-int CatItem::get_scriptPluginId() const
-{
-	if (id == pylaunchy::pluginHash) {
-		ScriptPlugin* plugin = reinterpret_cast<ScriptPlugin*>(data);
-		return plugin->getID();
-	}
-	else {
-		return id;
-	}
 }

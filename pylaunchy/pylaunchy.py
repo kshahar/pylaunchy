@@ -1,5 +1,6 @@
 #import rpdb2; rpdb2.start_embedded_debugger("pass")
 import sys, os
+import launchy
 
 sys.path.append(os.path.realpath('.'))
 
@@ -21,6 +22,6 @@ class FlushedFile:
 		self.file.write(str)
 		self.file.flush()
 
-sys.stdout = FlushedFile('stdout.txt')
-sys.stderr = FlushedFile('stderr.txt')
+sys.stdout = FlushedFile(os.path.join(launchy.getScriptsPath(), 'stdout.txt'))
+sys.stderr = FlushedFile(os.path.join(launchy.getScriptsPath(), 'stderr.txt'))
 print "pylaunchy is up and running"

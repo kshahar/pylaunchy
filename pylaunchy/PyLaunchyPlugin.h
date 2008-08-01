@@ -19,19 +19,27 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #pragma once
 
 #include "plugin_interface.h"
+#include "plugin_info.h"
 #include "ScriptPluginInfo.h"
 #include "ScriptDataStructures.h"
 
-class ScriptPluginsManager;
+class ScriptPluginWrapper;
 
 class PyLaunchyPlugin : public QObject, public PluginInterface
 {
 	Q_OBJECT
 	Q_INTERFACES(PluginInterface)
 
-private:
+public:
+	/** Interface for script plugins management */
+	//@{
+	void registerPlugin(ScriptPlugin* scriptPlugin);
+	//@}
 
 public:
+	/** Interface for Launchy */
+	//@{
+
 	PyLaunchyPlugin();
 	~PyLaunchyPlugin();
 	int msg(int msgId, void* wParam = NULL, void* lParam = NULL); 
@@ -48,14 +56,13 @@ public:
 	QString getIcon();
 	void launchyShow();
 	void launchyHide();
+	void getPlugins(QList<PluginInfo>* additionalPlugins);
+
+	//@}
 
 private:
-	/** Convert QList<InputData> -> ScriptInputDataList */
-	ScriptInputDataList prepareInputDataList(QList<InputData>* id);
-
-	boost::python::object m_mainModule;
-	ScriptPluginsManager& m_pluginsManager;
-	bool m_launchingItem;
+	QDir getScriptsDir();
+	QList<ScriptPluginWrapper*> m_scriptPlugins;
 };
 
 extern PyLaunchyPlugin* gmypluginInstance;

@@ -92,9 +92,6 @@ public:
 	int get_usage() const { return usage; }
 	/** The plugin id of the creator of this CatItem */
 	int get_id() const { return id; }
-
-	/** Get the real id of this CatItem, the one that was set by the script */
-	int get_scriptPluginId() const;
 };
 
 

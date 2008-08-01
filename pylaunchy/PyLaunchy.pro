@@ -5,10 +5,11 @@
  HEADERS       = catalog.h plugin_interface.h
  SOURCES       = catalog.cpp plugin_interface.cpp 
  
- HEADERS      += PyLaunchyPlugin.h ScriptPluginsManager.h NullScriptPlugin.h
- SOURCES      += PyLaunchyPlugin.cpp ScriptPluginsManager.cpp NullScriptPlugin.cpp
+ HEADERS      += PyLaunchyPlugin.h NullScriptPlugin.h
+ SOURCES      += PyLaunchyPlugin.cpp NullScriptPlugin.cpp
  
- HEADERS      += ScriptPlugin.h
+ HEADERS      += ScriptPlugin.h ScriptPluginWrapper.h
+ SOURCES      += ScriptPluginWrapper.cpp
  
  SOURCES      += python_export.cpp python_export_pylaunchy.cpp python_export_qstring.cpp python_export_catalog.cpp python_export_ScriptPlugin.cpp
  TARGET		   = PyLaunchy

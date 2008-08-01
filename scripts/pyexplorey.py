@@ -114,4 +114,4 @@ class PyExplorey(launchy.Plugin):
 				#if splitext[1] in ['.bat', '.lnk']:
 				self.fileCache.append( (entry, dir) )
 
-launchy.addPlugin(PyExplorey())
+launchy.registerPlugin(PyExplorey())

@@ -456,7 +456,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #define MSG_LAUNCHY_HIDE 11
 
-
+#define MSG_PATH 12
+   
+   
+#define MSG_GET_PLUGINS 100
 
 #define MSG_CONTROL_OPTIONS 500
 #define MSG_CONTROL_EXIT 501

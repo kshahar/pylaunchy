@@ -50,4 +50,4 @@ class SkeletonPlugin(launchy.Plugin):
 	def launchyHide(self):
 		pass
 
-launchy.addPlugin(SkeletonPlugin())
+launchy.registerPlugin(SkeletonPlugin())

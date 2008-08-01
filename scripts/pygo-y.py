@@ -13,6 +13,7 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+#import rpdb2; rpdb2.start_embedded_debugger("password")
 import launchy
 import sys, os
 
@@ -56,15 +57,16 @@ class PyGoY(launchy.Plugin):
 		self.topLevelWindows = self._getTopLevelWindows()
 		for window in self.topLevelWindows:
 			if window[1].lower().find(windowNameToMatch ) > -1:
-				resultsList.append( launchy.CatItem(window[1] + ".go", window[1], launchy.hash("PyLaunchy"), self.getIcon() ))
+				resultsList.append( launchy.CatItem(window[1] + ".go", window[1], self.getID(), self.getIcon() ))
 				
 		# Icon for the window can be extracted with WM_GETICON, but it's too much for now
 			
 	def getCatalog(self, resultsList):
-		resultsList.push_back( launchy.CatItem( "Go.go-y", "Go", launchy.hash("PyLaunchy"), self.getIcon() ) )
-		resultsList.push_back( launchy.CatItem( "Focus.go-y", "Focus", launchy.hash("PyLaunchy"), self.getIcon() ) )
+		resultsList.push_back( launchy.CatItem( "Go.go-y", "Go", self.getID(), self.getIcon() ) )
+		resultsList.push_back( launchy.CatItem( "Focus.go-y", "Focus", self.getID(), self.getIcon() ) )
 		
-	def launchItem(self, inputDataList, catItem):
+	def launchItem(self, inputDataList, catItemOrig):
+		catItem = inputDataList[-1].getTopResult()
 		for window in self.topLevelWindows:
 			if catItem.shortName == window[1]:
 				self._goToWindow(window[0])
@@ -104,4 +106,4 @@ class PyGoY(launchy.Plugin):
 				
 	_windowEnumTopLevel = staticmethod(_windowEnumTopLevel)
 
-launchy.addPlugin(PyGoY())
+launchy.registerPlugin(PyGoY())
