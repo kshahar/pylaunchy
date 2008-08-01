@@ -85,8 +85,8 @@ class PyExplorey(launchy.Plugin):
 		
 	def launchItem(self, inputDataList, catItem):
 		try:
-			os.system(catItem.fullPath())
-			#launchy.runProgram( catItem.fullPath(), "" )
+			os.system(catItem.fullPath)
+			#launchy.runProgram( catItem.fullPath, "" )
 		except Exception, inst:
 			print inst
 			

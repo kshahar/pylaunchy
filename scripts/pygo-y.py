@@ -35,7 +35,7 @@ class PyGoY(launchy.Plugin):
 		return self.icon
 		
 	def getLabels(self, inputDataList):
-		if len(inputDataList) != 1:
+		if len(inputDataList) < 2:
 			return
 		
 		lowerText = inputDataList[0].getText().lower()
@@ -66,7 +66,7 @@ class PyGoY(launchy.Plugin):
 		
 	def launchItem(self, inputDataList, catItem):
 		for window in self.topLevelWindows:
-			if catItem.shortName() == window[1]:
+			if catItem.shortName == window[1]:
 				self._goToWindow(window[0])
 				break
 			

@@ -1,3 +1,14 @@
+2008-08-01 Shahar Kosti
+	* Version 0.5.5
+	* Improved exporting of CatItem - exporting member instead of function
+	* Exporting InputData directly, instead of ExportedInputData
+	* Changed scripts to support the changes in CatItem
+
+2008-07-31 Shahar Kosti
+	* Moved to SourceForge
+	* Added a check before launchItem to avoid crashes
+	* Added icon to SVN
+
 2008-07-30  Shahar Kosti
 	* Released version 0.5.2
 	* The plugins/python directory is now part of sys.path, so external modules

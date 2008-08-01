@@ -4,7 +4,6 @@
 #include <QList>
 #include <vector>
 #include "catalog.h"
-#include "ExportedInputData.h"
 
 class ScriptResultsList {
 public:
@@ -17,6 +16,6 @@ private:
 	QList<CatItem>& m_list;
 };
 
-typedef std::vector<ExportedInputData> ScriptInputDataList;
+typedef std::vector<InputData*> ScriptInputDataList;
 
 #endif //ScriptDataStructures_H_

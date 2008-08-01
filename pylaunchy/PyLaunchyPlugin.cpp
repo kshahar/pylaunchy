@@ -186,6 +186,16 @@ void PyLaunchyPlugin::launchItem(QList<InputData>* id, CatItem* item)
 	CatItem& topResult = id->last().getTopResult();
 	item = &topResult;
 
+	if (item->data == NULL) {
+		LOG_WARN("Item has no plugin info");
+		return;
+	}
+
+	if (reinterpret_cast<unsigned int>(item->data) == 0x2) {
+		LOG_WARN("item->data == 0x2");
+		return;
+	}
+
 	ScriptInputDataList inputDataList(prepareInputDataList(id));
 	ScriptPlugin* plugin = reinterpret_cast<ScriptPlugin*>(item->data);
 
@@ -316,7 +326,7 @@ ScriptInputDataList PyLaunchyPlugin::prepareInputDataList(QList<InputData>* id)
 	ScriptInputDataList inputDataList;
 	QList<InputData>::iterator itr = id->begin();
 	for ( ; itr != id->end(); ++itr) {
-		inputDataList.push_back(ExportedInputData(*itr));
+		inputDataList.push_back(&(*itr));
 	}
 	return inputDataList;
 }

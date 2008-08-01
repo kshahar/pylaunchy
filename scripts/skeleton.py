@@ -42,7 +42,7 @@ class SkeletonPlugin(launchy.Plugin):
 		pass
 		
 	def launchItem(self, inputDataList, catItem):
-		print "You have chosen to launch " + catItem.fullPath()
+		print "You have chosen to launch " + catItem.fullPath
 			
 	def launchyShow(self):
 		pass
