@@ -111,10 +111,28 @@ void ScriptPluginWrapper::launchItem(QList<InputData>* id, CatItem* item)
 
 void ScriptPluginWrapper::doDialog(QWidget* parent, QWidget** newDlg) 
 {
+	LOG_FUNCTRACK;
+
+	GUARDED_CALL_TO_PYTHON(
+		LOG_DEBUG("Calling plugin doDialog");
+		void* result = m_pScriptPlugin->doDialog((void*)parent);
+		if (result) {
+			*newDlg = reinterpret_cast<QWidget*>(result);
+		} else {
+			LOG_DEBUG("doDialog returned NULL");
+			*newDlg = NULL;
+		}
+	);
 }
 
 void ScriptPluginWrapper::endDialog(bool accept) 
 {
+	LOG_FUNCTRACK;
+
+	GUARDED_CALL_TO_PYTHON(
+		LOG_DEBUG("Calling plugin endDialog");
+		m_pScriptPlugin->endDialog(accept);
+	);
 }
 
 void ScriptPluginWrapper::launchyShow() 

@@ -26,6 +26,10 @@ public:
 	virtual void launchItem(ScriptInputDataList& inputDataList, 
 		CatItem& item);	
 
+	virtual void* doDialog(void* parentWidget);
+
+	virtual void endDialog(bool accept);
+
 	virtual void launchyShow();
 
 	virtual void launchyHide();

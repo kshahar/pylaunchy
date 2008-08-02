@@ -55,6 +55,15 @@ void NullScriptPlugin::launchItem(ScriptInputDataList& inputDataList,
 {
 }	
 
+void* NullScriptPlugin::doDialog(void* parentWidget)
+{
+	return NULL;
+}
+
+void NullScriptPlugin::endDialog(bool accept)
+{
+}
+
 void NullScriptPlugin::launchyShow()
 {
 }

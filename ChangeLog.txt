@@ -1,4 +1,8 @@
 2008-08-02 Shahar Kosti
+	* Added pygo-y readme
+	* Started to add support for GUI, using PyQt4
+
+2008-08-02 Shahar Kosti
 	* Version 0.6.1
 	* Scripts register their class type instead of an instance
 	* Using custom Launchy Plugin API interface - MSG_LOAD_PLUGINS, MSG_UNLOAD_PLUGIN

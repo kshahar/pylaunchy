@@ -53,6 +53,31 @@ namespace pylaunchy {
 			this->get_override("launchItem")(inputDataList, item);
 		}
 
+		virtual void* doDialog(void* parentWidget)
+		{
+			PyObject *pw = PyLong_FromVoidPtr ((void *) parentWidget);
+			object result = this->get_override("doDialog")(handle<>(pw));
+			//handle<> resultHandle(borrowed(result.ptr()));
+			//void* resultDialog = extract<void*>(object(resultHandle));
+			PyObject* resultPtr = result.ptr();
+
+			const bool isLong = 
+				PyObject_IsInstance(resultPtr, (PyObject*)&PyLong_Type) ||
+				PyObject_IsInstance(resultPtr, (PyObject*)&PyInt_Type);
+
+			if (isLong) {
+				return PyLong_AsVoidPtr(resultPtr);
+			}
+			else {
+				return NULL;
+			}
+		}
+
+		virtual void endDialog(bool accept)
+		{
+			this->get_override("endDialog")(accept);
+		}
+
 		virtual void launchyShow()
 		{
 			this->get_override("launchyShow")();
@@ -91,6 +116,8 @@ void export_ScriptPlugin()
 		.def("getResults", pure_virtual(&ScriptPlugin::getResults))
 		.def("getCatalog", pure_virtual(&ScriptPlugin::getCatalog))
 		.def("launchItem", pure_virtual(&ScriptPlugin::launchItem))
+		.def("doDialog", pure_virtual(&ScriptPlugin::doDialog), return_value_policy<return_by_value>())
+		.def("endDialog", pure_virtual(&ScriptPlugin::endDialog))
 		.def("launchyShow", pure_virtual(&ScriptPlugin::launchyShow))
 		.def("launchyHide", pure_virtual(&ScriptPlugin::launchyHide))
     ;
