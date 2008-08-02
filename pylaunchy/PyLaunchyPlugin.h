@@ -16,13 +16,16 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-#pragma once
+#ifndef PyLaunchyPlugin_H_
+#define PyLaunchyPlugin_H_
+
+#include <QList>
+#include <QHash>
 
 #include "plugin_interface.h"
 #include "plugin_info.h"
-#include "ScriptPluginInfo.h"
-#include "ScriptDataStructures.h"
 
+class ScriptPlugin;
 class ScriptPluginWrapper;
 
 class PyLaunchyPlugin : public QObject, public PluginInterface
@@ -33,7 +36,7 @@ class PyLaunchyPlugin : public QObject, public PluginInterface
 public:
 	/** Interface for script plugins management */
 	//@{
-	void registerPlugin(ScriptPlugin* scriptPlugin);
+	void registerPlugin(boost::python::object pluginClass);
 	//@}
 
 public:
@@ -56,13 +59,25 @@ public:
 	QString getIcon();
 	void launchyShow();
 	void launchyHide();
-	void getPlugins(QList<PluginInfo>* additionalPlugins);
+	void loadPlugins(QList<PluginInfo>* additionalPlugins);
+	void unloadPlugin(uint id);
 
 	//@}
 
 private:
+	typedef QHash<uint, PluginInfo> PluginInfoHash;
+
+	const PluginInfo& addPlugin(ScriptPlugin* scriptPlugin);
+	void reloadPlugins();
+	void destroyPlugins();
+	void reloadScriptFiles();
 	QDir getScriptsDir();
-	QList<ScriptPluginWrapper*> m_scriptPlugins;
+
+	QList<boost::python::object> m_scriptPluginsClasses;
+	PluginInfoHash m_scriptPlugins;
+	QHash<uint, boost::python::object> m_scriptPluginsObjects;
 };
 
-extern PyLaunchyPlugin* gmypluginInstance;
+extern PyLaunchyPlugin* g_pyLaunchyInstance;
+
+#endif //PyLaunchyPlugin_H_

@@ -128,10 +128,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\ScriptPluginsManager.h"
-					>
-				</File>
-				<File
 					RelativePath=".\ScriptPluginWrapper.h"
 					>
 				</File>
@@ -150,10 +146,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\ScriptPluginsManager.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\ScriptPluginWrapper.cpp"
 					>
 				</File>
@@ -166,10 +158,6 @@
 				Name="Header Files"
 				>
 				<File
-					RelativePath=".\ExportedInputData.h"
-					>
-				</File>
-				<File
 					RelativePath=".\ScriptDataStructures.h"
 					>
 				</File>
@@ -181,10 +169,6 @@
 			<Filter
 				Name="Source Files"
 				>
-				<File
-					RelativePath=".\ExportedInputData.cpp"
-					>
-				</File>
 				<File
 					RelativePath=".\python_export.cpp"
 					>

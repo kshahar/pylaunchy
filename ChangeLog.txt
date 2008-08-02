@@ -1,4 +1,13 @@
 2008-08-02 Shahar Kosti
+	* Version 0.6.1
+	* Scripts register their class type instead of an instance
+	* Using custom Launchy Plugin API interface - MSG_LOAD_PLUGINS, MSG_UNLOAD_PLUGIN
+	* Removed MSG_GET_PLUGINS message
+	* Scripts can be loaded/unloaded dynamically
+	* Script plugins can have an __init__(self) function
+	* Changed scripts to support new API
+
+2008-08-02 Shahar Kosti
 	* Version 0.6.0
 	* Using custom Launchy Plugin API interface - MSG_GET_PLUGINS
 	* Each script plugin is now a real Launchy plugins

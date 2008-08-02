@@ -5,8 +5,8 @@
 # endif
 
 VS_VERSION_INFO VERSIONINFO
-	FILEVERSION 0,6,0,0
-	PRODUCTVERSION 0,6,0,0
+	FILEVERSION 0,6,1,0
+	PRODUCTVERSION 0,6,1,0
 	FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
 	FILEFLAGS VS_FF_DEBUG
@@ -21,9 +21,9 @@ VS_VERSION_INFO VERSIONINFO
 		BEGIN
 			BLOCK "040904B0"
 			BEGIN
-				VALUE "CompanyName", "\0"
+				VALUE "CompanyName", "Shahar Kosti\0"
 				VALUE "FileDescription", "\0"
-				VALUE "FileVersion", "0.6.0.0\0"
+				VALUE "FileVersion", "0.6.1.0\0"
 				VALUE "LegalCopyright", "\0"
 				VALUE "OriginalFilename", "PyLaunchy.dll\0"
 				VALUE "ProductName", "PyLaunchy\0"

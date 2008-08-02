@@ -23,7 +23,7 @@
 	DEFINES = _CRT_SECURE_NO_DEPRECATE
  	CONFIG -= embed_manifest_dll
 	LIBS += shell32.lib
-	LIBS += $$(PYTHONROOT)\libs\python25.lib
+	LIBS += $$(PYTHON_ROOT)\libs\python25.lib
 	LIBS += -L$$(BOOST_1_35_0)\lib
 	RC_FILE = PyLaunchyPlugin.rc
 %	LIBS += user32.lib

@@ -26,30 +26,21 @@ import time
 
 fileUrlPrefix = "file:///"
 
-GetModule("shdocvw.dll")
-SHDocVw = comtypes.gen.SHDocVw
-shellWindows = CreateObject(SHDocVw.ShellWindows)
-
-# Returns a list of the current directories opened by Explorer
-def listOpenExplorerDirectories():
-	dirs = []
-	for explorer in shellWindows:
-		locationUrl = explorer.LocationURL
-		if locationUrl.startswith(fileUrlPrefix):
-			path = locationUrl[len(fileUrlPrefix):]
-			dirs.append( urllib.unquote(path) )
-			
-	return dirs
-	
 class PyExplorey(launchy.Plugin):
 	cacheTimeThreshold = 30 # 30 seconds to rebuild cache
-	
-	def init(self):
+		
+	def __init__(self):
+		launchy.Plugin.__init__(self)
 		self.icon = os.path.join(launchy.getIconsPath(), "python.ico")
 		self.hash = launchy.hash(self.getName())
 		self.fileCache = []
 		self.lastCacheUpdate = 0 # Should cause cache on first time
-		listOpenExplorerDirectories()
+		
+	def init(self):
+		GetModule("shdocvw.dll")
+		SHDocVw = comtypes.gen.SHDocVw
+		self.shellWindows = CreateObject(SHDocVw.ShellWindows)
+		self.__listOpenExplorerDirectories()
 		
 	def getID(self):
 		return self.hash
@@ -71,7 +62,7 @@ class PyExplorey(launchy.Plugin):
 			if len(text) == 0:
 				return
 			
-			self._cacheFilesFromOpenDirs()
+			self.__cacheFilesFromOpenDirs()
 			
 			for fileEntry in self.fileCache:
 				if fileEntry[0].startswith(text):
@@ -95,8 +86,19 @@ class PyExplorey(launchy.Plugin):
 			
 	def launchyHide(self):
 		pass
+
+	# Returns a list of the current directories opened by Explorer
+	def __listOpenExplorerDirectories(self):
+		dirs = []
+		for explorer in self.shellWindows:
+			locationUrl = explorer.LocationURL
+			if locationUrl.startswith(fileUrlPrefix):
+				path = locationUrl[len(fileUrlPrefix):]
+				dirs.append( urllib.unquote(path) )
+				
+		return dirs
 		
-	def _cacheFilesFromOpenDirs(self):
+	def __cacheFilesFromOpenDirs(self):
 		currentTime = time.time()
 		if currentTime - self.lastCacheUpdate < self.cacheTimeThreshold:
 			return
@@ -104,7 +106,7 @@ class PyExplorey(launchy.Plugin):
 		self.lastCacheUpdate = currentTime
 		
 		self.fileCache = []
-		openDirectories = listOpenExplorerDirectories()
+		openDirectories = self.__listOpenExplorerDirectories()
 		for dir in openDirectories:
 			for entry in os.listdir(dir):
 				#if not path.isfile(entry): continue
@@ -114,4 +116,4 @@ class PyExplorey(launchy.Plugin):
 				#if splitext[1] in ['.bat', '.lnk']:
 				self.fileCache.append( (entry, dir) )
 
-launchy.registerPlugin(PyExplorey())
+launchy.registerPlugin(PyExplorey)

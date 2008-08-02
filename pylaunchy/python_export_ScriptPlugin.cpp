@@ -8,61 +8,63 @@
 
 using namespace boost::python;
 
-class ScriptPluginWrapper: public ScriptPlugin, public wrapper<ScriptPlugin> {
-public:
-	virtual void init()
-	{
-		this->get_override("init")();
-	}
+namespace pylaunchy {
+	class ScriptPluginWrapper: public ScriptPlugin, public wrapper<ScriptPlugin> {
+	public:
+		virtual void init()
+		{
+			this->get_override("init")();
+		}
 
-	virtual unsigned int getID()
-	{
-		return this->get_override("getID")();
-	}
+		virtual unsigned int getID()
+		{
+			return this->get_override("getID")();
+		}
 
-	virtual QString getName()
-	{
-		return this->get_override("getName")();
-	}
+		virtual QString getName()
+		{
+			return this->get_override("getName")();
+		}
 
-	virtual QString getIcon()
-	{
-		return this->get_override("getIcon")();
-	}
+		virtual QString getIcon()
+		{
+			return this->get_override("getIcon")();
+		}
 
-	virtual void getLabels(ScriptInputDataList& inputDataList)
-	{
-		this->get_override("getLabels")(inputDataList);
-	}
+		virtual void getLabels(ScriptInputDataList& inputDataList)
+		{
+			this->get_override("getLabels")(inputDataList);
+		}
 
-	virtual void getResults(ScriptInputDataList& inputDataList, 
-		ScriptResultsList& resultsList)
-	{
-		this->get_override("getResults")(inputDataList, resultsList);
-	}
+		virtual void getResults(ScriptInputDataList& inputDataList, 
+			ScriptResultsList& resultsList)
+		{
+			this->get_override("getResults")(inputDataList, resultsList);
+		}
 
-	virtual void getCatalog(ScriptResultsList& resultsList)
-	{
-		this->get_override("getCatalog")(resultsList);
-	}
+		virtual void getCatalog(ScriptResultsList& resultsList)
+		{
+			this->get_override("getCatalog")(resultsList);
+		}
 
-	virtual void launchItem(ScriptInputDataList& inputDataList, 
-		CatItem& item)
-	{
-		this->get_override("launchItem")(inputDataList, item);
-	}
+		virtual void launchItem(ScriptInputDataList& inputDataList, 
+			CatItem& item)
+		{
+			this->get_override("launchItem")(inputDataList, item);
+		}
 
-	virtual void launchyShow()
-	{
-		this->get_override("launchyShow")();
-	}
+		virtual void launchyShow()
+		{
+			this->get_override("launchyShow")();
+		}
 
-	virtual void launchyHide()
-	{
-		this->get_override("launchyHide")();
-	}
+		virtual void launchyHide()
+		{
+			this->get_override("launchyHide")();
+		}
 
 
+	};
 };
 
 void export_ScriptResultsList()
@@ -79,6 +81,7 @@ void export_ScriptPlugin()
 {
 	export_ScriptResultsList();
 
+	using pylaunchy::ScriptPluginWrapper;
 	class_< ScriptPluginWrapper, boost::noncopyable >("Plugin")
 		.def("init", pure_virtual(&ScriptPlugin::init))
 		.def("getID", pure_virtual(&ScriptPlugin::getID))

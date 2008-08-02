@@ -26,11 +26,24 @@ extern void init_pylaunchy();
 
 PyLaunchyPlugin* g_pyLaunchyInstance = NULL;
 
-void PyLaunchyPlugin::registerPlugin(ScriptPlugin* scriptPlugin)
+void PyLaunchyPlugin::registerPlugin(boost::python::object pluginClass)
 {
-	LOG_DEBUG("Adding script plugin");
-	ScriptPluginWrapper* pluginWrapper = new ScriptPluginWrapper(scriptPlugin);
-	m_scriptPlugins.push_back( pluginWrapper );
+	GUARDED_CALL_TO_PYTHON
+	(
+		LOG_DEBUG("Creating plugin object");
+		object pluginObject = pluginClass();
+
+		LOG_DEBUG("Extracting plugin");
+		ScriptPlugin* plugin = extract<ScriptPlugin*>(pluginObject);
+
+		if (!plugin) {
+			LOG_DEBUG("Plugin is NULL");
+			return;
+		}
+
+		LOG_DEBUG("Registering plugin");
+		m_scriptPluginsClasses.push_back(pluginClass);
+	);
 }
 
 PyLaunchyPlugin::PyLaunchyPlugin()
@@ -40,9 +53,7 @@ PyLaunchyPlugin::PyLaunchyPlugin()
 PyLaunchyPlugin::~PyLaunchyPlugin()
 {
 	LOG_DEBUG("Shutting down PyLaunchy");
-	while (!m_scriptPlugins.isEmpty()) {
-		delete m_scriptPlugins.takeFirst();
-	}
+	destroyPlugins();
 }
 
 void PyLaunchyPlugin::getID(uint* id)
@@ -74,8 +85,6 @@ void PyLaunchyPlugin::init()
 		return;
 	}
 
-	QDir scriptsDir = getScriptsDir();
-
 	LOG_DEBUG("Copying init script to temporary file");
 	QTemporaryFile* initScript =
 		QTemporaryFile::createLocalFile( ":/pylaunchy.py" );
@@ -84,7 +93,7 @@ void PyLaunchyPlugin::init()
 
 	GUARDED_CALL_TO_PYTHON
 	(
-		LOG_INFO("Importing __main__ and __dict__");
+		LOG_DEBUG("Importing __main__ and __dict__");
 		boost::python::object mainModule = boost::python::import("__main__");
 		boost::python::object mainNamespace = mainModule.attr("__dict__");
 
@@ -97,20 +106,9 @@ void PyLaunchyPlugin::init()
 			(const char*)initScriptFileName.toUtf8(), mainNamespace, mainNamespace);
 		initScript->remove();
 		LOG_INFO("Finished executing init script");
-
-		scriptsDir.setNameFilters(QStringList("*.py"));
-		scriptsDir.setFilter(QDir::Files);
-		
-		LOG_INFO("Executing all *.py files in scripts directory");
-		foreach (QString pyFile, scriptsDir.entryList()) {
-			LOG_INFO("Found %s, executing it", (const char*) pyFile.toUtf8());
-			boost::python::str pyFileName((const char*) 
-				scriptsDir.absoluteFilePath(pyFile).toUtf8());
-			boost::python::exec_file(pyFileName, 
-				mainNamespace, mainNamespace);
-		}	
-		LOG_INFO("Finished executing *.py files");
 	);
+
+	reloadScriptFiles();
 }
 
 
@@ -153,19 +151,28 @@ void PyLaunchyPlugin::launchyHide()
 {
 }
 
-void PyLaunchyPlugin::getPlugins(QList<PluginInfo>* additionalPlugins)
+void PyLaunchyPlugin::loadPlugins(QList<PluginInfo>* additionalPlugins)
 {
 	LOG_FUNCTRACK;
-	foreach (ScriptPluginWrapper* pluginWrapper, m_scriptPlugins)
-	{
-		PluginInfo launchyPluginInfo;
-		pluginWrapper->getID(&launchyPluginInfo.id);
-		pluginWrapper->getName(&launchyPluginInfo.name);
-		launchyPluginInfo.path = "";
-		launchyPluginInfo.obj = pluginWrapper;
+	reloadPlugins();
 
-		additionalPlugins->push_back(launchyPluginInfo);
-	}	
+	LOG_INFO("Adding Python plugins to Launchy");
+	PluginInfoHash::const_iterator itr = m_scriptPlugins.constBegin();
+	for ( ; itr != m_scriptPlugins.constEnd(); ++itr ) {
+		additionalPlugins->push_back(itr.value());
+	}
+}
+
+void PyLaunchyPlugin::unloadPlugin(uint id)
+{
+	LOG_INFO("Unloading plugin with ID %i", id);
+	PluginInfoHash::const_iterator itr = m_scriptPlugins.find(id);
+	for ( ; itr != m_scriptPlugins.end() && itr.key() == id; ++itr ) {
+		delete itr.value().obj;
+	}
+	m_scriptPlugins.remove(id);
+
+	m_scriptPluginsObjects.remove(id);
 }
 
 int PyLaunchyPlugin::msg(int msgId, void* wParam, void* lParam)
@@ -222,9 +229,14 @@ int PyLaunchyPlugin::msg(int msgId, void* wParam, void* lParam)
 			launchyHide();
 			break;
 
-		case MSG_GET_PLUGINS:
+		case MSG_LOAD_PLUGINS:
 			handled = true;
-			getPlugins((QList<PluginInfo>*)wParam);
+			loadPlugins((QList<PluginInfo>*)wParam);
+			break;
+
+		case MSG_UNLOAD_PLUGIN:
+			handled = true;
+			unloadPlugin((uint)wParam);
 			break;
 
 		default:
@@ -232,6 +244,81 @@ int PyLaunchyPlugin::msg(int msgId, void* wParam, void* lParam)
 	}
 		
 	return handled;
+}
+
+const PluginInfo& PyLaunchyPlugin::addPlugin(ScriptPlugin* scriptPlugin)
+{
+	LOG_DEBUG("Adding script plugin");
+	ScriptPluginWrapper* pluginWrapper = new ScriptPluginWrapper(scriptPlugin);
+
+	PluginInfo launchyPluginInfo;
+	pluginWrapper->getID(&launchyPluginInfo.id);
+	pluginWrapper->getName(&launchyPluginInfo.name);
+	launchyPluginInfo.path = "";
+	launchyPluginInfo.obj = pluginWrapper;
+
+	m_scriptPlugins[launchyPluginInfo.id] = launchyPluginInfo;
+
+	PluginInfoHash::iterator itemItr =
+		m_scriptPlugins.insert(launchyPluginInfo.id, launchyPluginInfo);
+
+	return itemItr.value();
+}
+
+void PyLaunchyPlugin::reloadPlugins()
+{
+	LOG_INFO("Reloading script plugins");
+	foreach (boost::python::object pluginClass, m_scriptPluginsClasses) {
+		GUARDED_CALL_TO_PYTHON
+		(
+			LOG_DEBUG("Creating plugin object");
+			object pluginObject = pluginClass();
+
+			LOG_DEBUG("Extracting plugin");
+			ScriptPlugin* plugin = extract<ScriptPlugin*>(pluginObject);
+
+			const PluginInfo& pluginInfo = addPlugin(plugin);
+			m_scriptPluginsObjects.insert(pluginInfo.id, pluginObject);
+		);
+	}
+}
+
+void PyLaunchyPlugin::destroyPlugins()
+{
+	LOG_INFO("Destroying script plugins");
+	PluginInfoHash::const_iterator itr = m_scriptPlugins.constBegin();
+	for ( ; itr != m_scriptPlugins.constEnd(); ++itr ) {
+		delete itr.value().obj;
+	}
+	m_scriptPlugins.clear();
+
+	m_scriptPluginsObjects.clear();
+}
+
+void PyLaunchyPlugin::reloadScriptFiles()
+{
+	LOG_INFO("Reloading script files");
+	QDir scriptsDir = getScriptsDir();
+
+	GUARDED_CALL_TO_PYTHON
+	(
+		LOG_DEBUG("Importing __main__ and __dict__");
+		boost::python::object mainModule = boost::python::import("__main__");
+		boost::python::object mainNamespace = mainModule.attr("__dict__");
+
+		scriptsDir.setNameFilters(QStringList("*.py"));
+		scriptsDir.setFilter(QDir::Files);
+		
+		LOG_INFO("Executing all *.py files in scripts directory");
+		foreach (QString pyFile, scriptsDir.entryList()) {
+			LOG_INFO("Found %s, executing it", (const char*) pyFile.toUtf8());
+			boost::python::str pyFileName((const char*) 
+				scriptsDir.absoluteFilePath(pyFile).toUtf8());
+			boost::python::exec_file(pyFileName, 
+				mainNamespace, mainNamespace);
+		}	
+		LOG_INFO("Finished executing *.py files");
+	);
 }
 
 QDir PyLaunchyPlugin::getScriptsDir()

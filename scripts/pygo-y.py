@@ -21,10 +21,14 @@ import win32gui
 from win32con import SW_RESTORE
 
 class PyGoY(launchy.Plugin):
-	def init(self):
+	def __init__(self):
+		launchy.Plugin.__init__(self)
 		self.icon = os.path.join(launchy.getIconsPath(), "pygo-y.png")
 		self.hash = launchy.hash(self.getName())
 		self.labelHash = launchy.hash("go-y")
+
+	def init(self):
+		pass
 		
 	def getID(self):
 		return self.hash
@@ -106,4 +110,4 @@ class PyGoY(launchy.Plugin):
 				
 	_windowEnumTopLevel = staticmethod(_windowEnumTopLevel)
 
-launchy.registerPlugin(PyGoY())
+launchy.registerPlugin(PyGoY)

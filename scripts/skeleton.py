@@ -17,9 +17,13 @@ import launchy
 import sys, os
 
 class SkeletonPlugin(launchy.Plugin):
-	def init(self):
+	def __init__(self):
+		launchy.Plugin.__init__(self)
 		self.icon = os.path.join(launchy.getIconsPath(), "python.ico")
 		self.hash = launchy.hash(self.getName())
+		
+	def init(self):
+		pass
 		
 	def getID(self):
 		return self.hash
@@ -50,4 +54,4 @@ class SkeletonPlugin(launchy.Plugin):
 	def launchyHide(self):
 		pass
 
-launchy.registerPlugin(SkeletonPlugin())
+launchy.registerPlugin(SkeletonPlugin)
