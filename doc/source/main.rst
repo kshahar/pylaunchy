@@ -10,8 +10,9 @@ Contents:
 .. toctree::
    :maxdepth: 2
    
-   launchy
-   plugin_howto
+   plugin_howto.rst
+   launchy.rst
+   
    
 
 Indices and tables

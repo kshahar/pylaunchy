@@ -42,9 +42,9 @@ copyright = u'2008, Shahar Kosti'
 # other places throughout the built documents.
 #
 # The short X.Y version.
-version = u'0.6'
+version = u'0.6.1'
 # The full version, including alpha/beta/rc tags.
-release = u'0.6'
+release = u'0.6.1'
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
