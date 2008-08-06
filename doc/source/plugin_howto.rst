@@ -2,7 +2,7 @@
   Howto: Writing a plugin
 ******************************************
 
-.. index:: Plugin Howto
+.. index:: Howto, Writing a plugin
 
 .. topic:: Abstract
 
