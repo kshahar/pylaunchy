@@ -68,3 +68,21 @@ The following refer to the ``### 1`` comments in the code.
     in |ScriptsPath|
  8. The plugin class must be registered in order to work.
  
+Storing and retrieving Settings
+================================
+
+Settings in PyLaunchy are handled through an exported `QSettings <http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/qsettings.html>`_ object.
+
+In order to use the settings object, you to get it from the module and wrap it with PyQt object::
+
+   from sip import wrapinstance, unwrapinstance
+   import QtCore
+   # ...
+   def init(self):
+       settingsVoidPtr = launchy.getSettings()
+       if settingsVoidPtr:
+           self.settings = wrapinstance(settingsVoidPtr, QtCore.QSettings)
+       else:
+           self.settings = None
+
+Then you

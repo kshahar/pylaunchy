@@ -41,6 +41,13 @@ namespace pylaunchy
 			(const char*)file.toUtf8(), (const char*)args.toUtf8());
 		::runProgram(file, args);
 	}
+
+	boost::python::handle<> getSettings()
+	{
+		QSettings* settings = *g_pyLaunchyInstance->settings;
+		PyObject* settingsPyObject = PyLong_FromVoidPtr ((void *) settings);
+		return handle<>(settingsPyObject);
+	}
 };
 
 void export_pylaunchy()
@@ -51,4 +58,5 @@ void export_pylaunchy()
 	def("getScriptsPath", &pylaunchy::getScriptsPath);
 	def("getIconsPath", &pylaunchy::getIconsPath);
 	def("runProgram", &pylaunchy::runProgram);
+	def("getSettings", &pylaunchy::getSettings);
 }
