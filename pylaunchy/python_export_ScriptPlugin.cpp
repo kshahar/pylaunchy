@@ -5,6 +5,7 @@
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 
 #include "ScriptPlugin.h"
+#include "PythonUtils.h"
 
 using namespace boost::python;
 
@@ -57,20 +58,7 @@ namespace pylaunchy {
 		{
 			PyObject *pw = PyLong_FromVoidPtr ((void *) parentWidget);
 			object result = this->get_override("doDialog")(handle<>(pw));
-			//handle<> resultHandle(borrowed(result.ptr()));
-			//void* resultDialog = extract<void*>(object(resultHandle));
-			PyObject* resultPtr = result.ptr();
-
-			const bool isLong = 
-				PyObject_IsInstance(resultPtr, (PyObject*)&PyLong_Type) ||
-				PyObject_IsInstance(resultPtr, (PyObject*)&PyInt_Type);
-
-			if (isLong) {
-				return PyLong_AsVoidPtr(resultPtr);
-			}
-			else {
-				return NULL;
-			}
+			return voidPtrFromObject(result);
 		}
 
 		virtual void endDialog(bool accept)

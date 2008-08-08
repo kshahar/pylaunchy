@@ -1,6 +1,22 @@
 #ifndef PythonUtils_H_
 #define PythonUtils_H_
 
+inline void* voidPtrFromObject(boost::python::object result)
+{
+	PyObject* resultPtr = result.ptr();
+
+	const bool isLong = 
+		PyObject_IsInstance(resultPtr, (PyObject*)&PyLong_Type) ||
+		PyObject_IsInstance(resultPtr, (PyObject*)&PyInt_Type);
+
+	if (isLong) {
+		return PyLong_AsVoidPtr(resultPtr);
+	}
+	else {
+		return NULL;
+	}
+}
+
 /** Call a python function and catch exceptions
  */
 #define GUARDED_CALL_TO_PYTHON(expr) do { \
