@@ -12,7 +12,9 @@ Contents:
 .. toctree::
    :maxdepth: 2
    
-   plugin_howto
+   simple_plugin.rst
+   settings
+   debugging
    launchy
    
    

@@ -42,9 +42,9 @@ copyright = u'2008, Shahar Kosti'
 # other places throughout the built documents.
 #
 # The short X.Y version.
-version = u'0.6.1'
+version = u'0.7.0'
 # The full version, including alpha/beta/rc tags.
-release = u'0.6.1'
+release = u'0.7.0'
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
@@ -119,7 +119,7 @@ html_last_updated_fmt = '%b %d, %Y'
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
-html_additional_pages = {'index': 'index.jinja'} 
+#html_additional_pages = {'index': 'index.jinja'} 
 
 # If false, no module index is generated.
 #html_use_modindex = True
