@@ -2,6 +2,7 @@ The following are needed for building PyLaunchy:
  * QT 4.4 (or any QT version compatible with Launchy)
  * Python 2.3+ (compatible with Boost.Python)
  * Boost 1.35
+ * PyQt4, compiled for the QT 4.4 open source version
  
 The following environemnt variables are needed:
  * QTDIR - path to QT root (e.g. C:\Qt\4.4.0)

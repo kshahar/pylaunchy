@@ -13,14 +13,20 @@
 ; limitations under the License.
 
 #define MyAppName "PyLaunchy"
-#define MyAppVer "0.6.1"
+#define MyAppVer "0.7.0"
 #define MyAppURL ""
 
 [Files]
 Source: pylaunchy\Release\PyLaunchy.dll; DestDir: {app}\plugins
-
 Source: tmpbuild\boost_python-vc80-mt-1_35.dll; DestDir: {app}\
+Source: tmpbuild\PyQt4\*.*; DestDir: {app}\plugins\python\PyQt4; Flags: recursesubdirs
+Source: icons\pysimple.png; DestDir: {app}\plugins\icons
+Source: scripts\pysimple.py; DestDir: {app}\plugins\python\examples
 
+Source: icons\pygo-y.png; DestDir: {app}\plugins\icons; Components: pygoy
+Source: scripts\pygo-y.py; DestDir: {app}\plugins\python; Components: pygoy
+Source: tmpbuild\win32con.py; DestDir: {app}\plugins\python; Components: pygoy
+Source: tmpbuild\win32gui.pyd; DestDir: {app}\plugins\python; Components: pygoy
 
 [Setup]
 AppName={#MyAppName}
@@ -32,6 +38,9 @@ VersionInfoVersion={#MyAppVer}
 OutputBaseFilename=PyLaunchy-{#MyAppVer}
 OutputDir=.\
 AppID={{AD02FF4D-0B7A-480A-AE06-10A2F853CAF3}
+LicenseFile=license.txt
 
 [Registry]
 
+[Components]
+Name: pygoy; Description: PyGo-y plugin; Types: custom full
