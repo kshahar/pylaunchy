@@ -14,6 +14,9 @@ int add_five(int x)
 
 BOOST_PYTHON_MODULE(launchy)
 {
+	// Don't want auto docstrings at this time
+	//docstring_options doc_options(true);
+
 	// Export our basic testing function
 	def("add_five", add_five);
 

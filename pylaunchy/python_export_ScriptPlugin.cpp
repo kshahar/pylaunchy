@@ -14,68 +14,107 @@ namespace pylaunchy {
 	public:
 		virtual void init()
 		{
-			this->get_override("init")();
+			if (override f = this->get_override("init")) {
+				f();
+			}
 		}
 
 		virtual unsigned int getID()
 		{
-			return this->get_override("getID")();
+			if (override f = this->get_override("getID")) {
+				return f();
+			}
+			else {
+				return -1;
+			}
 		}
 
 		virtual QString getName()
 		{
-			return this->get_override("getName")();
+			static QString defaultName("DefaultScriptPlugin");
+
+			if (override f = this->get_override("getName")) {
+				return f();
+			}
+			else {
+				return defaultName;
+			}
 		}
 
 		virtual QString getIcon()
 		{
-			return this->get_override("getIcon")();
+			static QString icon;
+
+			if (override f = this->get_override("getIcon")) {
+				return f();
+			}
+			else {
+				return icon;
+			}
 		}
 
 		virtual void getLabels(ScriptInputDataList& inputDataList)
 		{
-			this->get_override("getLabels")(inputDataList);
+			if (override f = this->get_override("getLabels")) {
+				f(inputDataList);
+			}
 		}
 
 		virtual void getResults(ScriptInputDataList& inputDataList, 
 			ScriptResultsList& resultsList)
 		{
-			this->get_override("getResults")(inputDataList, resultsList);
+			if (override f = this->get_override("getResults")) {
+				f(inputDataList, resultsList);
+			}
 		}
 
 		virtual void getCatalog(ScriptResultsList& resultsList)
 		{
-			this->get_override("getCatalog")(resultsList);
+			if (override f = this->get_override("getCatalog")) {
+				f(resultsList);
+			}
 		}
 
 		virtual void launchItem(ScriptInputDataList& inputDataList, 
 			CatItem& item)
 		{
-			this->get_override("launchItem")(inputDataList, item);
+			if (override f = this->get_override("launchItem")) {
+				f(inputDataList, item);
+			}
 		}
 
 		virtual void* doDialog(void* parentWidget)
 		{
 			PyObject *pw = PyLong_FromVoidPtr ((void *) parentWidget);
-			object result = this->get_override("doDialog")(handle<>(pw));
-			return voidPtrFromObject(result);
+			if (override f = this->get_override("doDialog")) {
+				object result = f(handle<>(pw));
+				return voidPtrFromObject(result);
+			}
+			else {
+				return NULL;
+			}			
 		}
 
 		virtual void endDialog(bool accept)
 		{
-			this->get_override("endDialog")(accept);
+			if (override f = this->get_override("endDialog")) {
+				f(accept);
+			}
 		}
 
 		virtual void launchyShow()
 		{
-			this->get_override("launchyShow")();
+			if (override f = this->get_override("launchyShow")) {
+				f();
+			}
 		}
 
 		virtual void launchyHide()
 		{
-			this->get_override("launchyHide")();
+			if (override f = this->get_override("launchyHide")) {
+				f();
+			}
 		}
-
 
 	};
 };

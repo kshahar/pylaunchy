@@ -37,6 +37,7 @@ public:
 	/** Interface for script plugins management */
 	//@{
 	void registerPlugin(boost::python::object pluginClass);
+	const QDir& scriptsDir() const;
 	//@}
 
 public:
@@ -71,11 +72,12 @@ private:
 	void reloadPlugins();
 	void destroyPlugins();
 	void reloadScriptFiles();
-	QDir getScriptsDir();
+	QDir determineScriptsDir();
 
 	QList<boost::python::object> m_scriptPluginsClasses;
 	PluginInfoHash m_scriptPlugins;
 	QHash<uint, boost::python::object> m_scriptPluginsObjects;
+	QDir m_scriptsDir;
 };
 
 extern PyLaunchyPlugin* g_pyLaunchyInstance;

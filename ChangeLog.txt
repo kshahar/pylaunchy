@@ -1,9 +1,11 @@
-2008-08-02 Shahar Kosti
+Version 0.7.0
+	* PyQt4 QtCore is now part of the distribution
+	* Exported Launchy's QSettings using PyQt4. It can be accessed with launchy.settings
+	* Added experimental support for GUI, using PyQt4
+	* Started documentation project at http://pylaunchy.sourceforge.net
 	* Added pygo-y readme
-	* Started to add support for GUI, using PyQt4
 
-2008-08-02 Shahar Kosti
-	* Version 0.6.1
+Version 0.6.1
 	* Scripts register their class type instead of an instance
 	* Using custom Launchy Plugin API interface - MSG_LOAD_PLUGINS, MSG_UNLOAD_PLUGIN
 	* Removed MSG_GET_PLUGINS message
@@ -11,33 +13,27 @@
 	* Script plugins can have an __init__(self) function
 	* Changed scripts to support new API
 
-2008-08-02 Shahar Kosti
-	* Version 0.6.0
+Version 0.6.0
 	* Using custom Launchy Plugin API interface - MSG_GET_PLUGINS
 	* Each script plugin is now a real Launchy plugins
 
-2008-08-01 Shahar Kosti
-	* Version 0.5.5
+Version 0.5.5
 	* Improved exporting of CatItem - exporting member instead of function
 	* Exporting InputData directly, instead of ExportedInputData
 	* Changed scripts to support the changes in CatItem
-
-2008-07-31 Shahar Kosti
 	* Moved to SourceForge
 	* Added a check before launchItem to avoid crashes
 	* Added icon to SVN
 
-2008-07-30  Shahar Kosti
-	* Released version 0.5.2
+Version 0.5.2
 	* The plugins/python directory is now part of sys.path, so external modules
 	  can be loaded from there.
 	* Added installer that includes PyLaunchy and pygo-y script
 
-2008-07-30  Shahar Kosti
-	* Released version 0.5.1
+Version 0.5.1
 	* Added pygo-y.py plugin, that activates a windows (similar to the old Go-Y)
 	* Fixed PyLaunchyPlugin::launchItem relating to the wrong CatItem
 	* Workaround for crash when launchItem() would hide Launchy and call launchyHide()
 
-2008-07-29  Shahar Kosti
-	* Version 0.5 - first public release
+Version 0.5
+	* First public release

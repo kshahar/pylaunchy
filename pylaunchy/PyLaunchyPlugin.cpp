@@ -46,6 +46,11 @@ void PyLaunchyPlugin::registerPlugin(boost::python::object pluginClass)
 	);
 }
 
+const QDir& PyLaunchyPlugin::scriptsDir() const
+{
+	return m_scriptsDir;
+}
+
 PyLaunchyPlugin::PyLaunchyPlugin()
 {
 }
@@ -91,15 +96,30 @@ void PyLaunchyPlugin::init()
 
 	QString initScriptFileName = initScript->fileName();
 
+	m_scriptsDir = determineScriptsDir();
+
 	GUARDED_CALL_TO_PYTHON
 	(
 		LOG_DEBUG("Importing __main__ and __dict__");
 		boost::python::object mainModule = boost::python::import("__main__");
 		boost::python::object mainNamespace = mainModule.attr("__dict__");
 
-		LOG_INFO("Initializing pylaunchy module");
+		LOG_INFO("Initializing launchy module");
 		init_pylaunchy();
-	
+
+		LOG_DEBUG("Importing launchy");
+		boost::python::object launchyModule = boost::python::import("launchy");
+		boost::python::object launchyNamespace = launchyModule.attr("__dict__");
+
+		LOG_DEBUG("Setting launchy.__settings object");
+		if (settings && *settings) {
+			PyObject* settingsPyObject = PyLong_FromVoidPtr ((void *) *settings);
+			launchyNamespace["__settings"] = handle<>(settingsPyObject);
+		}
+		else {
+			LOG_WARN("Launchy's QSettings object was not found");
+		}
+
 		LOG_INFO("Executing init script file");
 		LOG_DEBUG("Init script file name is %s", (const char*)initScriptFileName.toUtf8());
 		boost::python::exec_file(
@@ -298,7 +318,7 @@ void PyLaunchyPlugin::destroyPlugins()
 void PyLaunchyPlugin::reloadScriptFiles()
 {
 	LOG_INFO("Reloading script files");
-	QDir scriptsDir = getScriptsDir();
+	QDir scriptsDir = m_scriptsDir;
 
 	GUARDED_CALL_TO_PYTHON
 	(
@@ -321,7 +341,7 @@ void PyLaunchyPlugin::reloadScriptFiles()
 	);
 }
 
-QDir PyLaunchyPlugin::getScriptsDir()
+QDir PyLaunchyPlugin::determineScriptsDir()
 {
 	QSettings* set = *settings;
 
