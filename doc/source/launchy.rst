@@ -12,7 +12,16 @@ Plugin interface
  
 .. autoclass:: Plugin
    :members: 
- 
+
+Functions
+----------
+.. autofunction:: registerPlugin
+.. autofunction:: hash
+.. autofunction:: getLaunchyPath
+.. autofunction:: getScriptsPath
+.. autofunction:: getIconsPath
+.. autofunction:: runProgram
+   
 Classes
 ---------
 
@@ -20,7 +29,7 @@ CatItem
 ~~~~~~~~~
 .. autoclass:: CatItem
    :members:
-
+   
 InputData
 ~~~~~~~~~~
 .. autoclass:: InputData

@@ -11,11 +11,120 @@ Launchy plugin in Python.
 
 __docformat__ = 'restructuredtext'
 
-class CatItem:
+# TODO
+# .. data:: settings
+
+def registerPlugin(pluginClass):
     """
-    CatItem
+    :param pluginClass: Class type of your plugin.
+    :type pluginClass: launchy.Plugin child
+    
+    Adds a new plugin type, that will be created later on. 
+
+    Example::
+    
+        import launchy
+        class MyPlugin(launchy.Plugin):
+            pass # Real plugin code should come here
+        launchy.registerPlugin( MyPlugin )
+    
     """
     pass
+
+def hash(str):
+    """
+    Returns a hash number of a string.
+    
+    This is a wrapper of 
+    `QT's qHash <http://doc.trolltech.com/4.4/qhash.html>`_ function.
+
+    Use this function for your :meth:`Plugin.getID` function or for labels::
+    
+       def getID(self):
+           return launchy.hash("TestPlugin")
+    
+    """
+    pass
+
+def getLaunchyPath():
+    """
+    Get the path to Launchy's executable directory.
+    
+    For example: ``C:\Program Files\Launchy``
+    """
+
+def getScriptsPath():
+    """
+    Get the path to PyLaunchy's scripts directory.
+    
+    For example: ``C:\Program Files\Launchy\plugins\python``
+    """
+
+def getIconsPath():
+    """
+    Get the path to Launchy's icons directory.
+    
+    For example: ``C:\Program Files\Launchy\plugins\icons``
+    """
+
+def runProgram(file, args):
+    """
+    :param file: The location of the file to run
+    :param args: The arguments to the command
+    
+    A convienience run function.
+    
+    This function will run the program along with arguments and is platform 
+    independent.
+    
+    """
+    pass
+
+class CatItem:
+    """
+    CatItem (Catalog Item) - stores a single item in the index.
+    
+    Example::
+    
+        resultsList.push_back( launchy.CatItem(text,
+             "PySimple: " + text,
+             self.getID(), self.getIcon()) )
+    
+    Class attributes:
+    
+    .. attribute:: fullPath
+    
+        The full path of the file to execute
+    
+    .. attribute:: shortName
+    
+        The abbreviated name of the indexed item.
+    
+    .. attribute:: lowName
+    
+        The lowercase name of the indexed item.
+    
+    .. attribute:: icon
+    
+        A path to an icon for the item.
+    
+    .. attribute:: usage
+    
+        How many times this item has been called by the user.
+    
+    .. attribute:: id
+    
+        The plugin id of the creator of this CatItem (0 for Launchy itself).
+        
+    .. note:: It is usually a good idea to append ".your_plugin_name" 
+           to the end of the full parameter so that there are not multiple 
+           items in the index with the same full path. 
+    """
+    
+    def __init__(self, fullPath, shortName, id, iconPath):
+        """
+        """
+        pass
 
 class InputData:
     """
@@ -136,11 +245,15 @@ class Plugin:
     module itself, Python scripts can be added to Launchy as real plugins.
     
     Every plugin needs to be registered using the :func:`registerPlugin` 
-    function::
+    function.
     
+    Also, every plugin should have the following ``__init__`` function::
+    
+        # The most minimal plugin:
         import launchy
         class MyPlugin(launchy.Plugin):
-            pass # Real plugin code should come here
+            def __init__(self):
+                launchy.Plugin.__init__(self)
         launchy.registerPlugin( MyPlugin )
     
     The Plugin interface consists of the following functions:
