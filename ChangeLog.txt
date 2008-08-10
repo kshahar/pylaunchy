@@ -1,3 +1,7 @@
+Version 0.7.2:
+	* Added CatItem::lowName to interface
+	* Removed most of CatItem constructors
+
 Version 0.7.1
 	* PyQt4 QtGui is now part of the distribution
 	* Added documentation

@@ -11,13 +11,11 @@ using namespace boost::python;
 void export_CatItem()
 {
 	class_<CatItem>("CatItem", init<>())
-		.def(init<QString, bool>())
-		.def(init<QString, const char*>())
-		.def(init<QString, QString, unsigned int>())
 		.def(init<QString, QString, unsigned int, QString>())
 		
 		BOOST_PYTHON_EXPORT_CUSTOM_TYPE("fullPath", &CatItem::fullPath)
 		BOOST_PYTHON_EXPORT_CUSTOM_TYPE("shortName", &CatItem::shortName)
+		BOOST_PYTHON_EXPORT_CUSTOM_TYPE("lowName", &CatItem::lowName)
 		BOOST_PYTHON_EXPORT_CUSTOM_TYPE("icon", &CatItem::icon)
 
 		.def_readwrite("usage", &CatItem::usage)
