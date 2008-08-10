@@ -17,16 +17,16 @@ Classes
 ---------
 
 CatItem
-^^^^^^^^^^
+~~~~~~~~~
 .. autoclass:: CatItem
    :members:
 
 InputData
-^^^^^^^^^^
+~~~~~~~~~~
 .. autoclass:: InputData
    :members:
 
 ResultsList
-^^^^^^^^^^^^  
+~~~~~~~~~~~~
 .. autoclass:: ResultsList
    :members:
