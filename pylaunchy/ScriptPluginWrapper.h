@@ -21,6 +21,7 @@ public:
 	void getResults(QList<InputData>* id, QList<CatItem>* results);
 	void getCatalog(QList<CatItem>* items);
 	void launchItem(QList<InputData>*, CatItem*);
+	bool hasDialog();
 	void doDialog(QWidget* parent, QWidget**);
 	void endDialog(bool accept);
 	void init();

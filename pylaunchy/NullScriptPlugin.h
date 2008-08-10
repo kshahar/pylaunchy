@@ -14,8 +14,6 @@ public:
 
 	virtual QString getName();
 
-	virtual QString getIcon();
-
 	virtual void getLabels(ScriptInputDataList& inputDataList);
 
 	virtual void getResults(ScriptInputDataList& inputDataList, 
@@ -25,6 +23,8 @@ public:
 
 	virtual void launchItem(ScriptInputDataList& inputDataList, 
 		CatItem& item);	
+
+	virtual bool hasDialog();
 
 	virtual void* doDialog(void* parentWidget);
 

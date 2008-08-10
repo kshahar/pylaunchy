@@ -41,18 +41,6 @@ namespace pylaunchy {
 			}
 		}
 
-		virtual QString getIcon()
-		{
-			static QString icon;
-
-			if (override f = this->get_override("getIcon")) {
-				return f();
-			}
-			else {
-				return icon;
-			}
-		}
-
 		virtual void getLabels(ScriptInputDataList& inputDataList)
 		{
 			if (override f = this->get_override("getLabels")) {
@@ -80,6 +68,16 @@ namespace pylaunchy {
 		{
 			if (override f = this->get_override("launchItem")) {
 				f(inputDataList, item);
+			}
+		}
+
+		virtual bool hasDialog()
+		{
+			if (override f = this->get_override("hasDialog")) {
+				return f();
+			}
+			else {
+				return false;
 			}
 		}
 
@@ -138,11 +136,11 @@ void export_ScriptPlugin()
 		.def("init", pure_virtual(&ScriptPlugin::init))
 		.def("getID", pure_virtual(&ScriptPlugin::getID))
 		.def("getName", pure_virtual(&ScriptPlugin::getName))
-		.def("getIcon", pure_virtual(&ScriptPlugin::getIcon))
 		.def("getLabels", pure_virtual(&ScriptPlugin::getLabels))
 		.def("getResults", pure_virtual(&ScriptPlugin::getResults))
 		.def("getCatalog", pure_virtual(&ScriptPlugin::getCatalog))
 		.def("launchItem", pure_virtual(&ScriptPlugin::launchItem))
+		.def("hasDialog", pure_virtual(&ScriptPlugin::hasDialog))
 		.def("doDialog", pure_virtual(&ScriptPlugin::doDialog), return_value_policy<return_by_value>())
 		.def("endDialog", pure_virtual(&ScriptPlugin::endDialog))
 		.def("launchyShow", pure_virtual(&ScriptPlugin::launchyShow))

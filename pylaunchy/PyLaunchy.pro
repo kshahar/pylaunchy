@@ -12,6 +12,10 @@
  SOURCES      += ScriptPluginWrapper.cpp
  
  SOURCES      += python_export.cpp python_export_pylaunchy.cpp python_export_qstring.cpp python_export_catalog.cpp python_export_ScriptPlugin.cpp
+ 
+ HEADRES      += Precompiled.h
+ SOURCES	  += Precompiled.cpp
+ 
  TARGET		   = PyLaunchy
  PRECOMPILED_HEADER = Precompiled.h
  

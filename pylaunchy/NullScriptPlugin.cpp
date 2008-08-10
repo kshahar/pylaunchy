@@ -31,12 +31,6 @@ QString NullScriptPlugin::getName()
 	return nameNullScriptPlugin;
 }
 
-QString NullScriptPlugin::getIcon()
-{
-	static QString icon;
-	return icon;
-}
-
 void NullScriptPlugin::getLabels(ScriptInputDataList& inputDataList)
 {
 }
@@ -54,6 +48,11 @@ void NullScriptPlugin::launchItem(ScriptInputDataList& inputDataList,
 	CatItem& item)
 {
 }	
+
+bool NullScriptPlugin::hasDialog()
+{
+	return false;
+}
 
 void* NullScriptPlugin::doDialog(void* parentWidget)
 {

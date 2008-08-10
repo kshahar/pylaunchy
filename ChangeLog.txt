@@ -1,3 +1,10 @@
+Version 0.7.1
+	* PyQt4 QtGui is now part of the distribution
+	* Added documentation
+	* Added hasDialog() to launchy.Plugin
+	* Removed getIcon() from launchy.Plugin
+	* Fix in pygo-y for Unicode problem	
+
 Version 0.7.0
 	* PyQt4 QtCore is now part of the distribution
 	* Exported Launchy's QSettings using PyQt4. It can be accessed with launchy.settings

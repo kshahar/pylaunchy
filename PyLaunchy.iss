@@ -13,7 +13,7 @@
 ; limitations under the License.
 
 #define MyAppName "PyLaunchy"
-#define MyAppVer "0.7.0"
+#define MyAppVer "0.7.1"
 #define MyAppURL ""
 
 [Files]
@@ -25,6 +25,7 @@ Source: scripts\pysimple.py; DestDir: {app}\plugins\python\examples
 
 Source: icons\pygo-y.png; DestDir: {app}\plugins\icons; Components: pygoy
 Source: scripts\pygo-y.py; DestDir: {app}\plugins\python; Components: pygoy
+Source: scripts\pygo-y.readme.txt; DestDir: {app}\plugins\python; Components: pygoy
 Source: tmpbuild\win32con.py; DestDir: {app}\plugins\python; Components: pygoy
 Source: tmpbuild\win32gui.pyd; DestDir: {app}\plugins\python; Components: pygoy
 

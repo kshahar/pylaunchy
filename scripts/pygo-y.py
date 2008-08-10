@@ -1,4 +1,4 @@
-# Copyright (c) 2008 Shahar Kosti
+﻿# Copyright (c) 2008 Shahar Kosti
 #
 # This program is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -106,7 +106,7 @@ class PyGoY(launchy.Plugin):
 		""" Window Enum function for getTopLevelWindows """
 		title = win32gui.GetWindowText(hwnd)
 		if win32gui.GetParent(hwnd) == 0 and title != '':
-			windowsList.append((hwnd,title))
+			windowsList.append( (hwnd, unicode(title) ) )
 				
 	_windowEnumTopLevel = staticmethod(_windowEnumTopLevel)
 

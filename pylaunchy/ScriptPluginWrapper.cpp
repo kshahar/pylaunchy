@@ -109,6 +109,16 @@ void ScriptPluginWrapper::launchItem(QList<InputData>* id, CatItem* item)
 	s_inPythonFunction = false;
 }
 
+bool ScriptPluginWrapper::hasDialog()
+{
+	LOG_FUNCTRACK;
+
+	GUARDED_CALL_TO_PYTHON(
+		LOG_DEBUG("Calling plugin hasDialog");
+		return m_pScriptPlugin->hasDialog();
+	);
+}
+
 void ScriptPluginWrapper::doDialog(QWidget* parent, QWidget** newDlg) 
 {
 	LOG_FUNCTRACK;
@@ -201,7 +211,7 @@ int ScriptPluginWrapper::msg(int msgId, void* wParam, void* lParam)
 			break;
 		case MSG_HAS_DIALOG:
 			// Set to true if you provide a gui
-			handled = true;
+			handled = hasDialog();
 			break;
 		case MSG_DO_DIALOG:
 			// This isn't called unless you return true to MSG_HAS_DIALOG
