@@ -13,7 +13,7 @@
 ; limitations under the License.
 
 #define MyAppName "PyLaunchy"
-#define MyAppVer "0.7.1"
+#define MyAppVer "0.7.2"
 #define MyAppURL ""
 
 [Files]

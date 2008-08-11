@@ -38,7 +38,8 @@ def hash(str):
     This is a wrapper of 
     `QT's qHash <http://doc.trolltech.com/4.4/qhash.html>`_ function.
 
-    Use this function for your :meth:`Plugin.getID` function or for labels::
+    Use this function in your :meth:`Plugin.getID` function or for 
+    labels in :meth:`InputData.setLabel`::
     
        def getID(self):
            return launchy.hash("TestPlugin")

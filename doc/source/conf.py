@@ -42,9 +42,15 @@ copyright = u'2008, Shahar Kosti'
 # other places throughout the built documents.
 #
 # The short X.Y version.
-version = u'0.7.0'
+
+# Read the version from Version.txt file. Added by Shahar
+version_file = open("../../Version.txt")
+version_from_file = version_file.readline().strip()
+version_file.close()
+
+version = unicode(version_from_file)
 # The full version, including alpha/beta/rc tags.
-release = u'0.7.0'
+release = version
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
