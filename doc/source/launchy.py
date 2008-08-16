@@ -151,7 +151,15 @@ class InputData:
         Check if it has the given label applied to it.
         """
         pass
-   
+      
+    def getLabels(self):
+        """
+        :rtype: List of integers
+        
+        Get the labels associated with this query. 
+        """
+        pass
+      
     def setID(self, hashId):
         """
         Set the id of this query.

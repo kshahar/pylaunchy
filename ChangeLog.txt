@@ -1,3 +1,5 @@
+	* Exported function: InputData::getLabels
+
 Version 0.7.2:
 	* Added CatItem::lowName to interface
 	* Removed most of CatItem constructors
