@@ -1,3 +1,5 @@
+	* Added pywebindex and pyverby
+	* Changed __main__ to fix problem with BeautifulSoup
 	* Exported function: InputData::getLabels
 
 Version 0.7.2:

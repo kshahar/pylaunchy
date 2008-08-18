@@ -25,8 +25,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
     Details.
 */
 
-void runProgram(QString path, QString args) {
 #ifdef Q_WS_WIN
+void runProgram(QString path, QString args) {
 	SHELLEXECUTEINFO ShExecInfo;
 
 	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
@@ -47,7 +47,13 @@ void runProgram(QString path, QString args) {
 	ShExecInfo.nShow = SW_NORMAL;
 	ShExecInfo.hInstApp = NULL;
 
-	ShellExecuteEx(&ShExecInfo);	
+	LOG_DEBUG("Calling ShellExecuteEx with lpFile=%s", (const char*)(path).utf16());
+	const BOOL result = ShellExecuteEx(&ShExecInfo);
+
+	if (!result) {
+		LOG_WARN("runProgram failed. GetLastError()=%i", GetLastError());
+	}
+}
 #endif
 
 #ifdef Q_WS_MAC
@@ -57,5 +63,3 @@ void runProgram(QString path, QString args) {
 #ifdef Q_WS_X11
 
 #endif
-
-}
