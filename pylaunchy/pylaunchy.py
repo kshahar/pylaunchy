@@ -48,7 +48,10 @@ def setSettingsObject():
 		
 redirectOutput()
 
-# Add the 'python' directory to module path
+# Add the '<Launchy>\plugins\python' directory to module path
 sys.path.insert( 0, os.path.realpath( launchy.getScriptsPath() ) )
+
+# Add the '<Launchy>\plugins\python\lib' directory to module path
+sys.path.insert( 0, os.path.realpath( launchy.getLibPath() ) )
 
 setSettingsObject()

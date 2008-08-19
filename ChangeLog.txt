@@ -1,3 +1,6 @@
+	* Plugins are no longer deleted each time a MSG_LOAD_PLUGINS (100) message arrives
+	* Added <Launchy>\plugins\python\lib directory
+	* New launchy module function: getLibPath()
 	* Added pywebindex and pyverby
 	* Changed __main__ to fix problem with BeautifulSoup
 	* Exported function: InputData::getLabels

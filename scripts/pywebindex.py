@@ -20,14 +20,12 @@ import sys, os
 import urllib2
 from BeautifulSoup import BeautifulSoup
 
+from PyQt4 import QtCore
+from PyQt4.QtCore import QVariant
+
 import sqlite3
 import win32api
-
-#~ [PyWebIndex]
-#~ masterPages\1\name=doclaunchy
-#~ masterPages\1\url=http://launchy.net/api2.0/doxydoc/classes.html
-#~ masterPages\1\baseUrl=http://launchy.net/api2.0/doxydoc/
-#~ masterPages\size=1
+import hashlib
 
 class LinkInfo:
 	def __init__(self, name, url):
@@ -40,6 +38,8 @@ class LinkInfo:
 
 
 class PyWebIndex(launchy.Plugin):
+	initialized = False
+	
 	def __init__(self):
 		launchy.Plugin.__init__(self)
 		self.icon = os.path.join(launchy.getIconsPath(), "pysimple.png")
@@ -49,13 +49,17 @@ class PyWebIndex(launchy.Plugin):
 		self.db = LinksDB()
 
 	def init(self):
-		from PyQt4 import QtCore
-		from PyQt4.QtCore import QVariant
+		if self.initialized:
+			return
+		self.initialized = True
+		
 		settings = launchy.settings
 		
 		version = settings.value("PyWebIndex/version", QVariant("0.0")).toString()
 		print "PyWebIndex version: " + version
-		if version == "0.0":			
+		if version == "0.0":	
+			settings.setValue("PyWebIndex/pagesHash", QVariant(""))			
+			
 			settings.beginWriteArray("PyWebIndex/masterPages")
 			settings.setArrayIndex(0)
 			settings.setValue("name", QVariant("doclaunchy"))
@@ -76,7 +80,15 @@ class PyWebIndex(launchy.Plugin):
 			)
 		settings.endArray()
 		
-		self.__parseMasterPages(masterPages)
+		newPagesHash = hashlib.md5()
+		for page in masterPages:
+			newPagesHash.update( page[0] + page[1] + page[2] )
+			
+		pagesHash = settings.value("PyWebIndex/pagesHash").toString()
+		if newPagesHash.digest() != pagesHash:
+			print "Rebuilding PyWebIndex Database"
+			settings.setValue("PyWebIndex/pagesHash", QVariant(newPagesHash.digest()))
+			self.__parseMasterPages(masterPages)
 		
 	def getID(self):
 		return self.hash
@@ -123,6 +135,8 @@ class PyWebIndex(launchy.Plugin):
 		pass
 	
 	def __parseMasterPages(self, masterPages):
+		self.db.rebuildDatabase()
+		
 		for masterPage in masterPages:
 			(masterPageId, name, url, baseUrl) = self.db.addMasterPage(
 				masterPage[0], masterPage[1], masterPage[2])
@@ -143,13 +157,19 @@ class PyWebIndex(launchy.Plugin):
 
 class LinksDB:
 	def __init__(self):
-		dbFile = os.path.join(launchy.getScriptsPath(), 'pywebindex.db')
-		if os.path.exists(dbFile):
-			os.unlink(dbFile)
-			
-		self.conn = sqlite3.connect(dbFile)
-		self.cursor = self.conn.cursor()
+		self.dbFile = os.path.join(launchy.getScriptsPath(), 'pywebindex.db')
 		
+		self.conn = sqlite3.connect(self.dbFile)
+		self.cursor = self.conn.cursor()
+			
+	def rebuildDatabase(self):
+		self.conn.close()
+		if os.path.exists(self.dbFile):
+			os.unlink(self.dbFile)
+			
+		self.conn = sqlite3.connect(self.dbFile)
+		self.cursor = self.conn.cursor()
+							
 		self.cursor.execute('''CREATE TABLE master_pages (
 			id  INTEGER PRIMARY KEY ,
 			name TEXT,

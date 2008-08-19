@@ -129,6 +129,7 @@ void PyLaunchyPlugin::init()
 	);
 
 	reloadScriptFiles();
+	reloadPlugins();
 }
 
 
@@ -174,7 +175,6 @@ void PyLaunchyPlugin::launchyHide()
 void PyLaunchyPlugin::loadPlugins(QList<PluginInfo>* additionalPlugins)
 {
 	LOG_FUNCTRACK;
-	reloadPlugins();
 
 	LOG_INFO("Adding Python plugins to Launchy");
 	PluginInfoHash::const_iterator itr = m_scriptPlugins.constBegin();

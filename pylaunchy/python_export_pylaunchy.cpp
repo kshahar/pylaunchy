@@ -30,6 +30,12 @@ namespace pylaunchy
 		return g_pyLaunchyInstance->scriptsDir().absolutePath();
 	}
 
+	QString getLibPath()
+	{
+		return g_pyLaunchyInstance->scriptsDir().absolutePath() + 
+			QDir::separator() + "lib";
+	}
+
 	QString getIconsPath()
 	{
 		return qApp->applicationDirPath() + "/plugins/icons";
@@ -49,6 +55,7 @@ void export_pylaunchy()
 	def("hash", &pylaunchy::hash);
 	def("getLaunchyPath", &pylaunchy::getLaunchyPath);
 	def("getScriptsPath", &pylaunchy::getScriptsPath);
+	def("getLibPath", &pylaunchy::getLibPath);
 	def("getIconsPath", &pylaunchy::getIconsPath);
 	def("runProgram", &pylaunchy::runProgram);
 }
