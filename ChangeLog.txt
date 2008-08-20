@@ -1,4 +1,7 @@
+Version 0.7.5:
+	* Plugins are no longer created twice (bug 2062663)
 	* Plugins are no longer deleted each time a MSG_LOAD_PLUGINS (100) message arrives
+	* Added sip to installer (bug 2059352)
 	* Added <Launchy>\plugins\python\lib directory
 	* New launchy module function: getLibPath()
 	* Added pywebindex and pyverby

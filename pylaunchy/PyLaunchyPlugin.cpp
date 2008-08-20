@@ -30,17 +30,6 @@ void PyLaunchyPlugin::registerPlugin(boost::python::object pluginClass)
 {
 	GUARDED_CALL_TO_PYTHON
 	(
-		LOG_DEBUG("Creating plugin object");
-		object pluginObject = pluginClass();
-
-		LOG_DEBUG("Extracting plugin");
-		ScriptPlugin* plugin = extract<ScriptPlugin*>(pluginObject);
-
-		if (!plugin) {
-			LOG_DEBUG("Plugin is NULL");
-			return;
-		}
-
 		LOG_DEBUG("Registering plugin");
 		m_scriptPluginsClasses.push_back(pluginClass);
 	);
