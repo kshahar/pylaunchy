@@ -2,8 +2,8 @@
 
 .. |ScriptsPath| replace:: ``<Launchy>\plugins\python``
  
-Simple Plugin
-===============
+Simple Plugin Tutorial
+=======================
 
 Introduction
 --------------
@@ -20,9 +20,9 @@ Running the plugin is simple:
  * Put the pysimple.py file in |ScriptsPath| (Replace ``<Launchy>`` 
    with your Launchy install path, e.g. ``C:\Program Files\Launchy\plugins\python``).
  * Restart Launchy
- * Hit ``<Alt>`` + ``<Space>``
+ * Hit :kbd:`Alt+Space`
  * Type ``My simple plugin``
- * Hit ``<Enter>``
+ * Hit :kbd:`Enter`
 
 You should see the following image : 
 
@@ -49,7 +49,7 @@ The following refer to the ``### 1`` comments in the code.
     Launchy, are defined for later use. They are returned by functions called by
     Launchy and the plugin itself.
  4. Text is retrieved from the first input data. This is what the user has 
-    typed without clicking `<TAB>`
+    typed without clicking :kbd:`Tab`
  5. A new catalog item is created, containing the user text and some more.
     Note the usage of ``getID()``, it tells Launchy which plugin to use in case
     the user has selected this item.

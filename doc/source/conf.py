@@ -32,7 +32,7 @@ templates_path = [u'.templates']
 source_suffix = u'.rst'
 
 # The master toctree document.
-master_doc = u'main'
+master_doc = u'index'
 
 # General substitutions.
 project = u'pylaunchy'
@@ -89,11 +89,12 @@ pygments_style = u'sphinx'
 # The style sheet to use for HTML and HTML Help pages. A file of that name
 # must exist either in Sphinx' static/ path, or in one of the custom paths
 # given in html_static_path.
-html_style = u'default.css'
+#html_style = u'default.css'
+html_style = u'style.css'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-#html_title = None
+#html_title = u'PyLaunchy'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -125,7 +126,8 @@ html_last_updated_fmt = '%b %d, %Y'
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
-#html_additional_pages = {'index': 'index.jinja'} 
+#html_additional_pages = { 'layout': 'layout.html' } 
+# 'index': 'index.jinja'} 
 
 # If false, no module index is generated.
 #html_use_modindex = True
