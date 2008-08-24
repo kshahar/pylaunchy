@@ -1,6 +1,7 @@
  TEMPLATE      = lib
  CONFIG       += plugin debug_and_release
- FORMS		   = 
+ FORMS         = 
+ VPATH         = pylaunchy/
  
  HEADERS       = catalog.h plugin_interface.h
  SOURCES       = catalog.cpp plugin_interface.cpp 
@@ -29,7 +30,6 @@
 	LIBS += shell32.lib
 	LIBS += $$(PYTHON_ROOT)\libs\python25.lib
 	LIBS += -L$$(BOOST_1_35_0)\lib
-	RC_FILE = PyLaunchyPlugin.rc
 %	LIBS += user32.lib
 %	LIBS += Gdi32.lib
 %	LIBS += comctl32.lib

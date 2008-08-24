@@ -23,9 +23,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="%QTDIR%\bin\qmake PyLaunchy.pro&#x0D;&#x0A;nmake debug"
-				ReBuildCommandLine="%QTDIR%\bin\qmake PyLaunchy.pro&#x0D;&#x0A;nmake debug-clean&#x0D;&#x0A;nmake debug"
-				CleanCommandLine="%QTDIR%\bin\qmake PyLaunchy.pro&#x0D;&#x0A;nmake debug-clean"
+				BuildCommandLine="%QTDIR%\bin\qmake ..\PyLaunchy.pro&#x0D;&#x0A;nmake debug"
+				ReBuildCommandLine="%QTDIR%\bin\qmake ..\PyLaunchy.pro&#x0D;&#x0A;nmake debug-clean&#x0D;&#x0A;nmake debug"
+				CleanCommandLine="%QTDIR%\bin\qmake ..\PyLaunchy.pro&#x0D;&#x0A;nmake debug-clean"
 				Output="PyLaunchy.exe"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				IncludeSearchPath=""
@@ -43,9 +43,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="%QTDIR%\bin\qmake PyLaunchy.pro&#x0D;&#x0A;nmake release"
-				ReBuildCommandLine="%QTDIR%\bin\qmake PyLaunchy.pro&#x0D;&#x0A;nmake release-clean&#x0D;&#x0A;nmake release"
-				CleanCommandLine="%QTDIR%\bin\qmake PyLaunchy.pro&#x0D;&#x0A;nmake release-clean"
+				BuildCommandLine="%QTDIR%\bin\qmake ..\PyLaunchy.pro&#x0D;&#x0A;nmake release"
+				ReBuildCommandLine="%QTDIR%\bin\qmake ..=PyLaunchy.pro&#x0D;&#x0A;nmake release-clean&#x0D;&#x0A;nmake release"
+				CleanCommandLine="%QTDIR%\bin\qmake ..\PyLaunchy.pro&#x0D;&#x0A;nmake release-clean"
 				Output="PyLaunchy.exe"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				IncludeSearchPath=""
@@ -63,23 +63,23 @@
 			Name="Plugin API"
 			>
 			<File
-				RelativePath=".\catalog.cpp"
+				RelativePath="..\pylaunchy\catalog.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\catalog.h"
+				RelativePath="..\pylaunchy\catalog.h"
 				>
 			</File>
 			<File
-				RelativePath=".\plugin_info.h"
+				RelativePath="..\pylaunchy\plugin_info.h"
 				>
 			</File>
 			<File
-				RelativePath=".\plugin_interface.cpp"
+				RelativePath="..\pylaunchy\plugin_interface.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\plugin_interface.h"
+				RelativePath="..\pylaunchy\plugin_interface.h"
 				>
 			</File>
 		</Filter>
@@ -87,15 +87,15 @@
 			Name="General"
 			>
 			<File
-				RelativePath=".\Precompiled.cpp"
+				RelativePath="..\pylaunchy\Precompiled.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Precompiled.h"
+				RelativePath="..\pylaunchy\Precompiled.h"
 				>
 			</File>
 			<File
-				RelativePath=".\pylaunchy_ezlogger_adapter.h"
+				RelativePath="..\pylaunchy\pylaunchy_ezlogger_adapter.h"
 				>
 			</File>
 		</Filter>
@@ -108,27 +108,27 @@
 				UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 				>
 				<File
-					RelativePath=".\NullScriptPlugin.h"
+					RelativePath="..\pylaunchy\NullScriptPlugin.h"
 					>
 				</File>
 				<File
-					RelativePath=".\PyLaunchyPlugin.h"
+					RelativePath="..\pylaunchy\PyLaunchyPlugin.h"
 					>
 				</File>
 				<File
-					RelativePath=".\PyLaunchyPluginDefines.h"
+					RelativePath="..\pylaunchy\PyLaunchyPluginDefines.h"
 					>
 				</File>
 				<File
-					RelativePath=".\PythonUtils.h"
+					RelativePath="..\pylaunchy\PythonUtils.h"
 					>
 				</File>
 				<File
-					RelativePath=".\ScriptPluginInfo.h"
+					RelativePath="..\pylaunchy\ScriptPluginInfo.h"
 					>
 				</File>
 				<File
-					RelativePath=".\ScriptPluginWrapper.h"
+					RelativePath="..\pylaunchy\ScriptPluginWrapper.h"
 					>
 				</File>
 			</Filter>
@@ -138,15 +138,15 @@
 				UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 				>
 				<File
-					RelativePath=".\NullScriptPlugin.cpp"
+					RelativePath="..\pylaunchy\NullScriptPlugin.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\PyLaunchyPlugin.cpp"
+					RelativePath="..\pylaunchy\PyLaunchyPlugin.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\ScriptPluginWrapper.cpp"
+					RelativePath="..\pylaunchy\ScriptPluginWrapper.cpp"
 					>
 				</File>
 			</Filter>
@@ -158,11 +158,11 @@
 				Name="Header Files"
 				>
 				<File
-					RelativePath=".\ScriptDataStructures.h"
+					RelativePath="..\pylaunchy\ScriptDataStructures.h"
 					>
 				</File>
 				<File
-					RelativePath=".\ScriptPlugin.h"
+					RelativePath="..\pylaunchy\ScriptPlugin.h"
 					>
 				</File>
 			</Filter>
@@ -170,29 +170,29 @@
 				Name="Source Files"
 				>
 				<File
-					RelativePath=".\python_export.cpp"
+					RelativePath="..\pylaunchy\python_export.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\python_export_catalog.cpp"
+					RelativePath="..\pylaunchy\python_export_catalog.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\python_export_pylaunchy.cpp"
+					RelativePath="..\pylaunchy\python_export_pylaunchy.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\python_export_qstring.cpp"
+					RelativePath="..\pylaunchy\python_export_qstring.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\python_export_ScriptPlugin.cpp"
+					RelativePath="..\pylaunchy\python_export_ScriptPlugin.cpp"
 					>
 				</File>
 			</Filter>
 		</Filter>
 		<File
-			RelativePath=".\PyLaunchy.pro"
+			RelativePath="..\PyLaunchy.pro"
 			>
 		</File>
 		<File
