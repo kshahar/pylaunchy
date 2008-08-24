@@ -1,3 +1,6 @@
+	* Changed the project dicrectory structure
+	* Added documentation
+
 Version 0.7.5:
 	* Plugins are no longer created twice (bug 2062663)
 	* Plugins are no longer deleted each time a MSG_LOAD_PLUGINS (100) message arrives

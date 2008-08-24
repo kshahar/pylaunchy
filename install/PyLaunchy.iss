@@ -17,9 +17,10 @@
 #define MyAppURL ""
 
 #define RootDir ".."
+#define SrcDir RootDir + "\src"
 
 [Files]
-Source: {#RootDir}\pylaunchy\Release\PyLaunchy.dll; DestDir: {app}\plugins
+Source: {#SrcDir}\windows\Release\PyLaunchy.dll; DestDir: {app}\plugins
 Source: tmpbuild\boost_python-vc80-mt-1_35.dll; DestDir: {app}\
 Source: icons\pysimple.png; DestDir: {app}\plugins\icons
 Source: {#RootDir}\scripts\pysimple.py; DestDir: {app}\plugins\python\examples
