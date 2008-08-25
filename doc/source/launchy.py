@@ -61,11 +61,25 @@ def getScriptsPath():
     For example: ``C:\Program Files\Launchy\plugins\python``
     """
 
+def getLibPath():
+    """
+    Get the path to PyLaunchy's external modules.
+    
+    For example: ``C:\Program Files\Launchy\plugins\python\lib``
+    """
+
 def getIconsPath():
     """
     Get the path to Launchy's icons directory.
     
     For example: ``C:\Program Files\Launchy\plugins\icons``
+    """
+
+def getConfigPath():
+    """
+    Get the path to Launchy's configuration directory.
+    
+    For example: ``C:\Documents and Settings\username\Application Data\Launchy``
     """
 
 def runProgram(file, args):
