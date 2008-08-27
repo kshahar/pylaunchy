@@ -24,6 +24,7 @@ Source: {#SrcDir}\windows\Release\PyLaunchy.dll; DestDir: {app}\plugins
 Source: tmpbuild\boost_python-vc80-mt-1_35.dll; DestDir: {app}\
 Source: icons\pysimple.png; DestDir: {app}\plugins\icons
 Source: {#RootDir}\scripts\pysimple.py; DestDir: {app}\plugins\python\examples
+Source: lib\sip.pyd; DestDir: {app}\plugins\python\lib
 Source: lib\PyQt4\*.*; DestDir: {app}\plugins\python\lib\PyQt4; Flags: recursesubdirs; Excludes: .svn
 
 Source: icons\pygo-y.png; DestDir: {app}\plugins\icons; Components: pygoy
