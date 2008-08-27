@@ -1,3 +1,5 @@
+	* 
+	* Added sip to installer - again (bug 2059352) 
 	* Changed PyWebIndex to keep the database in Launchy's config path
 	* Exported function: getConfigPath()
 	* Changed the project dicrectory structure

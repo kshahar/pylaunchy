@@ -344,10 +344,20 @@ QDir PyLaunchyPlugin::determineScriptsDir()
 		scriptsDirPath = "plugins/python/";
 		set->setValue(scriptsDirKey, scriptsDirPath);
 	}
-	LOG_INFO("Using scripts dir %s", (const char*)scriptsDirPath.toUtf8());
+
 	QDir scriptsDir(scriptsDirPath);
+	if ( scriptsDir.isRelative() ) {
+		LOG_DEBUG("Scripts dir is relative, prepending Launchy's path");
+		scriptsDir = qApp->applicationDirPath() + "/" + scriptsDirPath;
+	}
+	else {
+		LOG_DEBUG("Scripts dir is absolute");
+	}
+
+	LOG_INFO("Using scripts dir %s", (const char*)scriptsDir.path().toUtf8());
+
 	if ( !scriptsDir.exists() ) {
-		scriptsDir.mkdir(scriptsDirPath);
+		scriptsDir.mkpath(scriptsDirPath);
 	}
 
 	return scriptsDir;
