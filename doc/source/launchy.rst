@@ -1,4 +1,4 @@
-:mod:`launchy` module ---API for Launchy plugins
+:mod:`launchy` module -- API for Launchy plugins
 ===================================================
 
 .. note:: This document is heavily based on Josh Karlin's 
