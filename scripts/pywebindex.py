@@ -13,6 +13,9 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
+# Version 1.1:
+#	* Changed DB file location to the Launchy config directory
+#	* Added some documentation
 # Version 1.0:
 #	* First public release
 #
@@ -133,6 +136,7 @@ class PyWebIndex(launchy.Plugin):
 	def __readConfig(self):
 		settings = launchy.settings
 		
+		# Test if the settings file has PyWebIndex configuration
 		version = settings.value("PyWebIndex/version", QVariant("0.0")).toString()
 		print_debug("PyWebIndex version: " + version)
 		if version == "0.0":
@@ -144,8 +148,10 @@ class PyWebIndex(launchy.Plugin):
 			settings.setValue("url", QVariant("http://launchy.net/api2.0/doxydoc/classes.html"))
 			settings.endArray()
 		
+		# Set our version
 		settings.setValue("PyWebIndex/version", QVariant(self.__version__))
 		
+		# Read master pages from the settings file
 		masterPages = []
 		size = settings.beginReadArray("PyWebIndex/masterPages")
 		for i in range(0, size):
@@ -156,12 +162,15 @@ class PyWebIndex(launchy.Plugin):
 			)
 		settings.endArray()
 		
+		# Make a hash of the pages we just read
 		newPagesHash = hashlib.md5()
 		for page in masterPages:
 			newPagesHash.update( page[0] + page[1] )
 		
+		# Test the new hash against the hash in the settings file
 		pagesHash = settings.value("PyWebIndex/pagesHash").toString()
 		if (newPagesHash.digest() != pagesHash) or (self.db.isDatabaseRebuilt):
+			# Database rebuild is required since the hash changed
 			print_debug("Rebuilding PyWebIndex Database")
 			settings.setValue("PyWebIndex/pagesHash", QVariant(newPagesHash.digest()))
 			self.__parseMasterPages(masterPages)
@@ -169,7 +178,10 @@ class PyWebIndex(launchy.Plugin):
 		self.masterPages = self.db.getMasterPages()
 	
 	def __parseMasterPages(self, masterPages):
+		# Recreate tables in DB
 		self.db.rebuildDatabase()
+		
+		# Download all master pages, get their links and add them to DB
 		
 		for masterPage in masterPages:
 			(masterPageId, name, url) = self.db.addMasterPage(
@@ -191,12 +203,24 @@ class PyWebIndex(launchy.Plugin):
 						self.db.addSubPage( masterPageId, link.string, link['href'] )
 					except Exception, msg:
 						print >> sys.stderr, "PyWebIndex: Error parsing link " + link
-			
+		
+		# Finished adding to DB
 		self.db.commit()
 		
 class LinksDB:
+	"""
+	Provides an interface to database that contains master (index pages) and
+	the links they contain.
+	
+	Database is composed of two tables: 
+	 * master_pages - contains the page name and full URL
+	 * sub_pages - contains pages linked from a master page, the link name and
+	    a partial or full URL.
+	"""
+	
 	def __init__(self):
-		self.dbFile = os.path.join(launchy.getScriptsPath(), 'pywebindex.db')
+		self.dbFile = os.path.join(launchy.getConfigPath(), 'pywebindex.db')
+		
 		self.conn = None
 		self.isDatabaseRebuilt = False
 		
