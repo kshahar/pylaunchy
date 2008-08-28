@@ -1,9 +1,11 @@
-	* 
+Version 0.7.6:
+	* pygo-y now works even if pywin32 is not installed (bug 2077740)
+	* Scripts directory is relative to Launchy's directory (bug 2079116)
 	* Added sip to installer - again (bug 2059352) 
 	* Changed PyWebIndex to keep the database in Launchy's config path
 	* Exported function: getConfigPath()
 	* Changed the project dicrectory structure
-	* Added documentation
+	* Added and updated documentation
 
 Version 0.7.5:
 	* Plugins are no longer created twice (bug 2062663)

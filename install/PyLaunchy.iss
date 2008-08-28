@@ -13,7 +13,7 @@
 ; limitations under the License.
 
 #define MyAppName "PyLaunchy"
-#define MyAppVer "0.7.5"
+#define MyAppVer "0.7.6"
 #define MyAppURL ""
 
 #define RootDir ".."
@@ -26,16 +26,16 @@ Source: icons\pysimple.png; DestDir: {app}\plugins\icons
 Source: {#RootDir}\scripts\pysimple.py; DestDir: {app}\plugins\python\examples
 Source: lib\sip.pyd; DestDir: {app}\plugins\python\lib
 Source: lib\PyQt4\*.*; DestDir: {app}\plugins\python\lib\PyQt4; Flags: recursesubdirs; Excludes: .svn
+Source: {#RootDir}\doc\build\*.*; DestDir: {app}\plugins\python\doc; Flags: recursesubdirs; Excludes: .svn, *.zip
 
 Source: icons\pygo-y.png; DestDir: {app}\plugins\icons; Components: pygoy
 Source: {#RootDir}\scripts\pygo-y.py; DestDir: {app}\plugins\python; Components: pygoy
-Source: {#RootDir}\scripts\pygo-y.readme.txt; DestDir: {app}\plugins\python; Components: pygoy
 Source: lib\win32con.pyc; DestDir: {app}\plugins\python\lib; Components: pygoy
 Source: lib\win32gui.pyd; DestDir: {app}\plugins\python\lib; Components: pygoy
+Source: lib\pywintypes25.dll; DestDir: {app}\plugins\python\lib; Components: pygoy
 
 Source: {#RootDir}\scripts\pywebindex.py; DestDir: {app}\plugins\python; Components: pywebindex
 Source: {#RootDir}\scripts\pywebindex_ui.py; DestDir: {app}\plugins\python; Components: pywebindex
-Source: {#RootDir}\scripts\pywebindex.readme.txt; DestDir: {app}\plugins\python; Components: pywebindex
 Source: lib\BeautifulSoup.pyc; DestDir: {app}\plugins\python\lib; Components: pywebindex
 
 [Setup]
@@ -49,6 +49,7 @@ OutputBaseFilename=PyLaunchy-{#MyAppVer}
 OutputDir=.\
 AppID={{AD02FF4D-0B7A-480A-AE06-10A2F853CAF3}
 LicenseFile=..\license.txt
+DirExistsWarning=no
 
 [Registry]
 
