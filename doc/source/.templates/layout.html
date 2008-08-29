@@ -1,16 +1,289 @@
-{% extends "!layout.html" %}
+{%- block doctype -%}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{%- endblock %}
+{%- set reldelim1 = reldelim1 is not defined and ' &raquo;' or reldelim1 %}
+{%- set reldelim2 = reldelim2 is not defined and ' |' or reldelim2 %}
+{%- macro relbar %}
+    <div class="dialog">
 
+    
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        {#
+        {%- for rellink in rellinks %}
+        <li class="right" {% if loop.first %}style="margin-right: 10px"{% endif %}>
+          <a href="{{ pathto(rellink[0]) }}" title="{{ rellink[1]|striptags }}"
+             accesskey="{{ rellink[2] }}">{{ rellink[3] }}</a>
+          {%- if not loop.first %}{{ reldelim2 }}{% endif %}</li>
+        {%- endfor %}
+        #}
+        {%- block rootrellink %}
+        <li><a href="{{ pathto('index') }}">{{ shorttitle }}</a>{{ reldelim1 }}</li>
+        {%- endblock %}
+        {%- for parent in parents %}
+          <li><a href="{{ parent.link|e }}" accesskey="U">{{ parent.title }}</a>{{ reldelim1 }}</li>
+        {%- endfor %}
+        {%- block relbaritems %}{% endblock %}
+      </ul>
+    </div>
+    </div>
+{%- endmacro %}
 
+{%- macro sidebar_main %}
+    <div id="left" class="column">
+      <div class="sidebar">
+        <div class="sidebaritem">
+          <h3>Table Of Contents</h3>
+          {{ main_tocs[0] }}
+          <ul>
+            <li><a href="http://sourceforge.net/project/showfiles.php?group_id=235162&package_id=285546">Downloads</a></li>
+          </ul>
+          {% for main_toc in main_tocs[1:] %}
+            {{ main_toc }}
+          {% endfor %}
+          <ul>
+            <li>
+              <a>Support</a>
+              <ul>
+                <li>
+                  <a href="http://sourceforge.net/forum/?group_id=235162">Forums</a>
+                </li>
+                <li>
+                  <a href="https://sourceforge.net/tracker/?group_id=235162">Bugs / Feature Requests</a>
+                </li>
+              </ul>
+            </li>
+<!--
+            <li>
+              <a>Mailing Lists</a>
+              <ul>
+                <li>
+                  <a href="http://groups.google.com/group/eclim-dev">Developers</a>
+                </li>
+              </ul>
+            </li>
+-->
+            <li>
+              <a>Links</a>
+              <ul>
+                <li>
+                  <a href="http://www.launchy.net">Launchy</a>
+                </li>
+                <li>
+                  <a href="http://trolltech.com/products/qt">QT</a>
+                </li>
+                <li>
+                  <a href="http://www.python.org">Python</a>
+                </li>
+                <li>
+                  <a href="http://www.boost.org/doc/libs/1_35_0/libs/python">Boost.Python</a>
+                </li>
+                <li>
+                  <a href="http://www.riverbankcomputing.co.uk/software/pyqt">PyQt</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="sidebaritem">
+          {% if current_page_name != "search" %}
+            <h3>{{ builder == 'web' and 'Keyword' or 'Quick' }} search</h3>
+            <form class="search" action="{{ pathto('search') }}" method="get">
+              <input type="text" name="q" size="18"> <input type="submit" value="Go">
+              <input type="hidden" name="check_keywords" value="yes">
+              <input type="hidden" name="area" value="default">
+            </form>
+            {% if builder == 'web' %}
+            <p style="font-size: 90%">Enter a module, class or function name.</p>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+{%- endmacro %}
 
-{% block relbar1 %}
-<div class="related">
-<div class="related2">
-<ul>
-<li class="right"><a href="http://sourceforge.net/forum/?group_id=235162">Forums</a></li>
-<li class="right"><a href="http://sourceforge.net/project/showfiles.php?group_id=235162">Downloads</a> | </li>
-<li><a href="index.html">Home</a></li>
-</ul>
-</div>
-</div>
-{{ relbar() }}
-{% endblock %}
+{%- macro sidebar %}
+      {%- if builder != 'htmlhelp' %}
+      <div id="right" class="column">
+        <div class="sidebar">
+          {%- block sidebarlogo %}
+          {%- if logo %}
+            <p class="logo"><img class="logo" src="{{ pathto('_static/' + logo, 1) }}" alt="Logo"/></p>
+          {%- endif %}
+          {%- endblock %}
+          {%- block sidebartoc %}
+          {%- if display_toc %}
+            {#<h3>Table Of Contents</h3>#}
+            <h3>This Page</h3>
+            {{ toc }}
+          {%- endif %}
+          {%- endblock %}
+{# EV: comment out prev/next
+          {%- block sidebarrel %}
+          {%- if prev %}
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="{{ prev.link|e }}" title="previous chapter">{{ prev.title }}</a></p>
+          {%- endif %}
+          {%- if next %}
+            <h4>Next topic</h4>
+            <p class="topless"><a href="{{ next.link|e }}" title="next chapter">{{ next.title }}</a></p>
+          {%- endif %}
+          {%- endblock %}
+#}
+          {%- if sourcename %}
+          {#<h3>This Page</h3>#}
+            <ul class="this-page-menu">
+            {%- if builder == 'web' %}
+              <li><a href="#comments">Comments ({{ comments|length }} so far)</a></li>
+              <li><a href="{{ pathto('@edit/' + sourcename)|e }}">Suggest Change</a></li>
+              <li><a href="{{ pathto('@source/' + sourcename)|e }}">Show Source</a></li>
+{# EV: changed to support 'eclim' builder #}
+            {%- elif builder in ('html', 'eclim') %}
+              <li><a href="{{ pathto('_sources/' + sourcename, true)|e }}">Show Source</a></li>
+            {%- endif %}
+            </ul>
+          {%- endif %}
+          {%- if customsidebar %}
+          {{ rendertemplate(customsidebar) }}
+          {%- endif %}
+{#
+          {%- block sidebarsearch %}
+          {%- if pagename != "search" %}
+            <h3>{{ builder == 'web' and 'Keyword' or 'Quick' }} search</h3>
+            <form class="search" action="{{ pathto('search') }}" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+            {%- if builder == 'web' %}
+            <p style="font-size: 90%">Enter a module, class or function name.</p>
+            {%- endif %}
+          {%- endif %}
+          {%- endblock %}
+#}
+        </div>
+      </div>
+      {%- endif %}
+{%- endmacro -%}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    {%- if builder != 'htmlhelp' %}
+      {%- set titlesuffix = " &mdash; " + docstitle %}
+    {%- endif %}
+    <title>{{ title|striptags }}{{ titlesuffix }}</title>
+    {%- if builder == 'web' %}
+    <link rel="stylesheet" href="{{ pathto('index') }}?do=stylesheet{%
+      if in_admin_panel %}&admin=yes{% endif %}" type="text/css" />
+    {%- for link, type, title in page_links %}
+    <link rel="alternate" type="{{ type|e(true) }}" title="{{ title|e(true) }}" href="{{ link|e(true) }}" />
+    {%- endfor %}
+    {%- else %}
+    <link rel="stylesheet" href="{{ pathto('_static/' + style, 1) }}" type="text/css" />
+    <link rel="stylesheet" href="{{ pathto('_static/pygments.css', 1) }}" type="text/css" />
+    {%- endif %}
+    {%- if builder != 'htmlhelp' %}
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:   '{{ pathto("", 1) }}',
+          VERSION:    '{{ release }}',
+          COLLAPSE_MODINDEX: false
+      };
+    </script>
+    <script type="text/javascript" src="{{ pathto('_static/jquery.js', 1) }}"></script>
+    <script type="text/javascript" src="{{ pathto('_static/interface.js', 1) }}"></script>
+    <script type="text/javascript" src="{{ pathto('_static/doctools.js', 1) }}"></script>
+    <script type="text/javascript" src="{{ pathto('_static/toc.js', 1) }}"></script>
+    {%- if use_opensearch %}
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within {{ docstitle }}"
+          href="{{ pathto('_static/opensearch.xml', 1) }}"/>
+    {%- endif %}
+    {%- if favicon %}
+    <link rel="shortcut icon" href="{{ pathto('_static/' + favicon, 1) }}"/>
+    {%- endif %}
+    {%- endif %}
+{%- block rellinks %}
+    {%- if hasdoc('about') %}
+    <link rel="author" title="About these documents" href="{{ pathto('about') }}" />
+    {%- endif %}
+    <link rel="contents" title="Global table of contents" href="{{ pathto('contents') }}" />
+    <link rel="index" title="Global index" href="{{ pathto('genindex') }}" />
+    <link rel="search" title="Search" href="{{ pathto('search') }}" />
+    {%- if hasdoc('copyright') %}
+    <link rel="copyright" title="Copyright" href="{{ pathto('copyright') }}" />
+    {%- endif %}
+    <link rel="top" title="{{ docstitle }}" href="{{ pathto('index') }}" />
+    {%- if parents %}
+    <link rel="up" title="{{ parents[-1].title|striptags }}" href="{{ parents[-1].link|e }}" />
+    {%- endif %}
+    {%- if next %}
+    <link rel="next" title="{{ next.title|striptags }}" href="{{ next.link|e }}" />
+    {%- endif %}
+    {%- if prev %}
+    <link rel="prev" title="{{ prev.title|striptags }}" href="{{ prev.link|e }}" />
+    {%- endif %}
+{%- endblock %}
+{%- block extrahead %}{% endblock %}
+  </head>
+  <body>
+
+{%- block relbar1 %}{{ relbar() }}{% endblock %}
+
+  <div id="container">
+{%- block document %}
+    <div id="center" class="document column">
+      <div class="documentwrapper">
+      {%- if builder != 'htmlhelp' %}
+        <div class="bodywrapper">
+      {%- endif %}
+          <div class="body">
+            {% block body %}{% endblock %}
+          </div>
+      {%- if builder != 'htmlhelp' %}
+        </div>
+      {%- endif %}
+      </div>
+{%- endblock %}
+      <div class="clearer"></div>
+    </div>
+
+{%- block sidebar1 %}{{ sidebar_main() }}{% endblock %}
+{%- block sidebar2 %}{{ sidebar() }}{% endblock %}
+  </div>
+
+{%- block relbar2 %}{{ relbar() }}{% endblock %}
+
+{%- block footer %}
+    <div class="footer">
+      <div class="credit">
+        <a href="http://sourceforge.net"><img border="0" title="Sourceforge.net Logo" alt="Sourceforge.net Logo - logo" src="http://sourceforge.net/sflogo.php?group_id=235162&type=1" style="width: 88px;height: 31px;"/></a>
+        <a href="http://www.python.org/"><img border="0" title="Powered by Python" alt="Powered by Python - logo" src="{{ pathto('_static/python-powered-w-70x28.png', 1) }}" style="width: 70px;height: 28px;"/></a>
+      </div>
+    {%- if hasdoc('copyright') %}
+      &copy; <a href="{{ pathto('copyright') }}">Copyright</a> {{ copyright }}.
+    {%- else %}
+      &copy; Copyright {{ copyright }}.
+    {%- endif %}
+    {%- if last_updated %}
+      Last updated on {{ last_updated }}.
+    {%- endif %}
+    {%- if show_sphinx %}
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    {%- endif %}
+    </div>
+{%- endblock %}
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-5448736-1");
+pageTracker._trackPageview();
+</script>
+  </body>
+</html>
+{# vim:set ft=htmljinja :#}

@@ -2,11 +2,11 @@
 The launchy module provides the required classes and functions for developing a
 Launchy plugin in Python.
 
+The module contains:
 - :class:`Plugin`, represents a Launchy Python plugin
-
 - :class:`CatItem`, a catalog entry
 - :class:`InputData`, a user query
-- :class:`ResultsList`, a catalog entry
+- :class:`ResultsList`, a list of catalog entries
 """
 
 __docformat__ = 'restructuredtext'
@@ -485,8 +485,7 @@ class Plugin:
                     self.widget = MyPluginWidget(parentWidget)
                     
                     return unwrapinstance(self.widget)
-        
-        .. warning:: Usage of this function is considered experimental.
+
         """
         pass
     

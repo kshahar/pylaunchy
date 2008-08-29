@@ -7,4 +7,3 @@ User Documentation
    
    install
    downloads
-   credits

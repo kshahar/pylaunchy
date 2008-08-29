@@ -10,15 +10,15 @@ to develop Launchy plugins in the Python_ programming language.
 .. _Python: http://www.python.org/  
 
 .. toctree::
-   :maxdepth: 2
    
-   userdoc
-   plugins
 
 .. toctree::
    :maxdepth: 2
    
+   userdoc
+   plugins
    devdoc
+   credits
 
 Indices and tables
 --------------------------------

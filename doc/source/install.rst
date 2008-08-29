@@ -4,14 +4,16 @@ Installing pylaunchy
 =====================
 
 pylaunchy can be installed in several ways:
-1. Using an installer
-2. Using a binary package
-3. Using a source package
+
+#. Using an installer
+#. Using a binary package
+#. Using a source package
 
 Requirements
 --------------
- * Download and install Python 2.5 from `www.python.org <http://www.python.org>`_ .
- * Make sure you have Launchy 2.1.2
+* Download and install Python 2.5 from 
+  `www.python.org <http://www.python.org>`_ .
+* Make sure you have Launchy 2.1.2
 
 Using the installer (PyLaunchy-|version|.exe)
 ----------------------------------------------
@@ -34,4 +36,4 @@ Using the binary package (PyLaunchy-bin-|version|.zip)
    
 Using the source package (PyLaunchy-src-|version|.zip)
 -------------------------------------------------------
-Work in progress. In the meantime, read the Building.txt file in the ZIP file.
+Not documented yet. In the meantime, read the Building.txt file in the ZIP file.
