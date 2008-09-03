@@ -30,7 +30,6 @@ void ScriptPluginWrapper::getID(uint* id)
 		LOG_DEBUG("Calling plugin getID");
 		*id = m_pScriptPlugin->getID();
 	);
-	
 }
 
 void ScriptPluginWrapper::getName(QString* str)
@@ -74,6 +73,8 @@ void ScriptPluginWrapper::getResults(QList<InputData>* id, QList<CatItem>* resul
 		LOG_DEBUG("Calling plugin getResults");
 		m_pScriptPlugin->getResults(inputDataList, scriptResults);
 	);
+
+	
 }
 
 void ScriptPluginWrapper::getCatalog(QList<CatItem>* items)
@@ -86,6 +87,8 @@ void ScriptPluginWrapper::getCatalog(QList<CatItem>* items)
 		LOG_DEBUG("Calling plugin getCatalog");
 		m_pScriptPlugin->getCatalog(scriptResults);
 	);
+	
+	
 }
 
 void ScriptPluginWrapper::launchItem(QList<InputData>* id, CatItem* item)
@@ -98,7 +101,6 @@ void ScriptPluginWrapper::launchItem(QList<InputData>* id, CatItem* item)
 	ScriptInputDataList inputDataList(prepareInputDataList(id));
 
 	LOG_DEBUG("Begining to launch item");
-	s_inPythonFunction = true;
 
 	GUARDED_CALL_TO_PYTHON(
 		LOG_DEBUG("Calling plugin launchItem");
@@ -106,17 +108,21 @@ void ScriptPluginWrapper::launchItem(QList<InputData>* id, CatItem* item)
 	);
 
 	LOG_DEBUG("Finished launching item");
-	s_inPythonFunction = false;
+	
+	
 }
 
 bool ScriptPluginWrapper::hasDialog()
 {
 	LOG_FUNCTRACK;
+	bool hasDialog = false;
 
 	GUARDED_CALL_TO_PYTHON(
 		LOG_DEBUG("Calling plugin hasDialog");
-		return m_pScriptPlugin->hasDialog();
+		hasDialog = m_pScriptPlugin->hasDialog();
 	);
+
+	return hasDialog;
 }
 
 void ScriptPluginWrapper::doDialog(QWidget* parent, QWidget** newDlg) 
@@ -133,6 +139,8 @@ void ScriptPluginWrapper::doDialog(QWidget* parent, QWidget** newDlg)
 			*newDlg = NULL;
 		}
 	);
+	
+	
 }
 
 void ScriptPluginWrapper::endDialog(bool accept) 
@@ -143,6 +151,8 @@ void ScriptPluginWrapper::endDialog(bool accept)
 		LOG_DEBUG("Calling plugin endDialog");
 		m_pScriptPlugin->endDialog(accept);
 	);
+	
+	
 }
 
 void ScriptPluginWrapper::launchyShow() 
@@ -153,16 +163,12 @@ void ScriptPluginWrapper::launchyShow()
 		LOG_DEBUG("Calling plugin launchyShow");
 		m_pScriptPlugin->launchyShow();
 	);
+	
+	
 }
 
 void ScriptPluginWrapper::launchyHide() 
 {
-	// pygo-y would crash in launchItem() if this test was not here.
-	// TODO: find a better way to fix the crash.
-	if (s_inPythonFunction) {
-		return;
-	}
-
 	LOG_FUNCTRACK;
 
 	GUARDED_CALL_TO_PYTHON(
@@ -177,8 +183,17 @@ int ScriptPluginWrapper::msg(int msgId, void* wParam, void* lParam)
 		LOG_WARN("Called ScriptPluginWrapper, but it has no script plugin");
 		return false;
 	}
-
+	
 	bool handled = false;
+	
+	// If a python functions is called while another one hasn't returned yet,
+	// a crash happens. This is a way to avoid it, not sure it's the best way.
+	if (s_inPythonFunction) { 
+		LOG_DEBUG("Trying to call a Python function while another one hasn't returned yet");
+		return handled; 
+	} 
+	s_inPythonFunction = true;
+	
 	switch (msgId)
 	{		
 		case MSG_INIT:
@@ -233,7 +248,8 @@ int ScriptPluginWrapper::msg(int msgId, void* wParam, void* lParam)
 		default:
 			break;
 	}
-		
+	
+	s_inPythonFunction = false;
 	return handled;
 }
 
