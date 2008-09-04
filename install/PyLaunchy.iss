@@ -26,7 +26,8 @@ Source: icons\pysimple.png; DestDir: {app}\plugins\icons
 Source: {#RootDir}\scripts\pysimple.py; DestDir: {app}\plugins\python\examples
 Source: lib\sip.pyd; DestDir: {app}\plugins\python\lib
 Source: lib\PyQt4\*.*; DestDir: {app}\plugins\python\lib\PyQt4; Flags: recursesubdirs; Excludes: .svn
-Source: {#RootDir}\doc\build\*.*; DestDir: {app}\plugins\python\doc; Flags: recursesubdirs; Excludes: .svn, *.zip
+
+Source: {#RootDir}\doc\build\*.*; DestDir: {app}\plugins\python\doc; Flags: recursesubdirs; Excludes: .svn, *.zip; Components: docs
 
 Source: icons\pygo-y.png; DestDir: {app}\plugins\icons; Components: pygoy
 Source: {#RootDir}\scripts\pygo-y.py; DestDir: {app}\plugins\python; Components: pygoy
@@ -54,5 +55,6 @@ DirExistsWarning=no
 [Registry]
 
 [Components]
+Name: docs; Description: Documentation; Types: custom full
 Name: pygoy; Description: PyGo-y plugin; Types: custom full
 Name: pywebindex; Description: PyWebIndex plugin; Types: custom full
