@@ -1,3 +1,7 @@
+Version X:
+	* Added PyDiry plugin
+	* Fixed crash while typing immediately after launching an item (bug 2059362)
+
 Version 0.7.6:
 	* pygo-y now works even if pywin32 is not installed (bug 2077740)
 	* Scripts directory is relative to Launchy's directory (bug 2079116)
