@@ -1,6 +1,8 @@
 #ifndef ScriptPluginWrapper_H_
 #define ScriptPluginWrapper_H_
 
+#include <QObject>
+#include <QMutex>
 #include "plugin_interface.h"
 #include "ScriptDataStructures.h"
 class ScriptPlugin;
@@ -30,8 +32,16 @@ public:
 	void launchyHide();
 
 private:
+	//! Does the actual work of calling a Python function
+	bool dispatchFunction(int msgId, void* wParam, void* lParam); 
+
 	ScriptPlugin* m_pScriptPlugin;
-	static bool s_inPythonFunction;
+
+	//! Should be locked whenever a Python function is called
+	static QMutex s_inPythonFunction;
+
+	//! Should be locked when doDialog was called and before endDialog called
+	static QMutex s_pythonGuiMutex;
 };
 
 #endif //ScriptPluginWrapper_H_

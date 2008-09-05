@@ -9,7 +9,8 @@
 
 using namespace boost::python;
 
-bool ScriptPluginWrapper::s_inPythonFunction = false;
+QMutex ScriptPluginWrapper::s_inPythonFunction;
+QMutex ScriptPluginWrapper::s_pythonGuiMutex;
 
 /** Convert QList<InputData> -> ScriptInputDataList */
 static ScriptInputDataList prepareInputDataList(QList<InputData>* id);
@@ -128,6 +129,7 @@ bool ScriptPluginWrapper::hasDialog()
 void ScriptPluginWrapper::doDialog(QWidget* parent, QWidget** newDlg) 
 {
 	LOG_FUNCTRACK;
+	s_pythonGuiMutex.lock();
 
 	GUARDED_CALL_TO_PYTHON(
 		LOG_DEBUG("Calling plugin doDialog");
@@ -152,7 +154,7 @@ void ScriptPluginWrapper::endDialog(bool accept)
 		m_pScriptPlugin->endDialog(accept);
 	);
 	
-	
+	s_pythonGuiMutex.unlock();
 }
 
 void ScriptPluginWrapper::launchyShow() 
@@ -183,17 +185,45 @@ int ScriptPluginWrapper::msg(int msgId, void* wParam, void* lParam)
 		LOG_WARN("Called ScriptPluginWrapper, but it has no script plugin");
 		return false;
 	}
-	
-	bool handled = false;
-	
+
+	// Handle locks
+		
+	// We can't allow Python functions to be called when doDialog was called
+	// and endDialog not called yet, since it results in a crash.
+	// The following tests for it
+	const bool waitingForEndDialog = 
+		msgId != MSG_END_DIALOG &&
+		!s_pythonGuiMutex.tryLock();
+
+	if ( waitingForEndDialog ) {
+		LOG_DEBUG("A doDialog--endDialog sequence has not ended yet. "
+			"Message id: %i", msgId);
+		return false;
+	}
+	s_pythonGuiMutex.unlock(); // doDialog will lock it
+
 	// If a python functions is called while another one hasn't returned yet,
 	// a crash happens. This is a way to avoid it, not sure it's the best way.
-	if (s_inPythonFunction) { 
-		LOG_DEBUG("Trying to call a Python function while another one hasn't returned yet");
-		return handled; 
+	const bool waitingForPythonFunctionToReturn = 
+		!s_inPythonFunction.tryLock();
+
+	if ( waitingForPythonFunctionToReturn ) { 
+		LOG_DEBUG("Trying to call a Python function while another one hasn't "
+			"returned yet. Message id: %i", msgId);
+		return false; 
 	} 
-	s_inPythonFunction = true;
 	
+	// Disptach the actual Python function
+	const bool result = dispatchFunction(msgId, wParam, lParam);
+	
+	s_inPythonFunction.unlock();
+	return result;
+}
+
+bool ScriptPluginWrapper::dispatchFunction(int msgId, void* wParam, void* lParam)
+{
+	bool handled = false;
+
 	switch (msgId)
 	{		
 		case MSG_INIT:
@@ -248,8 +278,7 @@ int ScriptPluginWrapper::msg(int msgId, void* wParam, void* lParam)
 		default:
 			break;
 	}
-	
-	s_inPythonFunction = false;
+
 	return handled;
 }
 
