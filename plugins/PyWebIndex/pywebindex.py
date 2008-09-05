@@ -35,6 +35,8 @@ import sqlite3
 import webbrowser # For launching URLs
 import hashlib # For md5
 
+from PyWebIndex import ui_pywebindex
+
 class PyWebIndex(launchy.Plugin):
 	__version__ = "1.0"
 	initialized = False
@@ -304,7 +306,7 @@ class LinksDB:
 class PyWebIndexUi(QtGui.QWidget):
 	def __init__(self, parent=None):
 		QtGui.QWidget.__init__(self, parent)
-		self.ui = Ui_Form()
+		self.ui = ui_pywebindex.Ui_PyWebIndex()
 		self.ui.setupUi(self)
 		
 		self.ui.forceDatabaseRebuildBox.setChecked(False)
