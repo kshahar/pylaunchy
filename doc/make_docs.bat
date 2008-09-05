@@ -1,1 +1,1 @@
-sphinx-build -b eclim source build
+sphinx-build -b html source build

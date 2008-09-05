@@ -24,7 +24,7 @@ sys.path.append(os.path.abspath('../extension'))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['eclim.sphinx.builder', 'sphinx.ext.autodoc']
+extensions = ['sphinx.ext.autodoc']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = [u'.templates']
@@ -91,7 +91,8 @@ pygments_style = u'sphinx'
 # must exist either in Sphinx' static/ path, or in one of the custom paths
 # given in html_static_path.
 #html_style = u'default.css'
-html_style = u'eclimdoc.css'
+#html_style = u'eclimdoc.css'
+html_style = u'style.css'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
