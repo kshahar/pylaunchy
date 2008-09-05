@@ -12,7 +12,10 @@
 # You should have received a copy of the GNU General Public License along with
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
+# 
+# Version 1.0:
+#	* First public release
+#
 #import rpdb2; rpdb2.start_embedded_debugger("password")
 import launchy
 import sys, os
@@ -25,6 +28,7 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QVariant
 from sip import wrapinstance, unwrapinstance
 
+from PyDiry import PyDiryGui
 # http://www.doughellmann.com/PyMOTW/glob/glob.html
 
 class PyDiry(launchy.Plugin):
@@ -40,7 +44,6 @@ class PyDiry(launchy.Plugin):
 	
 	def init(self):
 		self.__readConfig()
-		sys.path.append( os.path.join( launchy.getLibPath(), 'PyDiry' ) )
 		pass
 	
 	def getID(self):
@@ -56,7 +59,9 @@ class PyDiry(launchy.Plugin):
 		pass
 	
 	def getResults(self, inputDataList, resultsList):
-		if len(inputDataList) != 2:
+		inputs = len(inputDataList)
+		
+		if inputs != 2:
 			return
 		
 		firstText = inputDataList[0].getText()
@@ -76,18 +81,24 @@ class PyDiry(launchy.Plugin):
 		pathContents = glob.glob(os.path.join(path, query))
 		
 		for itemPath in pathContents:
-			try:
-				shortName = os.path.split(itemPath)[1]
-			except:
-				shortName = itemPath
-			resultsList.append( launchy.CatItem(itemPath, shortName, self.getID(), itemPath ))
+			resultsList.append( launchy.CatItem(itemPath, self.__makeShortName(itemPath), self.getID(), itemPath ) )
 		
 	def getCatalog(self, resultsList):
 		for name,path in self.dirs.items():
 			resultsList.push_back( launchy.CatItem( name + ".pydiry", name, self.getID(), self.getIcon() ) )
 		
 	def launchItem(self, inputDataList, catItemOrig):
-		pass
+		catItem = inputDataList[-1].getTopResult()
+		if catItem.fullPath.endswith(".pydiry"):
+			# Launch the directory itself
+			try:
+				path = self.dirs[catItem.shortName]
+				launchy.runProgram(path, "")
+			except:
+				pass
+		else:
+			# Launchy a file or directory
+			launchy.runProgram( catItem.fullPath, "" )
 		
 	def hasDialog(self):
 		return True
@@ -95,7 +106,6 @@ class PyDiry(launchy.Plugin):
 	def doDialog(self, parentWidgetPtr):
 		parentWidget = wrapinstance(parentWidgetPtr, QtGui.QWidget)
 		
-		import PyDiryGui
 		self.widget = PyDiryGui.PyDiryUi(parentWidget)
 		self.widget.show()
 			
@@ -136,5 +146,11 @@ class PyDiry(launchy.Plugin):
 			path = unicode(settings.value("path").toString())
 			self.dirs[name] = expandvars(path)
 		settings.endArray()
+		
+	def __makeShortName(self, itemPath):
+		try:
+			return os.path.split(itemPath)[1]
+		except:
+			return itemPath
 
 launchy.registerPlugin(PyDiry)
