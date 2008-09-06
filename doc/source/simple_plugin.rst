@@ -35,7 +35,7 @@ Also, check the file *stdout.txt* in |ScriptsPath|. It should have the following
 Code
 ------
 
-.. literalinclude:: ../../scripts/pysimple.py  
+.. literalinclude:: ../../plugins/pysimple.py  
    :linenos:
    
 Code explained

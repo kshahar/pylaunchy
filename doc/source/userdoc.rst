@@ -6,4 +6,5 @@ User Documentation
    :maxdepth: 2
    
    install
+   faq
    downloads

@@ -18,44 +18,48 @@ A typical usage might look like this - searching for QT class that has `line` in
 The user can define a list of keywords (called "Name") and associate them with index pages (called "Index URL"). Later on, user can access each of the links from the index pages by using the defined keyboard.
 
 For example, the following pages might be used with this plugin:
- * http://doc.trolltech.com/4.4/classes.html
- * http://www.boost.org/doc/libs/1_35_0/libs/python/doc/v2/reference.html
+
+* http://doc.trolltech.com/4.4/classes.html
+* http://www.boost.org/doc/libs/1_35_0/libs/python/doc/v2/reference.html
  
 The plugin indexes the links in advance, meaning you should have fast access when they are needed.
 
 Quick Tutorial
 ----------------
- * Install PyWebIndex
- * Restart Launchy 
- * Rebuild the catalog 
- * Bring up Launchy (Alt+Space) 
- * Type ``doclaunchy<TAB>data<Enter>``
- * Watch as the InputData documentation loads in your browser
+* Install PyWebIndex
+* Restart Launchy 
+* Rebuild the catalog 
+* Bring up Launchy (Alt+Space) 
+* Type ``doclaunchy<TAB>data<Enter>``
+* Watch as the InputData documentation loads in your browser
  
 Installation
 ---------------
 PyWebIndex requires the following:
- * Python 2.5
- * Launchy 2.1.2
- * PyLaunchy 0.7.5
+
+* Python 2.5
+* Launchy 2.1.2
+* PyLaunchy 0.7.5
 
 There are two ways to install:
- 1. Run the PyLaunchy installer
- 2. * Unpack *pywebindex.py* in ``<Launchy>\plugins\python``
-    * Unpack *BeautifulSoup.pyc* in ``<Launchy>\plugins\lib``
+
+1. Run the PyLaunchy installer
+2. * Unpack *pywebindex.py* in ``<Launchy>\plugins\python``
+   * Unpack *BeautifulSoup.pyc* in ``<Launchy>\plugins\lib``
 
 Adding index pages
 -------------------
- * Open Launchy's options
- * Go to "Plugins" tab
- * Select PyWebIndex
- * Hit the + button
- * Enter the keyword name in "Name"
- * Enter the index page address in "Index URL"
+* Open Launchy's options
+* Go to "Plugins" tab
+* Select PyWebIndex
+* Hit the + button
+* Enter the keyword name in "Name"
+* Enter the index page address in "Index URL"
  
 For example, try to add the following:
- * Name: docqt
- * Index URL: http://doc.trolltech.com/4.4/classes.html
+
+* Name: docqt
+* Index URL: http://doc.trolltech.com/4.4/classes.html
 
 An example of the settings dialog:
 
@@ -63,4 +67,4 @@ An example of the settings dialog:
  
 Known Issues:
 --------------
- * Memory consumption can be pretty high - Launchy can take up to ~30-40MB with a decent list of index pages. This is due to the indexing feature and due to Launchy memory issues.
+* Memory consumption can be pretty high - Launchy can take up to ~30-40MB with a decent list of index pages. This is due to the indexing feature and due to Launchy memory issues.

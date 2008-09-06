@@ -1,6 +1,10 @@
-Version X:
+Version 0.8.0:
 	* Added PyDiry plugin
 	* Fixed crash while typing immediately after launching an item (bug 2059362)
+	* Fixed crash when options GUI was active
+	* Fixed launchy.runProgram() not working (bug 2070086)
+	* Improved documentation and added FAQ
+	* Rearranged project structure
 
 Version 0.7.6:
 	* pygo-y now works even if pywin32 is not installed (bug 2077740)

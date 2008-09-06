@@ -13,37 +13,45 @@
 ; limitations under the License.
 
 #define MyAppName "PyLaunchy"
-#define MyAppVer "0.7.6"
-#define MyAppURL ""
+#define MyAppVer "0.8.0"
+#define MyAppURL "http://pylaunchy.sourceforge.net/"
 
 #define RootDir ".."
+#define PluginsDir RootDir + "\plugins"
 #define SrcDir RootDir + "\src"
+
+#define Exclude ".svn"
+#define PluginExclude ".svn, *.png, *.ui, *.ico"
 
 [Files]
 Source: {#SrcDir}\windows\Release\PyLaunchy.dll; DestDir: {app}\plugins
 Source: tmpbuild\boost_python-vc80-mt-1_35.dll; DestDir: {app}\
 Source: icons\pysimple.png; DestDir: {app}\plugins\icons
-Source: {#RootDir}\scripts\pysimple.py; DestDir: {app}\plugins\python\examples
+Source: {#PluginsDir}\pysimple.py; DestDir: {app}\plugins\python\examples
 Source: lib\sip.pyd; DestDir: {app}\plugins\python\lib
 Source: lib\PyQt4\*.*; DestDir: {app}\plugins\python\lib\PyQt4; Flags: recursesubdirs; Excludes: .svn
 
-Source: {#RootDir}\doc\build\*.*; DestDir: {app}\plugins\python\doc; Flags: recursesubdirs; Excludes: .svn, *.zip; Components: docs
+Source: {#RootDir}\doc\build\*.*; DestDir: {app}\plugins\python\doc; Flags: recursesubdirs; Excludes: {#Exclude}, *.zip, .doctrees; Components: docs
 
+; PyGo-Y
 Source: icons\pygo-y.png; DestDir: {app}\plugins\icons; Components: pygoy
-Source: {#RootDir}\scripts\pygo-y.py; DestDir: {app}\plugins\python; Components: pygoy
-Source: lib\win32con.pyc; DestDir: {app}\plugins\python\lib; Components: pygoy
+Source: {#PluginsDir}\pygo-y.py; DestDir: {app}\plugins\python; Components: pygoy
+Source: lib\win32con.py; DestDir: {app}\plugins\python\lib; Components: pygoy
 Source: lib\win32gui.pyd; DestDir: {app}\plugins\python\lib; Components: pygoy
 Source: lib\pywintypes25.dll; DestDir: {app}\plugins\python\lib; Components: pygoy
 
-Source: {#RootDir}\scripts\pywebindex.py; DestDir: {app}\plugins\python; Components: pywebindex
-Source: {#RootDir}\scripts\pywebindex_ui.py; DestDir: {app}\plugins\python; Components: pywebindex
-Source: lib\BeautifulSoup.pyc; DestDir: {app}\plugins\python\lib; Components: pywebindex
+; PyWebIndex
+Source: {#PluginsDir}\PyWebIndex\*.*; DestDir: {app}\plugins\python; Flags: recursesubdirs; Excludes: {#PluginExclude}; Components: pywebindex
+
+; PyDiry
+Source: {#PluginsDir}\PyDiry\*.*; DestDir: {app}\plugins\python; Flags: recursesubdirs; Excludes: {#PluginExclude}; Components: pydiry
+Source: {#PluginsDir}\PyDiry\pydiry.ico; DestDir: {app}\plugins\icons; Components: pydiry
 
 [Setup]
 AppName={#MyAppName}
 AppVerName={#MyAppName} {#MyAppVer}
 DefaultDirName={pf}\Launchy
-AppPublisher=Shahar Kosti
+AppPublisher=
 AppPublisherURL={#MyAppURL}
 VersionInfoVersion={#MyAppVer}
 OutputBaseFilename=PyLaunchy-{#MyAppVer}
@@ -57,4 +65,5 @@ DirExistsWarning=no
 [Components]
 Name: docs; Description: Documentation; Types: custom full
 Name: pygoy; Description: PyGo-y plugin; Types: custom full
+Name: pydiry; Description: PyDiry plugin; Types: custom full
 Name: pywebindex; Description: PyWebIndex plugin; Types: custom full

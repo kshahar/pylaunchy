@@ -29,25 +29,35 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 void runProgram(QString path, QString args) {
 	SHELLEXECUTEINFO ShExecInfo;
 
+	QByteArray pathUtf8 = path.toUtf8();
+
 	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
 	ShExecInfo.fMask = SEE_MASK_FLAG_NO_UI;
 	ShExecInfo.hwnd = NULL;
 	ShExecInfo.lpVerb = NULL;
-	ShExecInfo.lpFile = (LPCTSTR) (path).utf16();
+	//ShExecInfo.lpFile = (LPCTSTR) (path).utf16();
+	ShExecInfo.lpFile = (LPCTSTR) pathUtf8.data();
 	if (args != "") {
-		ShExecInfo.lpParameters = (LPCTSTR) args.utf16();
+		LOG_DEBUG( "args != ''");
+		//ShExecInfo.lpParameters = (LPCTSTR) args.utf16();
+		QByteArray argsUtf8 = args.toUtf8();
+		ShExecInfo.lpParameters = (LPCTSTR) argsUtf8.data();
 	} else {
+		LOG_DEBUG( "args == '' ");
 		ShExecInfo.lpParameters = NULL;
 	}
 	QDir dir(path);
 	QFileInfo info(path);
-	if (!info.isDir() && info.isFile())
+	if (!info.isDir() && info.isFile()) {
 		dir.cdUp();
-	ShExecInfo.lpDirectory = (LPCTSTR)QDir::toNativeSeparators(dir.absolutePath()).utf16();
+	}
+	//ShExecInfo.lpDirectory = (LPCTSTR)QDir::toNativeSeparators(dir.absolutePath()).utf16();
+	QByteArray dirUtf8 = QDir::toNativeSeparators(dir.absolutePath()).toUtf8();
+	ShExecInfo.lpDirectory = (LPCTSTR) dirUtf8.data();
+	//ShExecInfo.lpDirectory = NULL;
 	ShExecInfo.nShow = SW_NORMAL;
 	ShExecInfo.hInstApp = NULL;
 
-	LOG_DEBUG("Calling ShellExecuteEx with lpFile=%s", (const char*)(path).utf16());
 	const BOOL result = ShellExecuteEx(&ShExecInfo);
 
 	if (!result) {

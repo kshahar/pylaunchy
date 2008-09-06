@@ -29,7 +29,6 @@ from PyQt4.QtCore import QVariant
 from sip import wrapinstance, unwrapinstance
 
 from PyDiry import PyDiryGui
-# http://www.doughellmann.com/PyMOTW/glob/glob.html
 
 class PyDiry(launchy.Plugin):
 	__version__ = "1.0"
@@ -79,6 +78,7 @@ class PyDiry(launchy.Plugin):
 			query = '*%s*' % query
 		
 		pathContents = glob.glob(os.path.join(path, query))
+		pathContents.sort()
 		
 		for itemPath in pathContents:
 			resultsList.append( launchy.CatItem(itemPath, self.__makeShortName(itemPath), self.getID(), itemPath ) )

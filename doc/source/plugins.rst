@@ -7,4 +7,5 @@ Plugins Documentation
    :maxdepth: 2
    
    pygoy
+   pydiry
    pywebindex
