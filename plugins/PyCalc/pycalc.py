@@ -23,7 +23,7 @@ import sys, os
 import math
 import re
 
-# TAKEN FROM TODO TODO
+# Based on http://www.peterbe.com/plog/calculator-in-python-for-dummies
 class Calculator:
 	whitelist = '|'.join(
 		# oprators, digits
