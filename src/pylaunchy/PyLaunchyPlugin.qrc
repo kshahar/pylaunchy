@@ -1,5 +1,6 @@
  <!DOCTYPE RCC><RCC version="1.0">
  <qresource>
      <file>pylaunchy.py</file>
+     <file>../../Version.txt</file>
  </qresource>
  </RCC>

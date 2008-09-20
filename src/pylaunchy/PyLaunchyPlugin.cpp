@@ -2,10 +2,9 @@
 #include "PyLaunchyPlugin.h"
 
 #include <QtGui>
-#include <QUrl>
 #include <QFile>
 #include <QRegExp>
-#include <QTextCodec>
+#include <QMessageBox>
 
 #ifdef Q_WS_WIN
 #include <windows.h>
@@ -71,52 +70,8 @@ void PyLaunchyPlugin::init()
 	LOG_STATUS("Starting PyLaunchy");
 	g_pyLaunchyInstance = this;
 
-	Py_Initialize();
-	if (PyUnicode_SetDefaultEncoding("utf-8"))
-	{
-		LOG_FATAL("Failed to set default encoding to utf-8.\n");
-		PyErr_Clear();
-		return;
-	}
-
-	LOG_DEBUG("Copying init script to temporary file");
-	QTemporaryFile* initScript =
-		QTemporaryFile::createLocalFile( ":/pylaunchy.py" );
-
-	QString initScriptFileName = initScript->fileName();
-
-	m_scriptsDir = determineScriptsDir();
-
-	GUARDED_CALL_TO_PYTHON
-	(
-		LOG_DEBUG("Importing __main__ and __dict__");
-		boost::python::object mainModule = boost::python::import("__main__");
-		boost::python::object mainNamespace = mainModule.attr("__dict__");
-
-		LOG_INFO("Initializing launchy module");
-		init_pylaunchy();
-
-		LOG_DEBUG("Importing launchy");
-		boost::python::object launchyModule = boost::python::import("launchy");
-		boost::python::object launchyNamespace = launchyModule.attr("__dict__");
-
-		LOG_DEBUG("Setting launchy.__settings object");
-		if (settings && *settings) {
-			PyObject* settingsPyObject = PyLong_FromVoidPtr ((void *) *settings);
-			launchyNamespace["__settings"] = handle<>(settingsPyObject);
-		}
-		else {
-			LOG_WARN("Launchy's QSettings object was not found");
-		}
-
-		LOG_INFO("Executing init script file");
-		LOG_DEBUG("Init script file name is %s", (const char*)initScriptFileName.toUtf8());
-		boost::python::exec_file(
-			(const char*)initScriptFileName.toUtf8(), mainNamespace, mainNamespace);
-		initScript->remove();
-		LOG_INFO("Finished executing init script");
-	);
-
+	initPython();
+	handleVersion();
 	reloadScriptFiles();
 	reloadPlugins();
 }
@@ -253,6 +208,90 @@ int PyLaunchyPlugin::msg(int msgId, void* wParam, void* lParam)
 	}
 		
 	return handled;
+}
+
+void PyLaunchyPlugin::initPython()
+{
+	Py_Initialize();
+	if (PyUnicode_SetDefaultEncoding("utf-8"))
+	{
+		LOG_FATAL("Failed to set default encoding to utf-8.\n");
+		PyErr_Clear();
+		return;
+	}
+
+	LOG_DEBUG("Copying init script to temporary file");
+	QTemporaryFile* initScript =
+		QTemporaryFile::createLocalFile( ":/pylaunchy.py" );
+
+	QString initScriptFileName = initScript->fileName();
+
+	m_scriptsDir = determineScriptsDir();
+
+	GUARDED_CALL_TO_PYTHON
+	(
+		LOG_DEBUG("Importing __main__ and __dict__");
+		boost::python::object mainModule = boost::python::import("__main__");
+		boost::python::object mainNamespace = mainModule.attr("__dict__");
+
+		LOG_INFO("Initializing launchy module");
+		init_pylaunchy();
+
+		LOG_DEBUG("Importing launchy");
+		boost::python::object launchyModule = boost::python::import("launchy");
+		boost::python::object launchyNamespace = launchyModule.attr("__dict__");
+
+		LOG_DEBUG("Setting launchy.__settings object");
+		if (settings && *settings) {
+			PyObject* settingsPyObject = PyLong_FromVoidPtr ((void *) *settings);
+			launchyNamespace["__settings"] = handle<>(settingsPyObject);
+		}
+		else {
+			LOG_WARN("Launchy's QSettings object was not found");
+		}
+
+		LOG_INFO("Executing init script file");
+		LOG_DEBUG("Init script file name is %s", (const char*)initScriptFileName.toUtf8());
+		boost::python::exec_file(
+			(const char*)initScriptFileName.toUtf8(), mainNamespace, mainNamespace);
+		initScript->remove();
+		LOG_INFO("Finished executing init script");
+	);
+}
+
+void PyLaunchyPlugin::handleVersion()
+{
+	QFile file(":/Version.txt");
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+		LOG_WARN("Failed to open :/Version.txt file");
+		return;
+	}
+
+	QTextStream in(&file);
+	const QString realVersion = in.readLine();
+	LOG_INFO( "Version is %s", (const char*)realVersion.toUtf8() );
+
+	QSettings* set = *settings;
+	const QString configVersion = 
+		set->value("pylaunchy/version", "0.0").toString();
+
+	if (configVersion == "0.0") {
+		QMessageBox::information(0, "PyLaunchy",
+			QString("PyLaunchy %1 was installed successfully")
+				.arg(realVersion)
+		);
+	}
+	else if (realVersion != configVersion) {
+		QMessageBox::information(0, "PyLaunchy",
+			QString("PyLaunchy was upgraded successfully from version %1 to %2")
+				.arg(configVersion).arg(realVersion)
+		);
+	}
+	else {
+		// Version is the same, do nothing
+	}
+
+	set->setValue("pylaunchy/version", realVersion);
 }
 
 const PluginInfo& PyLaunchyPlugin::addPlugin(ScriptPlugin* scriptPlugin)

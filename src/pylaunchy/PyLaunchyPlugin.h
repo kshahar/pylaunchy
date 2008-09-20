@@ -68,6 +68,8 @@ public:
 private:
 	typedef QHash<uint, PluginInfo> PluginInfoHash;
 
+	void initPython();
+	void handleVersion();
 	const PluginInfo& addPlugin(ScriptPlugin* scriptPlugin);
 	void reloadPlugins();
 	void destroyPlugins();
