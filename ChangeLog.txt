@@ -1,3 +1,6 @@
+Version ?:
+	* Added experimental SCons support
+
 Version 0.8.0:
 	* Added PyDiry plugin
 	* Fixed crash while typing immediately after launching an item (bug 2059362)
