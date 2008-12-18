@@ -1,0 +1,13 @@
+PyLaunchyPlugin class responsibilties
+======================================
+ * A Launchy plugin the implements MSG_LOAD_PLUGINS and MSG_UNLOAD_PLUGIN
+ * Script plugins registeration (called from python)
+ * Returns the directory where scripts reside
+ * Python system initialization
+ * Loads script plugins
+ * Reads PyLaunchy configuration from Launchy.ini file
+ * PyLaunchy version handling
+ 
+ 
+ - test msg()
+ 

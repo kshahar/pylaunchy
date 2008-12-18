@@ -1,0 +1,11 @@
+set QMAKESPEC=win32-msvc2005
+set QTDIR=D:\SDK\qt-win-opensource-src-4.4.0
+set PYTHON_ROOT=C:\Python25
+set PYTHON_INCLUDE_DIR=%PYTHON_ROOT%\include
+set PYTHON_LIB_FILE=%PYTHON_ROOT%\libs\python25.lib
+set BOOST_ROOT=D:\SDK\boost\boost_1_35_0
+set UNIT_TEST_PP_DIR=D:\SDK\UnitTest++
+set UNIT_TEST_PP_LIB_FILE=%UNIT_TEST_PP_DIR%\release\UnitTest++.vsnet2005.lib
+set GTEST_INCLUDE_DIR=D:\SDK\gtest-1.2.1\include
+set GTEST_LIB_FILE=D:\sdk\gtest-1.2.1\msvc\Release\gtest.lib
+set PATH=%QTDIR%\bin;%PATH%

@@ -13,10 +13,6 @@ pylaunchySources = []
 for file in pylaunchyFiles:
     pylaunchySources.append("%s/%s" % ("pylaunchy", file))
 
-#flags = '/nologo /Zm200 /Zc:wchar_t- /O2 /MD /GR /EHsc /W3 /w34100 /w34189'
-flags = Split("""/nologo /Zm200 /Zc:wchar_t- /O2 /MD /GR /EHsc /W3 /w34100 /w34189 /FI Precompiled.h""")
-print flags
-print "###"
 
 qtIncludePath = path.join( os.environ['QTDIR'], 'include')
 qt4ToolLocation = '.'
@@ -39,6 +35,8 @@ libPath = [
     os.environ['LIB'].split(';'), # For Visual Studio Express
 ]
 
+flags = Split("""/nologo /Zm200 /Zc:wchar_t- /O2 /MD /GR /EHsc /W3 /w34100 /w34189 /FI Precompiled.h""")
+
 env = Environment(
     CPPPATH=includePath, CCFLAGS=flags,
     tools=['default', 'qt4'],
@@ -58,7 +56,16 @@ env.Append(LIBPATH = libPath)
 env.Append(LIBS = 'python25')
 env.Append(LIBS = 'shell32')
 
-env.SharedLibrary(
+pylaunchyDll = env.SharedLibrary(
     target = 'PyLaunchy', 
-    source = pylaunchySources,
+    source = pylaunchySources   
+)
+
+# Add a post-build step to embed the manifest using mt.exe
+# The number at the end of the line indicates the file type (1: EXE; 2:DLL).
+env.AddPostAction(pylaunchyDll, 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2')
+
+env.Program(
+    target = 'PyLaunchyTester',
+    source = ['pylaunchy_tester/pylaunchy_tester.cpp']
 )

@@ -55,6 +55,26 @@
 				CompileAsManaged=""
 			/>
 		</Configuration>
+		<Configuration
+			Name="UnitTest_Release|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="%QTDIR%\bin\qmake ..\PyLaunchyUnitTest.pro&#x0D;&#x0A;nmake release"
+				ReBuildCommandLine="%QTDIR%\bin\qmake ..=PyLaunchyUnitTest.pro&#x0D;&#x0A;nmake release-clean&#x0D;&#x0A;nmake release"
+				CleanCommandLine="%QTDIR%\bin\qmake ..\PyLaunchyUnitTest.pro&#x0D;&#x0A;nmake release-clean"
+				Output="PyLaunchy.exe"
+				PreprocessorDefinitions="WIN32;NDEBUG"
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -191,8 +211,52 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="Script Management"
+			>
+			<Filter
+				Name="Source Files"
+				>
+				<File
+					RelativePath="..\pylaunchy\ScriptsDirectoryConfig.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Header Files"
+				>
+				<File
+					RelativePath="..\pylaunchy\ScriptsDirectoryConfig.h"
+					>
+				</File>
+				<File
+					RelativePath="..\pylaunchy\SimpleQSettings.h"
+					>
+				</File>
+				<File
+					RelativePath="..\pylaunchy\SimpleSettings.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Unit Tests"
+				>
+				<File
+					RelativePath="..\pylaunchy_unit_test\ScriptsDirectoryConfigTest.cpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
 		<File
 			RelativePath="..\PyLaunchy.pro"
+			>
+		</File>
+		<File
+			RelativePath="..\PyLaunchyCommon.pro"
+			>
+		</File>
+		<File
+			RelativePath="..\PyLaunchyUnitTest.pro"
 			>
 		</File>
 		<File

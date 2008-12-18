@@ -74,7 +74,6 @@ private:
 	void reloadPlugins();
 	void destroyPlugins();
 	void reloadScriptFiles();
-	QDir determineScriptsDir();
 
 	QList<boost::python::object> m_scriptPluginsClasses;
 	PluginInfoHash m_scriptPlugins;

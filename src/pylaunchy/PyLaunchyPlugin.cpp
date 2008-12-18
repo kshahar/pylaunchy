@@ -19,6 +19,9 @@
 #include "plugin_info.h"
 #include "ScriptPluginWrapper.h"
 
+#include "SimpleQSettings.h"
+#include "ScriptsDirectoryConfig.h"
+
 using namespace boost::python;
 
 extern void init_pylaunchy();
@@ -226,7 +229,11 @@ void PyLaunchyPlugin::initPython()
 
 	QString initScriptFileName = initScript->fileName();
 
-	m_scriptsDir = determineScriptsDir();
+	SimpleQSettings simpleSettings(**settings);
+	ScriptsDirectoryConfig scriptsDirectoryConfig;
+	scriptsDirectoryConfig.init(simpleSettings);
+
+	m_scriptsDir = scriptsDirectoryConfig.scriptsDirectory();
 
 	GUARDED_CALL_TO_PYTHON
 	(
@@ -367,39 +374,6 @@ void PyLaunchyPlugin::reloadScriptFiles()
 		}	
 		LOG_INFO("Finished executing *.py files");
 	);
-}
-
-QDir PyLaunchyPlugin::determineScriptsDir()
-{
-	QSettings* set = *settings;
-
-	LOG_DEBUG("Reading scripts dir location from settings");
-	const QString scriptsDirKey = "pylaunchy/scriptsDir";
-	QString scriptsDirPath;
-	if (set->contains(scriptsDirKey)) {
-		scriptsDirPath = set->value(scriptsDirKey).toString();
-	}
-	else {
-		scriptsDirPath = "plugins/python/";
-		set->setValue(scriptsDirKey, scriptsDirPath);
-	}
-
-	QDir scriptsDir(scriptsDirPath);
-	if ( scriptsDir.isRelative() ) {
-		LOG_DEBUG("Scripts dir is relative, prepending Launchy's path");
-		scriptsDir = qApp->applicationDirPath() + "/" + scriptsDirPath;
-	}
-	else {
-		LOG_DEBUG("Scripts dir is absolute");
-	}
-
-	LOG_INFO("Using scripts dir %s", (const char*)scriptsDir.path().toUtf8());
-
-	if ( !scriptsDir.exists() ) {
-		scriptsDir.mkpath(scriptsDirPath);
-	}
-
-	return scriptsDir;
 }
 
 Q_EXPORT_PLUGIN2(PyLaunchy, PyLaunchyPlugin) 
