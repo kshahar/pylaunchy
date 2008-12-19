@@ -15,6 +15,8 @@
  
  INCLUDEPATH  += pylaunchy $$(GTEST_INCLUDE_DIR)
  
+ DEFINES += PYLAUNCHY_TESTING
+ 
  win32 {
      CONFIG += embed_manifest_exe
      LIBS += qtmaind.lib
