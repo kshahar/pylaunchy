@@ -1,28 +1,11 @@
 #include "Precompiled.h"
 #include "PyLaunchyPlugin.h"
 
-#include <QtGui>
-#include <QFile>
-#include <QRegExp>
-#include <QMessageBox>
-
-#ifdef Q_WS_WIN
-#include <windows.h>
-#include <shlobj.h>
-#include <tchar.h>
-#endif
-
 #include "PyLaunchyPluginDefines.h"
-#include "ScriptPlugin.h"
 #include "PythonUtils.h"
-
-#include "plugin_info.h"
-#include "ScriptPluginWrapper.h"
 
 #include "SimpleQSettings.h"
 #include "ScriptsDirectoryConfig.h"
-
-using namespace boost::python;
 
 extern void init_pylaunchy();
 
@@ -196,8 +179,10 @@ void PyLaunchyPlugin::initPython()
 
 		LOG_DEBUG("Setting launchy.__settings object");
 		if (settings && *settings) {
-			PyObject* settingsPyObject = PyLong_FromVoidPtr ((void *) *settings);
-			launchyNamespace["__settings"] = handle<>(settingsPyObject);
+			PyObject* settingsPyObject = 
+				PyLong_FromVoidPtr ((void *) *settings);
+			launchyNamespace["__settings"] = 
+				boost::python::handle<>(settingsPyObject);
 		}
 		else {
 			LOG_WARN("Launchy's QSettings object was not found");
