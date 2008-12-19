@@ -66,11 +66,19 @@ void PyLaunchyPlugin::loadPlugins(QList<PluginInfo>* additionalPlugins)
 {
 	LOG_FUNCTRACK;
 
+	// Iterate over all script plugins, which are already loaded, and
+	// add them to a list supplied to Launchy.
+	// TODO: move this code to ScriptPluginsManager, it doesn't seem right here
+
 	LOG_INFO("Adding Python plugins to Launchy");
-	const PluginInfoHash& scriptPluginsInfo = 
+
+	const ScriptPluginsManager::PluginInfoHash& scriptPluginsInfo = 
 		m_scriptPluginsManager.scriptPluginsInfo();
-	PluginInfoHash::const_iterator it = scriptPluginsInfo.constBegin();
-	PluginInfoHash::const_iterator ite = scriptPluginsInfo.constEnd();
+	ScriptPluginsManager::PluginInfoHash::const_iterator it = 
+		scriptPluginsInfo.constBegin();
+	ScriptPluginsManager::PluginInfoHash::const_iterator ite = 
+		scriptPluginsInfo.constEnd();
+
 	for ( ; it != ite; ++it ) {
 		additionalPlugins->push_back(it.value());
 	}

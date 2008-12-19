@@ -19,15 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef PyLaunchyPlugin_H_
 #define PyLaunchyPlugin_H_
 
-#include <QList>
-#include <QHash>
-
 #include "plugin_interface.h"
-
 #include "ScriptPluginsManager.h"
-
-class ScriptPlugin;
-class ScriptPluginWrapper;
 
 class PyLaunchyPlugin : public QObject, public PluginInterface
 {
@@ -59,8 +52,6 @@ public:
 	//@}
 
 private:
-	typedef QHash<uint, PluginInfo> PluginInfoHash;
-
 	void initPython();
 	void handleVersion();
 

@@ -1,7 +1,7 @@
  include("PyLaunchyCommon.pro")
  
  TEMPLATE      = app
- CONFIG       += qtestlib release
+ CONFIG       += release warn_on plugin
  FORMS         = 
  VPATH         = pylaunchy/
  VPATH        += pylaunchy_unit_test/
