@@ -218,6 +218,10 @@
 				Name="Source Files"
 				>
 				<File
+					RelativePath="..\pylaunchy\ScriptPluginsManager.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\pylaunchy\ScriptsDirectoryConfig.cpp"
 					>
 				</File>
@@ -225,6 +229,10 @@
 			<Filter
 				Name="Header Files"
 				>
+				<File
+					RelativePath="..\pylaunchy\ScriptPluginsManager.h"
+					>
+				</File>
 				<File
 					RelativePath="..\pylaunchy\ScriptsDirectoryConfig.h"
 					>

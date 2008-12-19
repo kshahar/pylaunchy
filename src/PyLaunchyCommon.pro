@@ -18,8 +18,8 @@
  HEADERS      += ScriptPlugin.h ScriptPluginWrapper.h
  SOURCES      += ScriptPluginWrapper.cpp
  
- HEADERS      += ScriptsDirectoryConfig.h
- SOURCES      += ScriptsDirectoryConfig.cpp
+ HEADERS      += ScriptsDirectoryConfig.h ScriptPluginsManager.h
+ SOURCES      += ScriptsDirectoryConfig.cpp ScriptPluginsManager.cpp
  
  SOURCES      += python_export.cpp python_export_pylaunchy.cpp python_export_qstring.cpp python_export_catalog.cpp python_export_ScriptPlugin.cpp
  

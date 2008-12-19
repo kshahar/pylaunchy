@@ -30,11 +30,7 @@ PyLaunchyPlugin* g_pyLaunchyInstance = NULL;
 
 void PyLaunchyPlugin::registerPlugin(boost::python::object pluginClass)
 {
-	GUARDED_CALL_TO_PYTHON
-	(
-		LOG_DEBUG("Registering plugin");
-		m_scriptPluginsClasses.push_back(pluginClass);
-	);
+	m_scriptPluginsManager.registerPlugin(pluginClass);
 }
 
 const QDir& PyLaunchyPlugin::scriptsDir() const
@@ -49,7 +45,6 @@ PyLaunchyPlugin::PyLaunchyPlugin()
 PyLaunchyPlugin::~PyLaunchyPlugin()
 {
 	LOG_DEBUG("Shutting down PyLaunchy");
-	destroyPlugins();
 }
 
 void PyLaunchyPlugin::getID(uint* id)
@@ -75,48 +70,13 @@ void PyLaunchyPlugin::init()
 
 	initPython();
 	handleVersion();
-	reloadScriptFiles();
-	reloadPlugins();
-}
-
-
-void PyLaunchyPlugin::getLabels(QList<InputData>* id)
-{
-}
-
-void PyLaunchyPlugin::getResults(QList<InputData>* id, QList<CatItem>* results)
-{
+	m_scriptPluginsManager.loadScriptFiles(m_scriptsDir);
+	m_scriptPluginsManager.loadPlugins();
 }
 
 QString PyLaunchyPlugin::getIcon()
 {
-#ifdef Q_WS_WIN
-	return qApp->applicationDirPath() + "/plugins/icons/python.ico";
-#endif
-}
-
-void PyLaunchyPlugin::getCatalog(QList<CatItem>* items)
-{
-}
-
-void PyLaunchyPlugin::launchItem(QList<InputData>* id, CatItem* item)
-{
-}
-
-void PyLaunchyPlugin::doDialog(QWidget* parent, QWidget** newDlg) 
-{
-}
-
-void PyLaunchyPlugin::endDialog(bool accept) 
-{
-}
-
-void PyLaunchyPlugin::launchyShow() 
-{
-}
-
-void PyLaunchyPlugin::launchyHide() 
-{
+	return QString::null;
 }
 
 void PyLaunchyPlugin::loadPlugins(QList<PluginInfo>* additionalPlugins)
@@ -124,22 +84,18 @@ void PyLaunchyPlugin::loadPlugins(QList<PluginInfo>* additionalPlugins)
 	LOG_FUNCTRACK;
 
 	LOG_INFO("Adding Python plugins to Launchy");
-	PluginInfoHash::const_iterator itr = m_scriptPlugins.constBegin();
-	for ( ; itr != m_scriptPlugins.constEnd(); ++itr ) {
-		additionalPlugins->push_back(itr.value());
+	const PluginInfoHash& scriptPluginsInfo = 
+		m_scriptPluginsManager.scriptPluginsInfo();
+	PluginInfoHash::const_iterator it = scriptPluginsInfo.constBegin();
+	PluginInfoHash::const_iterator ite = scriptPluginsInfo.constEnd();
+	for ( ; it != ite; ++it ) {
+		additionalPlugins->push_back(it.value());
 	}
 }
 
 void PyLaunchyPlugin::unloadPlugin(uint id)
 {
-	LOG_INFO("Unloading plugin with ID %i", id);
-	PluginInfoHash::const_iterator itr = m_scriptPlugins.find(id);
-	for ( ; itr != m_scriptPlugins.end() && itr.key() == id; ++itr ) {
-		delete itr.value().obj;
-	}
-	m_scriptPlugins.remove(id);
-
-	m_scriptPluginsObjects.remove(id);
+	m_scriptPluginsManager.unloadPlugin(id);
 }
 
 int PyLaunchyPlugin::msg(int msgId, void* wParam, void* lParam)
@@ -152,7 +108,6 @@ int PyLaunchyPlugin::msg(int msgId, void* wParam, void* lParam)
 			handled = true;
 			break;
 		case MSG_GET_LABELS:
-			getLabels((QList<InputData>*) wParam);
 			handled = true;
 			break;
 		case MSG_GET_ID:
@@ -164,36 +119,27 @@ int PyLaunchyPlugin::msg(int msgId, void* wParam, void* lParam)
 			handled = true;
 			break;
 		case MSG_GET_RESULTS:
-			getResults((QList<InputData>*) wParam, (QList<CatItem>*) lParam);
 			handled = true;
 			break;
 		case MSG_GET_CATALOG:
-			getCatalog((QList<CatItem>*) wParam);
 			handled = true;
 			break;
 		case MSG_LAUNCH_ITEM:
-			launchItem((QList<InputData>*) wParam, (CatItem*) lParam);
 			handled = true;
 			break;
 		case MSG_HAS_DIALOG:
 			// Set to true if you provide a gui
-			handled = true;
+			handled = false;
 			break;
 		case MSG_DO_DIALOG:
-			// This isn't called unless you return true to MSG_HAS_DIALOG
-			doDialog((QWidget*) wParam, (QWidget**) lParam);
 			break;
 		case MSG_END_DIALOG:
-			// This isn't called unless you return true to MSG_HAS_DIALOG
-			endDialog((bool) wParam);
 			break;
 		case MSG_LAUNCHY_SHOW:
 			handled = true;
-			launchyShow();
 			break;
 		case MSG_LAUNCHY_HIDE:
 			handled = true;
-			launchyHide();
 			break;
 
 		case MSG_LOAD_PLUGINS:
@@ -299,81 +245,6 @@ void PyLaunchyPlugin::handleVersion()
 	}
 
 	set->setValue("pylaunchy/version", realVersion);
-}
-
-const PluginInfo& PyLaunchyPlugin::addPlugin(ScriptPlugin* scriptPlugin)
-{
-	LOG_DEBUG("Adding script plugin");
-	ScriptPluginWrapper* pluginWrapper = new ScriptPluginWrapper(scriptPlugin);
-
-	PluginInfo launchyPluginInfo;
-	pluginWrapper->getID(&launchyPluginInfo.id);
-	pluginWrapper->getName(&launchyPluginInfo.name);
-	launchyPluginInfo.path = "";
-	launchyPluginInfo.obj = pluginWrapper;
-
-	m_scriptPlugins[launchyPluginInfo.id] = launchyPluginInfo;
-
-	PluginInfoHash::iterator itemItr =
-		m_scriptPlugins.insert(launchyPluginInfo.id, launchyPluginInfo);
-
-	return itemItr.value();
-}
-
-void PyLaunchyPlugin::reloadPlugins()
-{
-	LOG_INFO("Reloading script plugins");
-	foreach (boost::python::object pluginClass, m_scriptPluginsClasses) {
-		GUARDED_CALL_TO_PYTHON
-		(
-			LOG_DEBUG("Creating plugin object");
-			object pluginObject = pluginClass();
-
-			LOG_DEBUG("Extracting plugin");
-			ScriptPlugin* plugin = extract<ScriptPlugin*>(pluginObject);
-
-			const PluginInfo& pluginInfo = addPlugin(plugin);
-			m_scriptPluginsObjects.insert(pluginInfo.id, pluginObject);
-		);
-	}
-}
-
-void PyLaunchyPlugin::destroyPlugins()
-{
-	LOG_INFO("Destroying script plugins");
-	PluginInfoHash::const_iterator itr = m_scriptPlugins.constBegin();
-	for ( ; itr != m_scriptPlugins.constEnd(); ++itr ) {
-		delete itr.value().obj;
-	}
-	m_scriptPlugins.clear();
-
-	m_scriptPluginsObjects.clear();
-}
-
-void PyLaunchyPlugin::reloadScriptFiles()
-{
-	LOG_INFO("Reloading script files");
-	QDir scriptsDir = m_scriptsDir;
-
-	GUARDED_CALL_TO_PYTHON
-	(
-		LOG_DEBUG("Importing __main__ and __dict__");
-		boost::python::object mainModule = boost::python::import("__main__");
-		boost::python::object mainNamespace = mainModule.attr("__dict__");
-
-		scriptsDir.setNameFilters(QStringList("*.py"));
-		scriptsDir.setFilter(QDir::Files);
-		
-		LOG_INFO("Executing all *.py files in scripts directory");
-		foreach (QString pyFile, scriptsDir.entryList()) {
-			LOG_INFO("Found %s, executing it", (const char*) pyFile.toUtf8());
-			boost::python::str pyFileName((const char*) 
-				scriptsDir.absoluteFilePath(pyFile).toUtf8());
-			boost::python::exec_file(pyFileName, 
-				mainNamespace, mainNamespace);
-		}	
-		LOG_INFO("Finished executing *.py files");
-	);
 }
 
 Q_EXPORT_PLUGIN2(PyLaunchy, PyLaunchyPlugin) 

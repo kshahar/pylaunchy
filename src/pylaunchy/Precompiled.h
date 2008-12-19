@@ -31,7 +31,3 @@
 #include <shlobj.h>
 #include <tchar.h>
 #endif
-
-#ifdef PYLAUNCHY_TESTING
-#include <gtest/gtest.h>
-#endif

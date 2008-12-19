@@ -23,7 +23,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <QHash>
 
 #include "plugin_interface.h"
-#include "plugin_info.h"
+
+#include "ScriptPluginsManager.h"
 
 class ScriptPlugin;
 class ScriptPluginWrapper;
@@ -48,18 +49,10 @@ public:
 	~PyLaunchyPlugin();
 	int msg(int msgId, void* wParam = NULL, void* lParam = NULL); 
 
-	void getLabels(QList<InputData>*);
 	void getID(uint*);
 	void getName(QString*);
-	void getResults(QList<InputData>* id, QList<CatItem>* results);
-	void getCatalog(QList<CatItem>* items);
-	void launchItem(QList<InputData>*, CatItem*);
-	void doDialog(QWidget* parent, QWidget**);
-	void endDialog(bool accept);
 	void init();
 	QString getIcon();
-	void launchyShow();
-	void launchyHide();
 	void loadPlugins(QList<PluginInfo>* additionalPlugins);
 	void unloadPlugin(uint id);
 
@@ -70,14 +63,8 @@ private:
 
 	void initPython();
 	void handleVersion();
-	const PluginInfo& addPlugin(ScriptPlugin* scriptPlugin);
-	void reloadPlugins();
-	void destroyPlugins();
-	void reloadScriptFiles();
 
-	QList<boost::python::object> m_scriptPluginsClasses;
-	PluginInfoHash m_scriptPlugins;
-	QHash<uint, boost::python::object> m_scriptPluginsObjects;
+	ScriptPluginsManager m_scriptPluginsManager;
 	QDir m_scriptsDir;
 };
 
