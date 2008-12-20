@@ -61,6 +61,7 @@ inserted into the logging.
 #include <sstream>
 #include <string>
 #include <stdio.h>
+#include <stdarg.h>
 
 #include "ezlogger_misc.hpp"
 
@@ -153,7 +154,7 @@ namespace axter
 				char Data[4096];
 				va_list v;
 				va_start(v,format);
-				_vsnprintf(Data, sizeof(Data), format,v);
+				vsnprintf(Data, sizeof(Data), format,v);
 				va_end(v);
 				log_out(m_src_file_name, m_src_line_num, m_src_function_name, m_levels_format_usage, true, Data);
 			}
