@@ -38,7 +38,7 @@ Quick Tutorial
 
 Installation
 ---------------
-PyWebIndex requires the following:
+PyDiry requires the following:
 
 * Python 2.5
 * Launchy 2.1.2
@@ -47,7 +47,7 @@ PyWebIndex requires the following:
 There are several ways to install:
 
 1. Run the PyLaunchy installer or install from a binary package
-2. Unpack the ``plugins/PyWebIndex`` from the PyLaunchy source package 
+2. Unpack the ``plugins/PyDiry`` from the PyLaunchy source package 
    in the ``<Launchy>\plugins\python`` directory
 
 Adding directories

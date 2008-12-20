@@ -18,9 +18,3 @@ pylaunchy uses code from the following projects:
    Plugin skeleton.
  * `Scribus Open Source Desktop Publishing <http://www.scribus.net/>`_:  \
    Python bindings for QString.
-
-Website design
-----------------
-Website design is based on Eric Van Dewoestine's
-`Eclim <http://eclim.sourceforge.net>`_ project and used with his kind 
-permission.

@@ -24,7 +24,7 @@
 #define PluginExclude ".svn, *.png, *.ui, *.ico"
 
 [Files]
-Source: {#SrcDir}\windows\Release\PyLaunchy.dll; DestDir: {app}\plugins
+Source: {#SrcDir}\windows\Release\PyLaunchy.dll; DestDir: {app}\plugins; Flags: ignoreversion
 Source: tmpbuild\boost_python-vc80-mt-1_35.dll; DestDir: {app}\
 Source: icons\pysimple.png; DestDir: {app}\plugins\icons
 Source: {#PluginsDir}\pysimple.py; DestDir: {app}\plugins\python\examples
