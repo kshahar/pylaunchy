@@ -118,10 +118,12 @@ struct QString_from_python_str_or_unicode
     }
 };
 
+namespace python_export {
+
 void export_QString()
 {
 	boost::python::to_python_converter<QString, QString_to_python_unicode>();
 	QString_from_python_str_or_unicode();
 }
 
-
+}

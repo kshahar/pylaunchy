@@ -1,2 +1,2 @@
-call set_build_environment.bat
+call set_environment.bat
 start /B PyLaunchy.sln

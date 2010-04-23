@@ -45,7 +45,7 @@ def setSettingsObject():
 	except Exception, inst:
 		print >> sys.stderr, inst
 
-		
+
 redirectOutput()
 
 # Add the '<Launchy>\plugins\python' directory to module path

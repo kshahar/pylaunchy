@@ -2,18 +2,20 @@
 #define ScriptsDirectoryConfig_H_
 
 #include <QDir>
-class SimpleSettings;
+namespace qt_utils {
+	class QSettingsWrapper;
+}
 
 class ScriptsDirectoryConfig {
 public:
-	void init(SimpleSettings& settings);
+	void init(qt_utils::QSettingsWrapper& settings);
 	
 	const QDir& scriptsDirectory() const;
 	
 	void setApplicationDirPathForTesting(const QString& path);
 
 protected:
-	QDir determineScriptsDirectory(SimpleSettings& settings);
+	QDir determineScriptsDirectory(qt_utils::QSettingsWrapper& settings);
 	QString applicationDirPath() const;
 
 private:

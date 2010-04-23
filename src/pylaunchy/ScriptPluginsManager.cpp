@@ -12,7 +12,8 @@ ScriptPluginsManager::~ScriptPluginsManager()
 
 void ScriptPluginsManager::loadScriptFiles(const QDir& scriptsDirectory)
 {
-	LOG_INFO("Loading script files from %s", scriptsDirectory.absolutePath().toUtf8());
+	LOG_INFO("Loading script files from %s", 
+		(const char*)scriptsDirectory.absolutePath().toUtf8());
 	QDir scriptsDir = scriptsDirectory;
 
 	GUARDED_CALL_TO_PYTHON
@@ -27,10 +28,14 @@ void ScriptPluginsManager::loadScriptFiles(const QDir& scriptsDirectory)
 		LOG_INFO("Executing all *.py files in scripts directory");
 		foreach (QString pyFile, scriptsDir.entryList()) {
 			LOG_INFO("Found %s, executing it", (const char*) pyFile.toUtf8());
-			boost::python::str pyFileName((const char*) 
-				scriptsDir.absoluteFilePath(pyFile).toUtf8());
-			boost::python::exec_file(pyFileName, 
-				mainNamespace, mainNamespace);
+			GUARDED_CALL_TO_PYTHON
+			(
+				const QString pyFileAbsolutePath = 
+					scriptsDir.absoluteFilePath(pyFile);
+				boost::python::exec_file(
+					(const char*)pyFileAbsolutePath.toUtf8(), 
+					mainNamespace, mainNamespace);
+			);
 		}	
 		LOG_INFO("Finished executing *.py files");
 	);
@@ -96,7 +101,8 @@ void ScriptPluginsManager::destroyPlugins()
 const PluginInfo& ScriptPluginsManager::addPlugin(ScriptPlugin* scriptPlugin)
 {
 	LOG_DEBUG("Adding script plugin");
-	ScriptPluginWrapper* pluginWrapper = new ScriptPluginWrapper(scriptPlugin);
+	ScriptPluginWrapper* pluginWrapper = 
+		new ScriptPluginWrapper(scriptPlugin, m_scriptPluginsSynchronizer);
 
 	PluginInfo launchyPluginInfo;
 	pluginWrapper->getID(&launchyPluginInfo.id);

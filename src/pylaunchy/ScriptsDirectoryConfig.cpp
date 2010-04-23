@@ -1,8 +1,8 @@
 #include "Precompiled.h"
 #include "ScriptsDirectoryConfig.h"
-#include "SimpleSettings.h"
+#include "qt_utils/QSettingsWrapper.h"
 
-void ScriptsDirectoryConfig::init(SimpleSettings& settings)
+void ScriptsDirectoryConfig::init(qt_utils::QSettingsWrapper& settings)
 {
 	m_scriptsDirectory = determineScriptsDirectory(settings);
 }
@@ -12,12 +12,14 @@ const QDir& ScriptsDirectoryConfig::scriptsDirectory() const
 	return m_scriptsDirectory;
 }
 
-void ScriptsDirectoryConfig::setApplicationDirPathForTesting(const QString& path)
+void ScriptsDirectoryConfig::setApplicationDirPathForTesting(
+	const QString& path)
 {
 	m_applicationDirPath = path;
 }
 
-QDir ScriptsDirectoryConfig::determineScriptsDirectory(SimpleSettings& settings)
+QDir ScriptsDirectoryConfig::determineScriptsDirectory(
+	qt_utils::QSettingsWrapper& settings)
 {
 	LOG_DEBUG("Reading scripts dir location from settings");
 	const QString scriptsDirKey = "pylaunchy/scriptsDir";

@@ -1,19 +1,24 @@
 #include "Precompiled.h"
 
 #include <QHash>
-#include "plugin_interface.h"
+#include "launchy/plugin_interface.h" // For runProgram
 #include "PythonUtils.h"
-#include "PyLaunchyPlugin.h"
-#include "ScriptPlugin.h"
+#include "ScriptPluginRegisterer.h"
+#include "GlobalPythonModuleData.h"
 
 using namespace boost::python;
 
+// TODO: Move out of this file
 namespace pylaunchy 
 {
 	void registerPlugin(boost::python::object pluginClass)
 	{
 		LOG_FUNCTRACK;
-		g_pyLaunchyInstance->registerPlugin(pluginClass);
+		ScriptPluginRegisterer* pScriptPluginRegisterer = 
+			globalPythonModuleData().pScriptPluginRegisterer;
+		if (pScriptPluginRegisterer) {
+			pScriptPluginRegisterer->registerPlugin(pluginClass);
+		}
 	}
 
 	unsigned int hash(QString str)
@@ -25,39 +30,33 @@ namespace pylaunchy
 	QString getLaunchyPath()
 	{
 		LOG_FUNCTRACK;
-		return qApp->applicationDirPath();
+		return globalPythonModuleData().applicationDirPath;
 	}
 	
 	QString getScriptsPath()
 	{
 		LOG_FUNCTRACK;
-		return g_pyLaunchyInstance->scriptsDir().absolutePath();
+		return globalPythonModuleData().scriptsDirectoryAbsolutePath;
 	}
 
 	QString getLibPath()
 	{
 		LOG_FUNCTRACK;
-		return g_pyLaunchyInstance->scriptsDir().absolutePath() + 
+		return globalPythonModuleData().scriptsDirectoryAbsolutePath + 
 			QDir::separator() + "lib";
 	}
 
 	QString getIconsPath()
 	{
 		LOG_FUNCTRACK;
-		return qApp->applicationDirPath() + "/plugins/icons";
+		return globalPythonModuleData().applicationDirPath + 
+			"/plugins/icons";
 	}
 
 	QString getConfigPath()
 	{
 		LOG_FUNCTRACK;
-		static QString configPath;
-		if (configPath.isNull()) {
-			QSettings* settings = *(g_pyLaunchyInstance->settings);
-			const QString configFile = settings->fileName();
-			QFileInfo configFileInfo(configFile);
-			configPath = configFileInfo.absolutePath();
-		}
-		return configPath;
+		return globalPythonModuleData().configDirectoryAbsolutePath;
 	}
 
 	void runProgram(QString file, QString args)
@@ -67,6 +66,8 @@ namespace pylaunchy
 		::runProgram(file, args);
 	}
 };
+
+namespace python_export {
 
 void export_pylaunchy()
 {
@@ -78,4 +79,6 @@ void export_pylaunchy()
 	def("getIconsPath", &pylaunchy::getIconsPath);
 	def("getConfigPath", &pylaunchy::getConfigPath);
 	def("runProgram", &pylaunchy::runProgram);
+}
+
 }

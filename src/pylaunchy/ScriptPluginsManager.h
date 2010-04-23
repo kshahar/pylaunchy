@@ -4,12 +4,14 @@
 #include <boost/python/object.hpp>
 #include <QList>
 #include <QHash>
-#include "plugin_info.h"
+#include "launchy/plugin_info.h"
+#include "ScriptPluginRegisterer.h"
+#include "ScriptPluginsSynchronizer.h"
 
 class QDir;
 class ScriptPlugin;
 
-class ScriptPluginsManager {
+class ScriptPluginsManager: public pylaunchy::ScriptPluginRegisterer {
 public:
 	~ScriptPluginsManager();
 
@@ -28,6 +30,7 @@ private:
 	QList<boost::python::object> m_scriptPluginsClasses;
 	QHash<uint, boost::python::object> m_scriptPluginsObjects;
 	PluginInfoHash m_scriptPlugins;
+	ScriptPluginsSynchronizer m_scriptPluginsSynchronizer;
 };
 
 #endif // ScriptPluginsManager_H_

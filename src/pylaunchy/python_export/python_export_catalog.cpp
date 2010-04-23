@@ -2,11 +2,13 @@
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 
-#include "catalog.h"
+#include "launchy/catalog.h"
 #include "ScriptPlugin.h"
 #include "PythonUtils.h"
 
 using namespace boost::python;
+
+namespace python_export {
 
 /** Convert QSet<T> to a Python list */
 template <typename T>
@@ -68,4 +70,6 @@ void export_catalog()
 
 	export_CatItem();
 	export_InputData();
+}
+
 }

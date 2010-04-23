@@ -1,0 +1,1 @@
+EXECUTE_PROCESS(COMMAND taskkill /F /IM Launchy.exe)

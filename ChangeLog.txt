@@ -1,5 +1,9 @@
-Version ?:
-	* Added experimental SCons support
+Version 0.8.1:
+	* Fixed launchy.runProgram() not working with non-english paths (bug 2105184)
+	* Added some unit tests
+	* Did some refactoring and files reorganization
+	* Added unit test mechanism using googletest
+	* Switched build system from qmake to CMake. Building on Linux should now be easier.
 
 Version 0.8.0:
 	* Added PyDiry plugin

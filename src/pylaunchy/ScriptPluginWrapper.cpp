@@ -1,23 +1,19 @@
 #include "Precompiled.h"
 #include "ScriptPluginWrapper.h"
 
-#include "PyLaunchyPluginDefines.h"
 #include "ScriptPlugin.h"
+#include "ScriptPluginsSynchronizer.h"
 #include "PythonUtils.h"
-
-#include "plugin_info.h"
-
-using namespace boost::python;
-
-QMutex ScriptPluginWrapper::s_inPythonFunction;
-QMutex ScriptPluginWrapper::s_pythonGuiMutex;
 
 /** Convert QList<InputData> -> ScriptInputDataList */
 static ScriptInputDataList prepareInputDataList(QList<InputData>* id);
 
-ScriptPluginWrapper::ScriptPluginWrapper(ScriptPlugin* scriptPlugin)
+ScriptPluginWrapper::ScriptPluginWrapper(
+	ScriptPlugin* scriptPlugin,
+	ScriptPluginsSynchronizer& scriptPluginsSynchronizer)
+: m_pScriptPlugin(scriptPlugin),
+  m_scriptPluginsSynchronizer(scriptPluginsSynchronizer)
 {
-	m_pScriptPlugin = scriptPlugin;
 }
 
 ScriptPluginWrapper::~ScriptPluginWrapper()
@@ -129,7 +125,7 @@ bool ScriptPluginWrapper::hasDialog()
 void ScriptPluginWrapper::doDialog(QWidget* parent, QWidget** newDlg) 
 {
 	LOG_FUNCTRACK;
-	s_pythonGuiMutex.lock();
+	m_scriptPluginsSynchronizer.enteringDoDialog();
 
 	GUARDED_CALL_TO_PYTHON(
 		LOG_DEBUG("Calling plugin doDialog");
@@ -154,7 +150,7 @@ void ScriptPluginWrapper::endDialog(bool accept)
 		m_pScriptPlugin->endDialog(accept);
 	);
 	
-	s_pythonGuiMutex.unlock();
+	m_scriptPluginsSynchronizer.finishedEndDialog();
 }
 
 void ScriptPluginWrapper::launchyShow() 
@@ -193,19 +189,19 @@ int ScriptPluginWrapper::msg(int msgId, void* wParam, void* lParam)
 	// The following tests for it
 	const bool waitingForEndDialog = 
 		msgId != MSG_END_DIALOG &&
-		!s_pythonGuiMutex.tryLock();
+		!m_scriptPluginsSynchronizer.tryLockDialogMutex();
 
 	if ( waitingForEndDialog ) {
 		LOG_DEBUG("A doDialog--endDialog sequence has not ended yet. "
 			"Message id: %i", msgId);
 		return false;
 	}
-	s_pythonGuiMutex.unlock(); // doDialog will lock it
+	m_scriptPluginsSynchronizer.unlockDialogMutex(); // doDialog will lock it
 
 	// If a python functions is called while another one hasn't returned yet,
 	// a crash happens. This is a way to avoid it, not sure it's the best way.
 	const bool waitingForPythonFunctionToReturn = 
-		!s_inPythonFunction.tryLock();
+		!m_scriptPluginsSynchronizer.tryLockInPythonMutex();
 
 	if ( waitingForPythonFunctionToReturn ) { 
 		LOG_DEBUG("Trying to call a Python function while another one hasn't "
@@ -216,8 +212,19 @@ int ScriptPluginWrapper::msg(int msgId, void* wParam, void* lParam)
 	// Disptach the actual Python function
 	const bool result = dispatchFunction(msgId, wParam, lParam);
 	
-	s_inPythonFunction.unlock();
+	m_scriptPluginsSynchronizer.unlockInPythonMutex();
 	return result;
+}
+
+bool ScriptPluginWrapper::isInPythonFunction() const
+{
+	const bool waitingForPythonFunctionToReturn = 
+		!m_scriptPluginsSynchronizer.tryLockInPythonMutex();
+
+	if (waitingForPythonFunctionToReturn) {
+		m_scriptPluginsSynchronizer.unlockInPythonMutex();
+	}
+	return waitingForPythonFunctionToReturn;
 }
 
 bool ScriptPluginWrapper::dispatchFunction(int msgId, void* wParam, void* lParam)

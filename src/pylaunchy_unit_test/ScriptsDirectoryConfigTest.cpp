@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 #include "ScriptsDirectoryConfig.h"
-#include "SimpleSettings.h"
+#include "qt_utils/QSettingsWrapper.h"
 
 static const char* CONFIG_scriptsDirIniKey = "pylaunchy/scriptsDir";
 
-class SimpleSettingsForTest: public SimpleSettings {
+class QSettingsWrapperForTest: public qt_utils::QSettingsWrapper {
 public:
 	virtual bool contains(const QString &key) const
 	{
@@ -31,7 +31,7 @@ public:
 
 class ScriptsDirectoryConfigTest : public testing::Test {
 protected:
-	SimpleSettingsForTest settings;
+	QSettingsWrapperForTest settings;
 	ScriptsDirectoryConfig scriptsDirectoryConfig;
 
 	virtual void SetUp() 

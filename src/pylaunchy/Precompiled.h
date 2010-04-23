@@ -1,4 +1,5 @@
-#pragma once
+#ifndef Precompiled_H_
+#define Precompiled_H_
 
 #if _MSC_VER >= 1300
 #pragma warning (disable : 4100)
@@ -6,6 +7,7 @@
 
 #include "pylaunchy_ezlogger_adapter.h"
 
+// Python and Boost.Python
 #include <Python.h>
 #include <boost/python.hpp>
 #include <boost/python/call.hpp>
@@ -16,18 +18,22 @@
 #include <boost/python/wrapper.hpp>
 #include <boost/python/with_custodian_and_ward.hpp>
 
-#include <QHash>
-#include <QUrl>
+// Qt
+#include <QApplication>
+#include <QDir>
 #include <QFile>
-#include <QRegExp>
-#include <QTextCodec>
-#include <QTextStream>
+#include <QHash>
+#include <QList>
+#include <QMutex>
+#include <QObject>
+#include <QTemporaryFile>
+#include <QtPlugin>
 
-#include <QtGui>
-#include <QTextEdit>
-
+// Windows
 #ifdef Q_WS_WIN
 #include <windows.h>
 #include <shlobj.h>
 #include <tchar.h>
 #endif
+
+#endif // Precompiled_H_

@@ -3,7 +3,7 @@
 
 #include <QList>
 #include <vector>
-#include "catalog.h"
+#include "launchy/catalog.h"
 
 class ScriptResultsList {
 public:
