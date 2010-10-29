@@ -1,3 +1,6 @@
+Version 0.9.0:
+	* Upgraded to support Launchy 2.5, Qt 4.6.0, Python 2.7, Boost.Python 1.41 and PyQq 4.8.1
+
 Version 0.8.1:
 	* Fixed launchy.runProgram() not working with non-english paths (bug 2105184)
 	* Added some unit tests
