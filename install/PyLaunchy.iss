@@ -43,7 +43,7 @@ Source: lib\sip.pyd; DestDir: {app}\plugins\python\lib
 Source: lib\PyQt4\*.*; DestDir: {app}\plugins\python\lib\PyQt4; Flags: recursesubdirs; Excludes: .svn
 
 ; Documentation
-;Source: {#RootDir}\doc\build\*.*; DestDir: {app}\plugins\python\doc; Flags: recursesubdirs; Excludes: {#Exclude}, *.zip, .doctrees; Components: docs
+Source: {#RootDir}\doc\build\*.*; DestDir: {app}\plugins\python\doc; Flags: recursesubdirs; Excludes: {#Exclude}, *.zip, .doctrees; Components: docs
 
 ; PyGo-Y
 Source: icons\pygo-y.png; DestDir: {app}\plugins\icons; Components: pygoy
