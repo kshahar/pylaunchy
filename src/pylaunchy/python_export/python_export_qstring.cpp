@@ -40,7 +40,15 @@ struct QString_to_python_unicode
         delete[] buf;
         return tempObj;
 #else
-        return PyUnicode_FromUnicode(s.utf16(), s.length());
+        //return PyUnicode_FromUnicode(s.utf16(), s.length());
+		PyObject *obj;
+		if ((obj = PyUnicode_FromUnicode(NULL, s.length())) == NULL)
+			return NULL;
+
+		memcpy(PyUnicode_AS_UNICODE(obj), s.utf16(),
+			s.length() * sizeof (Py_UNICODE));
+
+		return obj;
 #endif
     }
 };
@@ -109,7 +117,9 @@ struct QString_from_python_str_or_unicode
 #else
         // Python is using a 2-byte unsigned buffer of UCS-2 with
         // limited support for UTF-16
-        QString tempString(QString::fromUtf16(value, unichars));
+        //QString tempString(QString::fromUtf16(value, unichars));
+		QString tempString(QString::fromUtf16((const ushort *)PyUnicode_AS_UNICODE(temp_obj_ptr),
+			PyUnicode_GET_SIZE(obj_ptr)));
 #endif
         Py_DECREF(temp_obj_ptr);
         void* storage = ((boost::python::converter::rvalue_from_python_storage<QString>*) data)->storage.bytes;
