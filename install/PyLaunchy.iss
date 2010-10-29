@@ -13,7 +13,7 @@
 ; limitations under the License.
 
 #define MyAppName "PyLaunchy"
-#define MyAppVer "0.8.0"
+#define MyAppVer "0.9.0"
 #define MyAppURL "http://pylaunchy.sourceforge.net/"
 
 #define RootDir ".."
@@ -24,10 +24,10 @@
 #define Exclude ".svn"
 #define PluginExclude ".svn, *.png, *.ui, *.ico"
 
-#define PythonSetupFile "python-2.5.4.msi"
-#define PythonUrl "http://www.python.org/download/releases/2.5.4/"
-#define PythonSetupFileUrl "http://python.org/ftp/python/2.5.4/" + PythonSetupFile
-#define PythonRegistryInstallPathKey "SOFTWARE\Python\PythonCore\2.5\InstallPath"
+#define PythonSetupFile "python-2.7.msi"
+#define PythonUrl "http://www.python.org/download/releases/2.7/"
+#define PythonSetupFileUrl "http://python.org/ftp/python/2.7/" + PythonSetupFile
+#define PythonRegistryInstallPathKey "SOFTWARE\Python\PythonCore\2.7\InstallPath"
 
 [Files]
 ; For download and install Python
@@ -35,22 +35,22 @@ Source: {#LicenseFilename}; DestDir: {tmp}; BeforeInstall: DownloadInstallPython
 Source: tmpbuild\isxdl.dll; Flags: dontcopy
 
 ; PyLaunchy core
-Source: {#SrcDir}\windows\Release\PyLaunchy.dll; DestDir: {app}\plugins; Flags: ignoreversion
-Source: tmpbuild\boost_python-vc80-mt-1_35.dll; DestDir: {app}\
+Source: {#SrcDir}\windows\PyLaunchy\Release\PyLaunchy.dll; DestDir: {app}\plugins; Flags: ignoreversion
+Source: tmpbuild\boost_python-vc80-mt-1_41.dll; DestDir: {app}\
 Source: icons\pysimple.png; DestDir: {app}\plugins\icons
 Source: {#PluginsDir}\pysimple.py; DestDir: {app}\plugins\python\examples
 Source: lib\sip.pyd; DestDir: {app}\plugins\python\lib
 Source: lib\PyQt4\*.*; DestDir: {app}\plugins\python\lib\PyQt4; Flags: recursesubdirs; Excludes: .svn
 
 ; Documentation
-Source: {#RootDir}\doc\build\*.*; DestDir: {app}\plugins\python\doc; Flags: recursesubdirs; Excludes: {#Exclude}, *.zip, .doctrees; Components: docs
+;Source: {#RootDir}\doc\build\*.*; DestDir: {app}\plugins\python\doc; Flags: recursesubdirs; Excludes: {#Exclude}, *.zip, .doctrees; Components: docs
 
 ; PyGo-Y
 Source: icons\pygo-y.png; DestDir: {app}\plugins\icons; Components: pygoy
 Source: {#PluginsDir}\pygo-y.py; DestDir: {app}\plugins\python; Components: pygoy
 Source: lib\win32con.py; DestDir: {app}\plugins\python\lib; Components: pygoy
 Source: lib\win32gui.pyd; DestDir: {app}\plugins\python\lib; Components: pygoy
-Source: lib\pywintypes25.dll; DestDir: {app}\plugins\python\lib; Components: pygoy
+Source: lib\pywintypes27.dll; DestDir: {app}\plugins\python\lib; Components: pygoy
 
 ; PyWebIndex
 Source: {#PluginsDir}\PyWebIndex\*.*; DestDir: {app}\plugins\python; Flags: recursesubdirs; Excludes: {#PluginExclude}; Components: pywebindex
@@ -75,7 +75,7 @@ DirExistsWarning=no
 [Registry]
 
 [Components]
-Name: Python; Description: Download and Install Python 2.5; Check: IsPythonMissing; Types: custom full
+Name: Python; Description: Download and Install Python 2.7; Check: IsPythonMissing; Types: custom full
 Name: docs; Description: Documentation; Types: custom full
 Name: pygoy; Description: PyGo-y plugin; Types: custom full
 Name: pydiry; Description: PyDiry plugin; Types: custom full
