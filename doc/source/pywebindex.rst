@@ -19,8 +19,8 @@ The user can define a list of keywords (called "Name") and associate them with i
 
 For example, the following pages might be used with this plugin:
 
-* http://doc.trolltech.com/4.4/classes.html
-* http://www.boost.org/doc/libs/1_35_0/libs/python/doc/v2/reference.html
+* http://doc.qt.nokia.com/4.6/classes.html
+* http://www.boost.org/doc/libs/1_41_0/libs/python/doc/v2/reference.html
  
 The plugin indexes the links in advance, meaning you should have fast access when they are needed.
 
@@ -37,9 +37,9 @@ Installation
 ---------------
 PyWebIndex requires the following:
 
-* Python 2.5
-* Launchy 2.1.2
-* PyLaunchy 0.7.5
+* Python 2.7
+* Launchy 2.5
+* PyLaunchy 0.9.0
 
 There are two ways to install:
 
@@ -59,7 +59,7 @@ Adding index pages
 For example, try to add the following:
 
 * Name: docqt
-* Index URL: http://doc.trolltech.com/4.4/classes.html
+* Index URL: http://doc.qt.nokia.com/4.6/classes.html
 
 An example of the settings dialog:
 

@@ -40,9 +40,9 @@ Installation
 ---------------
 PyDiry requires the following:
 
-* Python 2.5
-* Launchy 2.1.2
-* PyLaunchy 0.8.0
+* Python 2.7
+* Launchy 2.5
+* PyLaunchy 0.9.0
 
 There are several ways to install:
 

@@ -6,9 +6,9 @@ Credits
 Libraries in use:
 ------------------
 pylaunchy uses the following open source libraries:
- * `Qt Cross-Platform Application Framework <http://trolltech.com/products/qt>`_
+ * `Qt Cross-platform application and UI framework <http://qt.nokia.com>`_
  * `Python Programming Language <http://www.python.org>`_
- * `Boost.Python <http://www.boost.org/doc/libs/1_35_0/libs/python>`_
+ * `Boost.Python <http://www.boost.org/doc/libs/release/libs/python>`_
  * `PyQt <http://www.riverbankcomputing.co.uk/software/pyqt>`_
 
 Code from other projects

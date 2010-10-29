@@ -24,9 +24,9 @@ Quick Tutorial
 Installation
 ---------------
 PyWebIndex requires the following:
- * Python 2.5
- * Launchy 2.1.2
- * PyLaunchy 0.7.5
+ * Python 2.7
+ * Launchy 2.5
+ * PyLaunchy 0.9.0
 
 There are two ways to install:
  1. Run the PyLaunchy installer
