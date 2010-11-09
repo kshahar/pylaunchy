@@ -1,6 +1,7 @@
 #include "Precompiled.h"
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
+#include <QtCore/QSet>
 
 #include "launchy/catalog.h"
 #include "ScriptPlugin.h"
@@ -17,8 +18,8 @@ struct QSet_to_python_list
     static PyObject* convert(const QSet<T>& set)
     {
 		boost::python::list pylist;
-		QSet<T>::const_iterator itr = set.constBegin();
-		for ( ; itr != set.constEnd(); ++itr) {
+		typename QSet<T>::const_iterator itr = set.begin();
+		for ( ; itr != set.end(); ++itr) {
 			pylist.append(*itr);
 		}
 		return incref(pylist.ptr());

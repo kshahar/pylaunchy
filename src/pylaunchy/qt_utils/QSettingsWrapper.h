@@ -1,8 +1,8 @@
 #ifndef QSettingsWrapper_H_
 #define QSettingsWrapper_H_
 
-#include <QString.h>
-#include <QVariant.h>
+#include <QtCore/QString>
+#include <QtCore/QVariant>
 class QSettings;
 
 namespace qt_utils {
