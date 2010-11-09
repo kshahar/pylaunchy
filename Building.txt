@@ -1,12 +1,31 @@
+Requirements
+-------------------------
 The following are needed for building PyLaunchy:
- * QT 4.4 (or any QT version compatible with Launchy)
- * Python 2.3+ (compatible with Boost.Python)
- * Boost 1.35
- * PyQt4, compiled for the QT 4.4 open source version
- 
-The following environemnt variables are needed:
- * QTDIR - path to QT root (e.g. C:\Qt\4.4.0)
- * PYTHON_ROOT - path to python root (e.g. C:\Python25)
- * BOOST_1_35_0 - path to Boost 1.35 top directory (e.g. D:\SDK\boost\boost_1_35_0)
+ * Qt 4.6 (or any QT version compatible with Launchy)
+ * Python 2.3 and above (compatible with Boost.Python)
+ * Boost 1.35 and above
+ * PyQt4, for the chosen Qt and Python versions
+ * CMake 2.6 and above
 
-The dev.bat file contains a script to start Visual Studio for PyLaunchy.
+Building on Windows
+-------------------------
+ * Microsoft Visual Studio 2005 or Microsoft Visual C++ Express 2005 are required.
+ * The Windows build directory is src\windows.
+ * Copy the "set_environment.bat.example" file to "set_environment.bat" and modify it.
+ * Run the "run_cmake.bat" script to prepare the build environment.
+ * To build, run "dev.bat" script.
+
+Building on Linux
+-------------------------
+* Tested with Ubuntu Linux 10.04
+* Installed all development packages for the libraries from above
+* mkdir src/linux ; cd src/linux ; cmake ../ ; make
+* The build process generates a lot of warning, due to incompatibility with the "ezlogger" library source code
+
+Installation on Linux
+-------------------------
+* After building, copy the libPyLaunchy.so file from src/linux/pylaunchy to /usr/lib/launchy/plugins
+* The "plugins" directory should be copied to /usr/lib/launchy/plugins/python
+* Another option would be to put the "plugins" directory in the user home 
+  directory (e.g ~), modify the ~/launchy.ini file and change the "scriptsDir"
+  value to /home/user/my_launchy_plugins_dir
