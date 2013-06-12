@@ -17,10 +17,10 @@ Building on Windows
 
 Building on Linux
 -------------------------
-* Tested with Ubuntu Linux 10.04
-* Installed all development packages for the libraries from above
+* Install all development packages for the libraries from above
 * mkdir src/linux ; cd src/linux ; cmake ../ ; make
-* The build process generates a lot of warning, due to incompatibility with the "ezlogger" library source code
+* The build process generates a lot of warnings, due to incompatibility with the "ezlogger" library source code
+* Tested on Ubuntu Linux 10.04
 
 Installation on Linux
 -------------------------
