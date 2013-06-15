@@ -11,9 +11,9 @@ pylaunchy can be installed in several ways:
 
 Requirements
 --------------
-* Download and install Python 2.5 from 
+* Download and install Python 2.7 from 
   `www.python.org <http://www.python.org>`_ .
-* Make sure you have Launchy 2.1.2
+* Make sure you have Launchy 2.5 and above
 
 Using the installer (PyLaunchy-|version|.exe)
 ----------------------------------------------
@@ -22,18 +22,24 @@ the instructions.
 
 **Note:** 
 The installer only unpacks the files in the Launchy directory and creates
-an uninstaller. You can use the binary ZIP file if you encouter any problems
-during the installation (permissions, for example).
+an uninstaller. If this is not desirable, you can use the manual method described 
+below.
 
-Using the binary package (PyLaunchy-bin-|version|.zip)
+Manual/portable installation
 -------------------------------------------------------
-1. Download the latest binary package from the downloads page.
-2. Unpack the ZIP file in the **root** Launchy directory. For example, if
-   Launchy was installed in ``C:\Program Files\Launchy``, unpack the ZIP
-   file in ``C:\Program Files\Launchy``.
-3. After unpacking, the *boost_python-vc80-mt-1_35.dll* file should in the
+#. Download the installer (PyLaunchy-|version|.exe) and  
+   `Inno Setup Unpacker <http://sourceforge.net/projects/innounp/>`_.
+#. From command line, run -
+
+       innounp -x PyLaunchy-|version|.exe
+       
+#. Copy the contents of the generated {app} directory to the **root** Launchy
+   directory. For example, if Launchy was installed in
+   ``C:\Program Files\Launchy``, copy the files to 
+   ``C:\Program Files\Launchy``.
+#. After unpacking, the *boost_python-vc80-mt-1_35.dll* file should in the
    same directory as *Launchy.exe*.
    
 Using the source package (PyLaunchy-src-|version|.zip)
 -------------------------------------------------------
-Not documented yet. In the meantime, read the Building.txt file in the ZIP file.
+See the Building.txt file in the ZIP file.

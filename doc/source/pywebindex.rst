@@ -11,7 +11,7 @@ It is intended for software developers wishing to access automatically generated
 
 The plugin is very similar to the Weby plugin from Launchy distribution in it`s interface, but it works differently. Here the main focus is on indexing large pages with lots of links, which are not wanted as bookmarks.
 
-A typical usage might look like this - searching for QT class that has `line` in it`s name:
+A typical usage might look like this - searching for QT class that has `plugin` in it`s name:
 
 .. image:: ./images/pywebindex_main.png
 

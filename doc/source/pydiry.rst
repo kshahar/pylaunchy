@@ -97,5 +97,5 @@ For more possible queries see the links below.
 Known Issues
 ---------------
 * Folder icons do not appear
-* Items or directories with names that are not english cannot be launched.
+* Items or directories with non-ascii names cannot be launched.
   This is due to a bug in PyLaunchy with unicode conversions.

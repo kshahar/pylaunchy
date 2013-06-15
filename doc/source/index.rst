@@ -6,8 +6,8 @@ PyLaunchy: Python plugins for Launchy
 Welcome to PyLaunchy
 -----------------------
 
-**PyLaunchy** is an extension to Launchy_'s plugin system, that allows a user
-to develop Launchy plugins in the Python_ programming language.
+**PyLaunchy** is an extension to Launchy_'s plugin system, that allows 
+developing Launchy plugins in the Python_ programming language.
 
 PyLaunchy features:
 
@@ -18,6 +18,9 @@ PyLaunchy comes with some powerful Launchy plugins:
 * :ref:`pygoy`
 * :ref:`pydiry`
 * :ref:`pywebindex`
+
+In addition, several plugins have been contributed by users: 
+:ref:`community_plugins`.
 
 Simple plugin development
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -38,8 +41,8 @@ Table of Contents
    
    userdoc
    plugins
+   community_plugins
    devdoc
-
 
 .. toctree::
    :maxdepth: 1

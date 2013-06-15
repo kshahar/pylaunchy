@@ -37,7 +37,7 @@ master_doc = u'index'
 
 # General substitutions.
 project = u'pylaunchy'
-copyright = u'2008, Shahar Kosti'
+copyright = u'2008-2013, Shahar Kosti'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
