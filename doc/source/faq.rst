@@ -56,7 +56,7 @@ to write a Launchy plugin that interfaces with another language
 
 Is there a Linux version?
 ---------------------------------------
-Although Launchy is availible on Linux, currently PyLaunchy does not work on
-Linux. Getting it to work should not be difficult, if you want to help please
-contact the author using the `SourceForge project page
-<http://sourceforge.net/projects/pylaunchy>`_.
+PyLaunchy can be installed on Linux by building from the source code.
+See the Building.txt file in the source package for more details.
+
+Binary packages for all distributions are very welcome.
