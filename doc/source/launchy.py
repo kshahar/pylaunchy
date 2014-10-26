@@ -184,7 +184,7 @@ class InputData:
         """
         pass      
    
-    def getId(self):
+    def getID(self):
         """
         Returns the current owner id of the query. 
         """
